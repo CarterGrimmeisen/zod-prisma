@@ -14,6 +14,7 @@ generatorHandler({
 		return {
 			prettyName: 'Zod Schemas',
 			defaultOutput: 'zod',
+			version: '0.1.0',
 		}
 	},
 	onGenerate(options) {
