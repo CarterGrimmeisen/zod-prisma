@@ -1,15 +1,20 @@
+import { generatorHandler } from '@prisma/generator-helper'
 import path from 'path'
-import generatorHelper from '@prisma/generator-helper'
 import { Project, StructureKind, VariableDeclarationKind } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
-import { writeFile } from 'fs'
+import { getJSDocs } from './docs'
+import { getZodConstructor } from './types'
+import { writeArray } from './util'
 
-generatorHelper.generatorHandler({
+interface Config {
+  relationModel: boolean | 'default'
+}
+
+generatorHandler({
   onManifest() {
     return {
-      prettyName: 'Filters',
-      defaultOutput: path.resolve(__dirname, 'filters'),
-      // requiresGenerators: ['nexus-prisma'],
+      prettyName: 'Zod Schemas',
+      defaultOutput: path.resolve(__dirname, 'zod'),
     }
   },
   onGenerate(options) {
@@ -18,8 +23,9 @@ generatorHelper.generatorHandler({
     })
 
     const outputPath = options.generator.output!.value
-    // const enums = options.dmmf.datamodel.enums
     const models = options.dmmf.datamodel.models
+
+    const { relationModel } = (options.generator.config as unknown) as Config
 
     const indexSource = project.createSourceFile(
       `${outputPath}/index.ts`,
@@ -35,7 +41,10 @@ generatorHelper.generatorHandler({
           moduleSpecifier: `./${model.name}`,
         })
 
-        const modelTypeName = `${model.name}Model`
+        const modelName = (name: string) =>
+          relationModel === 'default' ? `_${name}Model` : `${name}Model`
+        const relatedModelName = (name: string) =>
+          relationModel === 'default' ? `${name}Model` : `Related${name}Model`
 
         const sourceFile = project.createSourceFile(
           `${outputPath}/${model.name}.ts`,
@@ -58,15 +67,19 @@ generatorHelper.generatorHandler({
         sourceFile.addImportDeclaration({
           kind: StructureKind.ImportDeclaration,
           moduleSpecifier: '@prisma/client',
-          namedImports: enumFields.map(f => f.type),
+          namedImports: [model.name, ...enumFields.map(f => f.type)],
         })
+
+        sourceFile.addStatements(writer =>
+          writeArray(writer, getJSDocs(model.documentation))
+        )
 
         sourceFile.addVariableStatement({
           declarationKind: VariableDeclarationKind.Const,
           isExported: true,
           declarations: [
             {
-              name: modelTypeName,
+              name: modelName(model.name),
               initializer(writer) {
                 writer
                   .write('z.object(')
@@ -74,119 +87,83 @@ generatorHelper.generatorHandler({
                     model.fields
                       .filter(f => f.kind !== 'object')
                       .forEach(field => {
-                        if (field.kind === 'scalar') {
-                          writer.write(`${field.name}: z`)
-                          switch (field.type) {
-                            case 'String':
-                              writer.write('.string()')
-                              break
-                            case 'Int':
-                              writer.write('.number().int()')
-                              break
-                            case 'DateTime':
-                              writer.write(
-                                '.string().regex(/^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$/)'
-                              )
-                              break
-                            case 'Float':
-                              writer.write('.number()')
-                              break
-                            case 'Json':
-                              writer.write('.object()')
-                              break
-                            case 'Boolean':
-                              writer.write('.boolean()')
-                              break
-                            default:
-                              writer.write('.unknown()')
-                          }
-                        } else if (field.kind === 'enum') {
-                          writer.write(
-                            `${field.name}: z.nativeEnum(${field.type})`
-                          )
-                        }
-
-                        if (!field.isRequired) {
-                          writer.write('.nullable()')
-                        }
-
-                        writer.write(',').newLine()
+                        writeArray(writer, getJSDocs(field.documentation))
+                        writer
+                          .write(`${field.name}: ${getZodConstructor(field)}`)
+                          .write(',')
+                          .newLine()
                       })
                   })
                   .write(')')
-                  .newLine()
               },
             },
           ],
         })
 
-        const ioFile = project.createSourceFile(
-          `${outputPath}/io/${model.name}.ts`,
-          {
-            statements: [
-              {
-                kind: StructureKind.ImportDeclaration,
-                namespaceImport: 'z',
-                moduleSpecifier: 'zod',
-              },
-            ],
-          }
-        )
+        const relationFields = model.fields.filter(f => f.kind === 'object')
 
-        const ioTypes = Object.values(
-          options.dmmf.mappings.modelOperations.find(
-            mo => mo.model === model.name
-          )!
-        ).map(
-          ([_, value]) =>
-            options.dmmf.schema.inputObjectTypes.prisma.find(
-              io => io.name === value
-            ) ??
-            options.dmmf.schema.outputObjectTypes.prisma.find(
-              oo => oo.name === value
-            )!
-        )
-
-        /* if (relationFields.length > 0) {
+        if (relationModel !== false && relationFields.length > 0) {
           sourceFile.addImportDeclaration({
             kind: StructureKind.ImportDeclaration,
-            namedImports: relationFields.map(f => `${f.type}BaseModel`),
             moduleSpecifier: './index',
+            namedImports: Array.from(
+              new Set(
+                relationFields.flatMap(f => [
+                  `Complete${f.type}`,
+                  relatedModelName(f.type),
+                ])
+              )
+            ),
           })
+
+          sourceFile.addInterface({
+            name: `Complete${model.name}`,
+            isExported: true,
+            extends: writer => writer.write(model.name),
+            properties: relationFields.map(f => ({
+              name: f.name,
+              type: `Complete${f.type}${f.isList ? '[]' : ''}${
+                !f.isRequired ? ' | null' : ''
+              }`,
+            })),
+          })
+
+          sourceFile.addStatements(writer =>
+            writeArray(writer, [
+              '',
+              '/**',
+              ` * Related${model.name}Model contains all relations on your model in addition to the scalars`,
+              ' *',
+              ' * NOTE: Lazy required in case of potential circular dependencies within schema',
+              ' */',
+            ])
+          )
 
           sourceFile.addVariableStatement({
             declarationKind: VariableDeclarationKind.Const,
             isExported: true,
             declarations: [
               {
-                name: modelTypeName,
+                name: relatedModelName(model.name),
                 initializer(writer) {
                   writer
-                    .write(`${modelBaseTypeName}.extend(`)
+                    .write(`z.lazy(() => ${modelName(model.name)}.extend(`)
                     .inlineBlock(() => {
                       relationFields.forEach(field => {
-                        if (field.isList) {
-                          writer.write(
-                            `${field.name}: z.array(${field.type}BaseModel)`
-                          )
-                        } else {
-                          writer.write(`${field.name}: ${field.type}BaseModel`)
-                        }
+                        writeArray(writer, getJSDocs(field.documentation))
 
-                        if (!field.isRequired) {
-                          writer.write('.nullable()')
-                        }
-
-                        writer.write(',').newLine()
+                        writer
+                          .write(`${field.name}: ${getZodConstructor(field)}`)
+                          .write(',')
+                          .newLine()
                       })
                     })
-                    .write(')')
-                    .newLine()
+                    .write(')).schema')
                 },
               },
             ],
           })
-        } */
+        }
 
         sourceFile.formatText({
           indentSize: 2,
@@ -196,11 +173,6 @@ generatorHelper.generatorHandler({
       })
     }
 
-    return project.save().then(
-      () =>
-        new Promise<void>(res =>
-          writeFile('out.json', JSON.stringify(options.dmmf), () => res())
-        )
-    )
+    return project.save()
   },
 })

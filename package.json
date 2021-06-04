@@ -19,7 +19,8 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build",
+    "install-peers": "install-self-peers -- --ignore-scripts",
+    "prepare": "yarn install-peers && yarn build",
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
@@ -52,14 +53,16 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.11.0",
+    "@team-griffin/install-self-peers": "^1.1.1",
     "husky": "^6.0.0",
     "size-limit": "^4.11.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
-    "typescript": "^4.3.2"
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "@prisma/generator-helper": "^2.24.0",
+    "change-case": "^4.1.2",
     "ts-morph": "^11.0.0"
   }
 }

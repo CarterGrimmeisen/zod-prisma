@@ -11,8 +11,9 @@ generator client {
 }
 
 generator zod {
-  provider = "../bin/cli.js"
-  output   = "./zod"
+  provider      = "../bin/cli.js"
+  output        = "./zod"
+  relationModel = "default"
 }
 
 model Auth {
@@ -27,11 +28,18 @@ enum UserType {
   ADMIN
 }
 
+/// A super duper cool Prisma model
 model User {
+  /// The user's email address (used to identify them)
+  /// Some other line of documentation
+  /// @example {test@example.com}
+  /// @zod.email({ message: 'something interesting' })
+  /// @zod.min(7, { message: 'something interesting' })
   email String   @id
   name  String
   type  UserType
 
+  /// @zod.min(1)
   liked    Listing[] @relation("liked")
   showings Showing[]
 
