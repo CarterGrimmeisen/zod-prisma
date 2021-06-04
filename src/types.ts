@@ -1,7 +1,10 @@
 import type { DMMF } from '@prisma/generator-helper'
 import { computeModifiers } from './docs'
 
-export const getZodConstructor = (field: DMMF.Field) => {
+export const getZodConstructor = (
+	field: DMMF.Field,
+	getRelatedModelName = (name: string) => name
+) => {
 	let zodType = 'unknown()'
 	let extraModifiers: string[] = ['']
 	if (field.kind === 'scalar') {
@@ -29,7 +32,7 @@ export const getZodConstructor = (field: DMMF.Field) => {
 	} else if (field.kind === 'enum') {
 		zodType = `z.nativeEnum(${field.type})`
 	} else if (field.kind === 'object') {
-		zodType = `Related${field.type}Model`
+		zodType = getRelatedModelName(field.type)
 	}
 
 	if (!field.isRequired) extraModifiers.push('nullable()')
