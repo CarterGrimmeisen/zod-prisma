@@ -32,9 +32,15 @@ enum UserType {
 model User {
   /// The user's email address (used to identify them)
   /// Some other line of documentation
-  /// @example {test@example.com}
-  /// @zod.email({ message: 'something interesting' })
-  /// @zod.min(7, { message: 'something interesting' })
+  /// @zod.email({ message: 'Must be a valid email address' })
+  /// @zod.min(7, { message: 'Should be at least 7 characters' })
+  /// @remark The generate zod schema
+  /// @example
+  /// ```ts
+  ///  z.string()
+  ///    .email({ message: 'Must be a valid email address' })
+  ///    .min(7, { message: 'Should be at least 7 characters' })
+  /// ```
   email String   @id
   name  String
   type  UserType
