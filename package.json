@@ -36,7 +36,9 @@
     "printWidth": 80,
     "semi": false,
     "singleQuote": true,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "useTabs": true
   },
   "name": "zod-prisma",
   "author": "Carter Grimmeisen",
@@ -54,7 +56,11 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.11.0",
     "@team-griffin/install-self-peers": "^1.1.1",
+    "@typescript-eslint/eslint-plugin": "^4.26.1-alpha.0",
+    "@typescript-eslint/parser": "^4.26.1-alpha.0",
     "husky": "^6.0.0",
+    "jest-mock-extended": "^1.0.15",
+    "prettier": "^2.3.0",
     "size-limit": "^4.11.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
