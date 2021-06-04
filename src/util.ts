@@ -1,4 +1,4 @@
-import { CodeBlockWriter } from 'ts-morph'
+import type { CodeBlockWriter } from 'ts-morph'
 
 export const writeArray = (
   writer: CodeBlockWriter,

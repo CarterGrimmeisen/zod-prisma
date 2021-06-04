@@ -1,5 +1,5 @@
 import { generatorHandler } from '@prisma/generator-helper'
-import path from 'path'
+import { resolve } from 'path'
 import { Project, StructureKind, VariableDeclarationKind } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { getJSDocs } from './docs'
@@ -14,7 +14,7 @@ generatorHandler({
   onManifest() {
     return {
       prettyName: 'Zod Schemas',
-      defaultOutput: path.resolve(__dirname, 'zod'),
+      defaultOutput: resolve(__dirname, 'zod'),
     }
   },
   onGenerate(options) {
@@ -35,43 +35,107 @@ generatorHandler({
       }
     )
 
-    if (models.length > 0) {
-      models.forEach(model => {
-        indexSource.addExportDeclaration({
-          moduleSpecifier: `./${model.name}`,
-        })
+    models.forEach(model => {
+      indexSource.addExportDeclaration({
+        moduleSpecifier: `./${model.name}`,
+      })
 
-        const modelName = (name: string) =>
-          relationModel === 'default' ? `_${name}Model` : `${name}Model`
-        const relatedModelName = (name: string) =>
-          relationModel === 'default' ? `${name}Model` : `Related${name}Model`
+      const modelName = (name: string) =>
+        relationModel === 'default' ? `_${name}Model` : `${name}Model`
+      const relatedModelName = (name: string) =>
+        relationModel === 'default' ? `${name}Model` : `Related${name}Model`
 
-        const sourceFile = project.createSourceFile(
-          `${outputPath}/${model.name}.ts`,
+      const sourceFile = project.createSourceFile(
+        `${outputPath}/${model.name}.ts`,
+        {
+          statements: [
+            {
+              kind: StructureKind.ImportDeclaration,
+              namespaceImport: 'z',
+              moduleSpecifier: 'zod',
+            },
+          ],
+        },
+        {
+          overwrite: true,
+        }
+      )
+
+      const enumFields = model.fields.filter(f => f.kind === 'enum')
+
+      sourceFile.addImportDeclaration({
+        kind: StructureKind.ImportDeclaration,
+        moduleSpecifier: '@prisma/client',
+        namedImports: [model.name, ...enumFields.map(f => f.type)],
+      })
+
+      sourceFile.addStatements(writer =>
+        writeArray(writer, getJSDocs(model.documentation))
+      )
+
+      sourceFile.addVariableStatement({
+        declarationKind: VariableDeclarationKind.Const,
+        isExported: true,
+        declarations: [
           {
-            statements: [
-              {
-                kind: StructureKind.ImportDeclaration,
-                namespaceImport: 'z',
-                moduleSpecifier: 'zod',
-              },
-            ],
+            name: modelName(model.name),
+            initializer(writer) {
+              writer
+                .write('z.object(')
+                .inlineBlock(() => {
+                  model.fields
+                    .filter(f => f.kind !== 'object')
+                    .forEach(field => {
+                      writeArray(writer, getJSDocs(field.documentation))
+                      writer
+                        .write(`${field.name}: ${getZodConstructor(field)}`)
+                        .write(',')
+                        .newLine()
+                    })
+                })
+                .write(')')
+            },
           },
-          {
-            overwrite: true,
-          }
-        )
+        ],
+      })
 
-        const enumFields = model.fields.filter(f => f.kind === 'enum')
+      const relationFields = model.fields.filter(f => f.kind === 'object')
 
+      if (relationModel !== false && relationFields.length > 0) {
         sourceFile.addImportDeclaration({
           kind: StructureKind.ImportDeclaration,
-          moduleSpecifier: '@prisma/client',
-          namedImports: [model.name, ...enumFields.map(f => f.type)],
+          moduleSpecifier: './index',
+          namedImports: Array.from(
+            new Set(
+              relationFields.flatMap(f => [
+                `Complete${f.type}`,
+                relatedModelName(f.type),
+              ])
+            )
+          ),
+        })
+
+        sourceFile.addInterface({
+          name: `Complete${model.name}`,
+          isExported: true,
+          extends: writer => writer.write(model.name),
+          properties: relationFields.map(f => ({
+            name: f.name,
+            type: `Complete${f.type}${f.isList ? '[]' : ''}${
+              !f.isRequired ? ' | null' : ''
+            }`,
+          })),
         })
 
         sourceFile.addStatements(writer =>
-          writeArray(writer, getJSDocs(model.documentation))
+          writeArray(writer, [
+            '',
+            '/**',
+            ` * Related${model.name}Model contains all relations on your model in addition to the scalars`,
+            ' *',
+            ' * NOTE: Lazy required in case of potential circular dependencies within schema',
+            ' */',
+          ])
         )
 
         sourceFile.addVariableStatement({
@@ -79,99 +143,33 @@ generatorHandler({
           isExported: true,
           declarations: [
             {
-              name: modelName(model.name),
+              name: relatedModelName(model.name),
               initializer(writer) {
                 writer
-                  .write('z.object(')
+                  .write(`z.lazy(() => ${modelName(model.name)}.extend(`)
                   .inlineBlock(() => {
-                    model.fields
-                      .filter(f => f.kind !== 'object')
-                      .forEach(field => {
-                        writeArray(writer, getJSDocs(field.documentation))
-                        writer
-                          .write(`${field.name}: ${getZodConstructor(field)}`)
-                          .write(',')
-                          .newLine()
-                      })
+                    relationFields.forEach(field => {
+                      writeArray(writer, getJSDocs(field.documentation))
+
+                      writer
+                        .write(`${field.name}: ${getZodConstructor(field)}`)
+                        .write(',')
+                        .newLine()
+                    })
                   })
-                  .write(')')
+                  .write(')).schema')
               },
             },
           ],
         })
+      }
 
-        const relationFields = model.fields.filter(f => f.kind === 'object')
-
-        if (relationModel !== false && relationFields.length > 0) {
-          sourceFile.addImportDeclaration({
-            kind: StructureKind.ImportDeclaration,
-            moduleSpecifier: './index',
-            namedImports: Array.from(
-              new Set(
-                relationFields.flatMap(f => [
-                  `Complete${f.type}`,
-                  relatedModelName(f.type),
-                ])
-              )
-            ),
-          })
-
-          sourceFile.addInterface({
-            name: `Complete${model.name}`,
-            isExported: true,
-            extends: writer => writer.write(model.name),
-            properties: relationFields.map(f => ({
-              name: f.name,
-              type: `Complete${f.type}${f.isList ? '[]' : ''}${
-                !f.isRequired ? ' | null' : ''
-              }`,
-            })),
-          })
-
-          sourceFile.addStatements(writer =>
-            writeArray(writer, [
-              '',
-              '/**',
-              ` * Related${model.name}Model contains all relations on your model in addition to the scalars`,
-              ' *',
-              ' * NOTE: Lazy required in case of potential circular dependencies within schema',
-              ' */',
-            ])
-          )
-
-          sourceFile.addVariableStatement({
-            declarationKind: VariableDeclarationKind.Const,
-            isExported: true,
-            declarations: [
-              {
-                name: relatedModelName(model.name),
-                initializer(writer) {
-                  writer
-                    .write(`z.lazy(() => ${modelName(model.name)}.extend(`)
-                    .inlineBlock(() => {
-                      relationFields.forEach(field => {
-                        writeArray(writer, getJSDocs(field.documentation))
-
-                        writer
-                          .write(`${field.name}: ${getZodConstructor(field)}`)
-                          .write(',')
-                          .newLine()
-                      })
-                    })
-                    .write(')).schema')
-                },
-              },
-            ],
-          })
-        }
-
-        sourceFile.formatText({
-          indentSize: 2,
-          convertTabsToSpaces: true,
-          semicolons: SemicolonPreference.Remove,
-        })
+      sourceFile.formatText({
+        indentSize: 2,
+        convertTabsToSpaces: true,
+        semicolons: SemicolonPreference.Remove,
       })
-    }
+    })
 
     return project.save()
   },
