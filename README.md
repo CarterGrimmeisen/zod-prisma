@@ -114,7 +114,7 @@ This project utilizes yarn and if you plan on contributing, you should too.
 
 1. Add zod-prisma as a dev dependency
     ```sh
-    yarn add -D zod-prisma
+    yarn add -D zod-prisma # Not yet published
     ```
 
 2. Add the zod-prisma generator to your schema.prisma
@@ -137,7 +137,7 @@ This project utilizes yarn and if you plan on contributing, you should too.
 > TODO
 <!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
 
-_For examples, please refer to the [Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples)_
+_For examples, please refer to the [Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples) or the [Functional Tests](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/test/functional)_
 
 
 
@@ -189,4 +189,4 @@ Project Link: [https://github.com/CarterGrimmeisen/zod-prisma](https://github.co
 [issues-shield]: https://img.shields.io/github/issues/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
 [issues-url]: https://github.com/CarterGrimmeisen/zod-prisma/issues
 [license-shield]: https://img.shields.io/github/license/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[license-url]: https://github.com/CarterGrimmeisen/zod-prisma/blob/main/LICENSE.txt
+[license-url]: https://github.com/CarterGrimmeisen/zod-prisma/blob/main/LICENSE
