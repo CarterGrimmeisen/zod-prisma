@@ -32,7 +32,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/CarterGrimmeisen/zod-prisma">
-    <img src="images/zod-prisma.svg" alt="Logo" width="120" height="120">
+    <img src="https://raw.githubusercontent.com/CarterGrimmeisen/zod-prisma/main/images/zod-prisma.svg" alt="Logo" width="120" height="120">
   </a>
 
   <h3 align="center">Zod Prisma</h3>
