@@ -4,3 +4,4 @@ node_modules
 dist
 examples/prisma/zod
 test/functional/*/actual
+.yarn
