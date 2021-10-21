@@ -7,6 +7,7 @@ import { writeArray } from './util'
 
 interface Config {
 	relationModel: boolean | 'default'
+	clientOutputPath?: string
 }
 
 generatorHandler({
@@ -25,7 +26,8 @@ generatorHandler({
 		const outputPath = options.generator.output!.value
 		const models = options.dmmf.datamodel.models
 
-		const { relationModel } = options.generator.config as unknown as Config
+		const { relationModel, clientOutputPath } = options.generator
+			.config as unknown as Config
 
 		const indexSource = project.createSourceFile(
 			`${outputPath}/index.ts`,
@@ -67,7 +69,7 @@ generatorHandler({
 
 			sourceFile.addImportDeclaration({
 				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: '@prisma/client',
+				moduleSpecifier: clientOutputPath || '@prisma/client',
 				namedImports: [model.name, ...enumFields.map((f) => f.type)],
 			})
 
