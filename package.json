@@ -52,7 +52,7 @@
 		"fast-glob": "^3.2.5",
 		"fs-extra": "^10.0.0",
 		"husky": "^6.0.0",
-		"jest-mock-extended": "^1.0.15",
+		"jest-mock-extended": "^2.0.4",
 		"prettier": "^2.3.0",
 		"prisma": "^3.3.0",
 		"tsdx": "^0.14.1",
