@@ -1,81 +1,69 @@
 {
-  "version": "0.1.2",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "bin": "bin/cli.js",
-  "files": [
-    "dist",
-    "src",
-    "bin"
-  ],
-  "engines": {
-    "node": ">=14"
-  },
-  "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint src test/*.test.ts test/**/*.test.ts",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
-  },
-  "peerDependencies": {
-    "prisma": "^2.24.0",
-    "zod": "^3.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
-  "prettier": {
-    "printWidth": 80,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "tabWidth": 4,
-    "useTabs": true
-  },
-  "name": "zod-prisma",
-  "author": "Carter Grimmeisen",
-  "module": "dist/zod-prisma.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/zod-prisma.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/zod-prisma.esm.js",
-      "limit": "10 KB"
-    }
-  ],
-  "resolutions": {
-    "eslint": "^7.17.0"
-  },
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.5.5",
-    "@types/fs-extra": "^9.0.11",
-    "@typescript-eslint/eslint-plugin": "^4.26.1-alpha.0",
-    "@typescript-eslint/parser": "^4.26.1-alpha.0",
-    "eslint": "^7.17.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "execa": "^5.1.0",
-    "fast-glob": "^3.2.5",
-    "fs-extra": "^10.0.0",
-    "husky": "^6.0.0",
-    "jest-mock-extended": "^1.0.15",
-    "prettier": "^2.3.0",
-    "prisma": "^2.24.1",
-    "size-limit": "^4.11.0",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4",
-    "zod": "^3.1.0"
-  },
-  "dependencies": {
-    "@prisma/generator-helper": "^2.24.0",
-    "ts-morph": "^11.0.0"
-  }
+	"version": "0.1.2",
+	"license": "MIT",
+	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
+	"bin": "bin/cli.js",
+	"files": [
+		"dist",
+		"src",
+		"bin"
+	],
+	"engines": {
+		"node": ">=14"
+	},
+	"scripts": {
+		"start": "tsdx watch",
+		"build": "tsdx build",
+		"test": "tsdx test",
+		"lint": "tsdx lint src test/*.test.ts test/**/*.test.ts"
+	},
+	"peerDependencies": {
+		"prisma": "^3.3.0",
+		"zod": "^3.0.0"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "tsdx lint"
+		}
+	},
+	"prettier": {
+		"printWidth": 80,
+		"semi": false,
+		"singleQuote": true,
+		"trailingComma": "es5",
+		"tabWidth": 4,
+		"useTabs": true
+	},
+	"name": "zod-prisma",
+	"author": "Carter Grimmeisen",
+	"module": "dist/zod-prisma.esm.js",
+	"resolutions": {
+		"eslint": "^7.17.0"
+	},
+	"devDependencies": {
+		"@size-limit/preset-small-lib": "^4.5.5",
+		"@types/fs-extra": "^9.0.11",
+		"@typescript-eslint/eslint-plugin": "^4.26.1-alpha.0",
+		"@typescript-eslint/parser": "^4.26.1-alpha.0",
+		"eslint": "^7.17.0",
+		"eslint-config-react-app": "^6.0.0",
+		"eslint-plugin-prettier": "^3.4.0",
+		"execa": "^5.1.0",
+		"fast-glob": "^3.2.5",
+		"fs-extra": "^10.0.0",
+		"husky": "^6.0.0",
+		"jest-mock-extended": "^1.0.15",
+		"prettier": "^2.3.0",
+		"prisma": "^3.3.0",
+		"size-limit": "^4.11.0",
+		"tsdx": "^0.14.1",
+		"tslib": "^2.2.0",
+		"typescript": "^4.2.4",
+		"zod": "^3.1.0"
+	},
+	"dependencies": {
+		"@prisma/generator-helper": "^2.24.0",
+		"ts-morph": "^11.0.0"
+	}
 }
