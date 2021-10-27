@@ -1,5 +1,5 @@
 name: CI
-on: [push, workflow_dispatch, pull_request]
+on: [push, workflow_dispatch]
 jobs:
     build:
         name: Build, lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
