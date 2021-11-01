@@ -45,7 +45,7 @@
 		"@types/fs-extra": "^9.0.11",
 		"@typescript-eslint/eslint-plugin": "^4.33.0",
 		"@typescript-eslint/parser": "^4.33.0",
-		"eslint": "^7.17.0",
+		"eslint": "^8.1.0",
 		"eslint-config-react-app": "^6.0.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"execa": "^5.1.0",
