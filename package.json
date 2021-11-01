@@ -61,7 +61,7 @@
 		"zod": "^3.11.6"
 	},
 	"dependencies": {
-		"@prisma/generator-helper": "^2.24.0",
+		"@prisma/generator-helper": "^3.3.0",
 		"ts-morph": "^12.0.0"
 	}
 }
