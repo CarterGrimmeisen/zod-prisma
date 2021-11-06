@@ -18,6 +18,6 @@ export interface CompletePost extends Post {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const PostModel = z.lazy(() => _PostModel.extend({
+export const PostModel: z.ZodSchema<CompletePost> = z.lazy(() => _PostModel.extend({
   author: UserModel,
-})).schema
+}))

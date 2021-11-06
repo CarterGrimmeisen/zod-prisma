@@ -52,4 +52,5 @@ describe('Functional Tests', () => {
 	test.concurrent('Basic', ftForDir('basic'))
 	test.concurrent('Config', ftForDir('config'))
 	test.concurrent('Docs', ftForDir('docs'))
+	test.concurrent('Different Client Path', ftForDir('different-client-path'))
 })

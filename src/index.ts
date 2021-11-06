@@ -26,18 +26,11 @@ generatorHandler({
 		const outputPath = options.generator.output!.value
 		const models = options.dmmf.datamodel.models
 
-    const prismaClient = options.otherGenerators.find(each => each.provider.value === 'prisma-client-js')
-    if (!prismaClient) {
-      console.error("You must generate a prisma client as well. Add it to your schema.prisma with the following:")
-      console.error(`generator client {
-        provider = "prisma-client-js"
-      }
-      `)
-      process.exit(1)
-    }
+		const prismaClient = options.otherGenerators.find(
+			(each) => each.provider.value === 'prisma-client-js'
+		)
 
-		const { relationModel } = options.generator
-			.config as unknown as Config
+		const { relationModel } = options.generator.config as unknown as Config
 
 		const indexSource = project.createSourceFile(
 			`${outputPath}/index.ts`,
@@ -79,7 +72,9 @@ generatorHandler({
 
 			sourceFile.addImportDeclaration({
 				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: prismaClient?.output?.value ? path.relative(outputPath, prismaClient.output.value) : '@prisma/client',
+				moduleSpecifier: prismaClient?.output?.value
+					? path.relative(outputPath, prismaClient.output.value)
+					: '@prisma/client',
 				namedImports: [model.name, ...enumFields.map((f) => f.type)],
 			})
 
@@ -171,7 +166,7 @@ generatorHandler({
 					declarations: [
 						{
 							name: relatedModelName(model.name),
-              type: `z.ZodSchema<Complete${model.name}>`,
+							type: `z.ZodSchema<Complete${model.name}>`,
 							initializer(writer) {
 								writer
 									.write(

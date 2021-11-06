@@ -17,6 +17,6 @@ export interface CompleteUser extends User {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const UserModel = z.lazy(() => _UserModel.extend({
+export const UserModel: z.ZodSchema<CompleteUser> = z.lazy(() => _UserModel.extend({
   posts: PostModel.array(),
-})).schema
+}))
