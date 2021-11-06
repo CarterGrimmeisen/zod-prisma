@@ -1,3 +1,4 @@
+import path from 'path'
 import { generatorHandler } from '@prisma/generator-helper'
 import { Project, StructureKind, VariableDeclarationKind } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
@@ -7,7 +8,6 @@ import { writeArray } from './util'
 
 interface Config {
 	relationModel: boolean | 'default'
-	clientOutputPath?: string
 }
 
 generatorHandler({
@@ -26,7 +26,17 @@ generatorHandler({
 		const outputPath = options.generator.output!.value
 		const models = options.dmmf.datamodel.models
 
-		const { relationModel, clientOutputPath } = options.generator
+    const prismaClient = options.otherGenerators.find(each => each.provider.value === 'prisma-client-js')
+    if (!prismaClient) {
+      console.error("You must generate a prisma client as well. Add it to your schema.prisma with the following:")
+      console.error(`generator client {
+        provider = "prisma-client-js"
+      }
+      `)
+      process.exit(1)
+    }
+
+		const { relationModel } = options.generator
 			.config as unknown as Config
 
 		const indexSource = project.createSourceFile(
@@ -69,7 +79,7 @@ generatorHandler({
 
 			sourceFile.addImportDeclaration({
 				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: clientOutputPath || '@prisma/client',
+				moduleSpecifier: prismaClient?.output?.value ? path.relative(outputPath, prismaClient.output.value) : '@prisma/client',
 				namedImports: [model.name, ...enumFields.map((f) => f.type)],
 			})
 
@@ -161,6 +171,7 @@ generatorHandler({
 					declarations: [
 						{
 							name: relatedModelName(model.name),
+              type: `z.ZodSchema<Complete${model.name}>`,
 							initializer(writer) {
 								writer
 									.write(
@@ -188,7 +199,7 @@ generatorHandler({
 												.newLine()
 										})
 									})
-									.write(')).schema')
+									.write('))')
 							},
 						},
 					],
