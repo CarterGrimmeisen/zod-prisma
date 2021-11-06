@@ -7,8 +7,8 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                node: ['14.x', '16.x']
-                os: [ubuntu-latest, macOS-latest]
+                node: ['14.x']
+                os: [ubuntu-latest]
 
         steps:
             - name: Checkout repo
@@ -19,8 +19,11 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
 
-            - name: Install deps (with cache)
-              uses: bahmutov/npm-install@v1
+            - name: Clean yarn cache
+              run: yarn cache clean
+
+            - name: Install deps (no cache)
+              run: yarn install --force
 
             - name: Build
               run: yarn build
