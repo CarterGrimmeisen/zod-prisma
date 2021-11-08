@@ -1166,10 +1166,10 @@
     "@types/debug" "4.1.7"
     ms "2.1.3"
 
-"@prisma/engines@3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c":
-  version "3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c"
-  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c.tgz#99026c466ffe1229c94e3392a1ae923a149be4f1"
-  integrity sha512-T3nEnRWmoneNZJPd9IBR29G8ZDUjNelA8+cG5y8/lh6vySm6ryWSNxj1s377U9YzFYyZmXiA9vK1iyxMoRff/g==
+"@prisma/engines@3.4.1-2.57771c0558568c7d08bd34c7248af5244ae16bd9":
+  version "3.4.1-2.57771c0558568c7d08bd34c7248af5244ae16bd9"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-3.4.1-2.57771c0558568c7d08bd34c7248af5244ae16bd9.tgz#8e5534bfe255210c29b5181f694c9acd32d558c2"
+  integrity sha512-NO4Q88k3CfUpYzfpDD+0wSVCqhaeljCFAGSe1XyvmXAOlMU2AAjCwmRn6S4UXlT9yEGB/LwFjdvGjcgfUQ+Mtw==
 
 "@prisma/generator-helper@^3.3.0":
   version "3.3.0"
@@ -5125,12 +5125,12 @@ pretty-format@^25.2.1, pretty-format@^25.5.0:
     ansi-styles "^4.0.0"
     react-is "^16.12.0"
 
-prisma@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-3.3.0.tgz#9fd685111c26d078dd7eb6ffaddc584a33ec42b4"
-  integrity sha512-E7C9mXRwZVpcnSeJT533qGHUVrYULsE9ihFvAtQMuxhTXkxoRlMLyo/1ZOyeu9GdXP8DJ7ruLOw06kEs/N3dVg==
+prisma@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-3.4.1.tgz#a6c406301e67716009dcbdedc09a1c9bf7bd3b2d"
+  integrity sha512-APws/xRa1wYd064KV7hByQzWiBMUy/yQ501XXrsRZegXAQ/j1obG2HCk34MEbgn8IqLSRLaXyhCYz4R4HwRmMQ==
   dependencies:
-    "@prisma/engines" "3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c"
+    "@prisma/engines" "3.4.1-2.57771c0558568c7d08bd34c7248af5244ae16bd9"
 
 progress-estimator@^0.2.2:
   version "0.2.2"
