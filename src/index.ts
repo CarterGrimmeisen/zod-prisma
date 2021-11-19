@@ -122,18 +122,24 @@ generatorHandler({
 			)
 
 			if (relationModel !== false && relationFields.length > 0) {
-				sourceFile.addImportDeclaration({
-					kind: StructureKind.ImportDeclaration,
-					moduleSpecifier: './index',
-					namedImports: Array.from(
-						new Set(
-							relationFields.flatMap((f) => [
-								`Complete${f.type}`,
-								relatedModelName(f.type),
-							])
-						)
-					),
-				})
+				const filteredFields = relationFields.filter(
+					(f) => f.type !== model.name
+				)
+
+				if (filteredFields.length > 0) {
+					sourceFile.addImportDeclaration({
+						kind: StructureKind.ImportDeclaration,
+						moduleSpecifier: './index',
+						namedImports: Array.from(
+							new Set(
+								filteredFields.flatMap((f) => [
+									`Complete${f.type}`,
+									relatedModelName(f.type),
+								])
+							)
+						),
+					})
+				}
 
 				sourceFile.addInterface({
 					name: `Complete${model.name}`,
