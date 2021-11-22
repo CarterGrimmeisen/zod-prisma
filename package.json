@@ -64,6 +64,6 @@
 	},
 	"dependencies": {
 		"@prisma/generator-helper": "^3.3.0",
-		"ts-morph": "^12.2.0"
+		"ts-morph": "^13.0.0"
 	}
 }
