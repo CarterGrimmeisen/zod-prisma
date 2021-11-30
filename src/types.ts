@@ -5,7 +5,7 @@ export const getZodConstructor = (
 	field: DMMF.Field,
 	getRelatedModelName = (name: string) => name
 ) => {
-	let zodType = 'unknown()'
+	let zodType = 'z.unknown()'
 	let extraModifiers: string[] = ['']
 	if (field.kind === 'scalar') {
 		switch (field.type) {
@@ -16,10 +16,16 @@ export const getZodConstructor = (
 				zodType = 'z.number()'
 				extraModifiers.push('int()')
 				break
+			case 'BigInt':
+				zodType = 'z.bigint()'
+				break
 			case 'DateTime':
 				zodType = 'z.date()'
 				break
 			case 'Float':
+				zodType = 'z.number()'
+				break
+			case 'Decimal':
 				zodType = 'z.number()'
 				break
 			case 'Json':
@@ -27,6 +33,9 @@ export const getZodConstructor = (
 				break
 			case 'Boolean':
 				zodType = 'z.boolean()'
+				break
+			case 'Bytes':
+				zodType = 'z.unknown()'
 				break
 		}
 	} else if (field.kind === 'enum') {

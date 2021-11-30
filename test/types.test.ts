@@ -20,4 +20,22 @@ describe('types Package', () => {
 
 		expect(constructor).toBe('z.string().nullable().array().max(64).min(1)')
 	})
+
+	test('regression - unknown type', () => {
+		const field: DMMF.Field = {
+			hasDefaultValue: false,
+			isGenerated: false,
+			isId: false,
+			isList: false,
+			isRequired: true,
+			isUnique: false,
+			kind: 'scalar',
+			name: 'aField',
+			type: 'SomeUnknownType',
+		}
+
+		const constructor = getZodConstructor(field)
+
+		expect(constructor).toBe('z.unknown()')
+	})
 })
