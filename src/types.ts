@@ -5,7 +5,7 @@ export const getZodConstructor = (
 	field: DMMF.Field,
 	getRelatedModelName = (name: string) => name
 ) => {
-	let zodType = 'unknown()'
+	let zodType = 'z.unknown()'
 	let extraModifiers: string[] = ['']
 	if (field.kind === 'scalar') {
 		switch (field.type) {

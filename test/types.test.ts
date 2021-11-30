@@ -20,4 +20,22 @@ describe('types Package', () => {
 
 		expect(constructor).toBe('z.string().nullable().array().max(64).min(1)')
 	})
+
+	test('getZodConstructor for unknown type', () => {
+		const field: DMMF.Field = {
+			hasDefaultValue: false,
+			isGenerated: false,
+			isId: false,
+			isList: false,
+			isRequired: false,
+			isUnique: false,
+			kind: 'scalar',
+			name: 'hereBeDragons',
+			type: 'SomeUnknownType',
+		}
+
+		const constructor = getZodConstructor(field)
+
+		expect(constructor).toMatch(/^z.unknown\(\)/)
+	})
 })
