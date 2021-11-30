@@ -4,8 +4,8 @@
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"bin": {
-    "zod-prisma": "bin/cli.js"
-  },
+		"zod-prisma": "bin/cli.js"
+	},
 	"files": [
 		"dist",
 		"src",
@@ -17,7 +17,7 @@
 	"scripts": {
 		"start": "tsdx watch",
 		"build": "tsdx build",
-		"test": "tsdx test",
+		"test": "tsdx build && tsdx test",
 		"lint": "tsdx lint src test/*.test.ts test/**/*.test.ts"
 	},
 	"peerDependencies": {
@@ -63,7 +63,7 @@
 		"zod": "^3.11.6"
 	},
 	"dependencies": {
-		"@prisma/generator-helper": "^3.3.0",
+		"@prisma/generator-helper": "^3.6.0",
 		"ts-morph": "^12.2.0"
 	}
 }
