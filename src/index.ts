@@ -1,5 +1,5 @@
 import path from 'path'
-import { generatorHandler } from '@prisma/generator-helper'
+import { generatorHandler, DMMF } from '@prisma/generator-helper'
 import { Project, StructureKind, VariableDeclarationKind } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { getJSDocs } from './docs'
@@ -47,7 +47,13 @@ generatorHandler({
 
 			const modelName = (name: string) =>
 				relationModel === 'default' ? `_${name}Model` : `${name}Model`
-			const relatedModelName = (name: string) =>
+			const relatedModelName = (
+				name:
+					| string
+					| DMMF.SchemaEnum
+					| DMMF.OutputType
+					| DMMF.SchemaArg
+			) =>
 				relationModel === 'default'
 					? `${name}Model`
 					: `Related${name}Model`
