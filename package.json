@@ -18,7 +18,8 @@
 		"start": "tsdx watch",
 		"build": "tsdx build",
 		"test": "tsdx build && tsdx test",
-		"lint": "tsdx lint src test/*.test.ts test/**/*.test.ts"
+		"lint": "tsdx lint src test/*.test.ts test/**/*.test.ts",
+		"prepublish": "yarn build"
 	},
 	"peerDependencies": {
 		"prisma": "^3.4.2",
