@@ -8,6 +8,8 @@ import { writeArray } from './util'
 
 interface Config {
 	relationModel: boolean | 'default'
+	modelSuffix?: string
+	modelCase?: 'PascalCase' | 'camelCase'
 }
 
 generatorHandler({
@@ -30,7 +32,18 @@ generatorHandler({
 			(each) => each.provider.value === 'prisma-client-js'
 		)
 
-		const { relationModel } = options.generator.config as unknown as Config
+		const {
+			relationModel,
+			modelSuffix = 'Model',
+			modelCase = 'PascalCase',
+		} = options.generator.config as unknown as Config
+
+		const formatModelName = (name: string, prefix = '') => {
+			if (modelCase === 'camelCase') {
+				name = name.slice(0, 1).toLowerCase() + name.slice(1)
+			}
+			return `${prefix}${name}${modelSuffix}`
+		}
 
 		const indexSource = project.createSourceFile(
 			`${outputPath}/index.ts`,
@@ -46,11 +59,12 @@ generatorHandler({
 			})
 
 			const modelName = (name: string) =>
-				relationModel === 'default' ? `_${name}Model` : `${name}Model`
+				formatModelName(name, relationModel === 'default' ? '_' : '')
+
 			const relatedModelName = (name: string) =>
-				relationModel === 'default'
-					? `${name}Model`
-					: `Related${name}Model`
+				formatModelName(
+					relationModel === 'default' ? name : `Related${name}`
+				)
 
 			const sourceFile = project.createSourceFile(
 				`${outputPath}/${model.name.toLowerCase()}.ts`,

@@ -10,6 +10,8 @@ generator zod {
   provider      = "../../../bin/cli.js"
   output        = "../actual/"
   relationModel = "default"
+  modelCase     = "camelCase"
+  modelSuffix   = "Schema"
 }
 
 model User {
