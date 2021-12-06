@@ -134,7 +134,7 @@ generatorHandler({
 							new Set(
 								filteredFields.flatMap((f) => [
 									`Complete${f.type}`,
-									relatedModelName(f.type),
+									relatedModelName(String(f.type)),
 								])
 							)
 						),
