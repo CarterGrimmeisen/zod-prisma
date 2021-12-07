@@ -122,7 +122,12 @@ This project utilizes yarn and if you plan on contributing, you should too.
     generator zod {
       provider      = "zod-prisma"
       output        = "./zod"
-      relationModel = "default"
+      relationModel = "default" # Do not export model without relations.
+      # relationModel = true # Create and export both plain and related models.
+      # relationModel = false # Do not generate related model
+      modelCase = "PascalCase" # (default) Output models using pascal case (ex. UserModel, PostModel)
+      # modelCase = "camelCase" # Output models using camel case (ex. userModel, postModel)
+      modelSuffix = "Model" # (default) Suffix to apply to your prisma models when naming Zod schemas
     }
     ```
 
