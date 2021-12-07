@@ -1,6 +1,7 @@
 {
 	"version": "0.2.4",
 	"license": "MIT",
+  "description": "A Prisma generator that creates Zod schemas for all of your models",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"bin": {
