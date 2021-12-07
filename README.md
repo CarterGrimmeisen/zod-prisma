@@ -150,8 +150,10 @@ This project utilizes yarn and if you plan on contributing, you should too.
 
 ### JSDoc Generation
 
-Rich-comments in the Prisma schema will be transformed
-into JSDoc for the associated fields:
+[Rich-comments](https://www.prisma.io/docs/concepts/components/prisma-schema#comments)
+in the Prisma schema will be transformed into JSDoc for the associated fields:
+
+> _Note: make sure to use a triple-slash. Double-slash comments won't be processed._
 
 ```graphql
 model Post {
