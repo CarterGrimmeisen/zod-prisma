@@ -33,10 +33,16 @@ generatorHandler({
 		)
 
 		const {
-			relationModel,
 			modelSuffix = 'Model',
 			modelCase = 'PascalCase',
 		} = options.generator.config as unknown as Config
+
+		// config fields are strings and require an explicit cast to boolean:
+		const relationModel = options.generator.config.relationModel === 'false'
+			? false
+			: options.generator.config.relationModel === 'true'
+			? true
+			: 'default'
 
 		const formatModelName = (name: string, prefix = '') => {
 			if (modelCase === 'camelCase') {
