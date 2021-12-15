@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Spreadsheet } from "@prisma/client"
+import { Spreadsheet } from "../prisma/.client"
 
 export const SpreadsheetModel = z.object({
   id: z.string(),

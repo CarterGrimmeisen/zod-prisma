@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Presentation } from "@prisma/client"
+import { Presentation } from "../prisma/.client"
 
 export const PresentationModel = z.object({
   id: z.string(),

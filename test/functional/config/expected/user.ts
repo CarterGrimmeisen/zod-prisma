@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { User } from "@prisma/client"
+import { User } from "../prisma/.client"
 import { CompletePost, postSchema } from "./index"
 
 export const _userSchema = z.object({

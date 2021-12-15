@@ -5,12 +5,16 @@ import { SemicolonPreference } from 'typescript'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
 import { writeArray } from './util'
+import z from 'zod'
 
-interface Config {
-	relationModel: boolean | 'default'
-	modelSuffix?: string
-	modelCase?: 'PascalCase' | 'camelCase'
-}
+const configSchema = z.object({
+	relationModel: z
+		.enum(['default', 'true', 'false'])
+		.default('true')
+		.transform((val) => (val === 'default' ? val : Boolean(val))),
+	modelSuffix: z.string().default('Model'),
+	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
+})
 
 generatorHandler({
 	onManifest() {
@@ -32,11 +36,13 @@ generatorHandler({
 			(each) => each.provider.value === 'prisma-client-js'
 		)
 
-		const {
-			relationModel,
-			modelSuffix = 'Model',
-			modelCase = 'PascalCase',
-		} = options.generator.config as unknown as Config
+		const parsedConfig = configSchema.safeParse(options.generator.config)
+		if (!parsedConfig.success)
+			throw new Error(
+				'Incorrect config provided. Please check the values you provided and try again.'
+			)
+
+		const { relationModel, modelSuffix, modelCase } = parsedConfig.data
 
 		const formatModelName = (name: string, prefix = '') => {
 			if (modelCase === 'camelCase') {
@@ -92,11 +98,21 @@ generatorHandler({
 
 			const enumFields = model.fields.filter((f) => f.kind === 'enum')
 
+			let relativePath = prismaClient?.output?.value
+				? path.relative(outputPath, prismaClient.output.value)
+				: null
+			if (
+				relativePath &&
+				!(
+					relativePath.startsWith('./') ||
+					relativePath.startsWith('../')
+				)
+			)
+				relativePath = `./${relativePath}`
+
 			sourceFile.addImportDeclaration({
 				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: prismaClient?.output?.value
-					? path.relative(outputPath, prismaClient.output.value)
-					: '@prisma/client',
+				moduleSpecifier: relativePath ?? '@prisma/client',
 				namedImports: [model.name, ...enumFields.map((f) => f.type)],
 			})
 

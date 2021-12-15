@@ -6,6 +6,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+  output = ".client"
+}
+
 generator zod {
   provider      = "../../../bin/cli.js"
   output        = "../actual/"
