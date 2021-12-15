@@ -44,7 +44,7 @@
 	"module": "dist/zod-prisma.esm.js",
 	"resolutions": {
 		"eslint": "^7.17.0",
-    "typescript": "4.5.4"
+		"typescript": "4.5.4"
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^9.0.11",
