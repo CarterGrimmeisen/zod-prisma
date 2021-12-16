@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { Post } from "../prisma/.client"
 
 export const PostModel = z.object({
   id: z.string(),

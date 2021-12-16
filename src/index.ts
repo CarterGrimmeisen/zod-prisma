@@ -116,14 +116,31 @@ generatorHandler({
 					relativePath.startsWith('./') ||
 					relativePath.startsWith('../')
 				)
-			)
+			) {
 				relativePath = `./${relativePath}`
+			}
+			if (relativePath?.endsWith('/node_modules/@prisma/client')) {
+				relativePath = '@prisma/client'
+			}
 
-			sourceFile.addImportDeclaration({
-				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: relativePath ?? '@prisma/client',
-				namedImports: [model.name, ...enumFields.map((f) => f.type)],
-			})
+			const relationFields = model.fields.filter(
+				(f) => f.kind === 'object'
+			)
+
+			if (
+				(relationModel !== false && relationFields.length > 0) ||
+				enumFields.length > 0
+			) {
+				sourceFile.addImportDeclaration({
+					kind: StructureKind.ImportDeclaration,
+					isTypeOnly: enumFields.length === 0,
+					moduleSpecifier: relativePath ?? '@prisma/client',
+					namedImports:
+						relationModel !== false && relationFields.length > 0
+							? [model.name, ...enumFields.map((f) => f.type)]
+							: enumFields.map((f) => f.type),
+				})
+			}
 
 			sourceFile.addStatements((writer) =>
 				writeArray(writer, getJSDocs(model.documentation))
@@ -163,10 +180,6 @@ generatorHandler({
 					},
 				],
 			})
-
-			const relationFields = model.fields.filter(
-				(f) => f.kind === 'object'
-			)
 
 			if (relationModel !== false && relationFields.length > 0) {
 				const filteredFields = relationFields.filter(

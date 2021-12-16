@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Comment } from "../prisma/.client"
+import type { Comment } from "../prisma/.client"
 
 export const CommentModel = z.object({
   id: z.string(),
