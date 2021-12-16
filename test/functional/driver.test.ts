@@ -54,4 +54,5 @@ describe('Functional Tests', () => {
 	test.concurrent('Docs', ftForDir('docs'))
 	test.concurrent('Different Client Path', ftForDir('different-client-path'))
 	test.concurrent('Recursive Schema', ftForDir('recursive'))
+	test.concurrent('relationModel = false', ftForDir('relationFalse'))
 })
