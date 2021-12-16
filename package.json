@@ -20,16 +20,12 @@
 		"build": "tsdx build",
 		"test": "tsdx build && tsdx test",
 		"lint": "tsdx lint src test/*.test.ts test/**/*.test.ts",
-		"prepublish": "yarn build"
+		"prepublish": "yarn build",
+		"prepare": "husky install"
 	},
 	"peerDependencies": {
 		"prisma": "^3.4.2",
 		"zod": "^3.0.0"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "tsdx lint"
-		}
 	},
 	"prettier": {
 		"printWidth": 80,
