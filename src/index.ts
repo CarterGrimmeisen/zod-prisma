@@ -4,7 +4,7 @@ import { Project, StructureKind, VariableDeclarationKind } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
-import { writeArray } from './util'
+import { getDocumentationCodeInjection, writeArray } from './util'
 import z from 'zod'
 
 const configSchema = z.object({
@@ -124,6 +124,15 @@ generatorHandler({
 				moduleSpecifier: relativePath ?? '@prisma/client',
 				namedImports: [model.name, ...enumFields.map((f) => f.type)],
 			})
+
+			const injectedCode = getDocumentationCodeInjection(
+				model.documentation?.split('\n') ?? []
+			)
+			if (injectedCode) {
+				sourceFile.addStatements((writer) =>
+					writer.write(injectedCode + '\n')
+				)
+			}
 
 			sourceFile.addStatements((writer) =>
 				writeArray(writer, getJSDocs(model.documentation))

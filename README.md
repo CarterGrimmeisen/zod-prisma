@@ -215,6 +215,29 @@ export const PostModel = z.object({
 })
 ```
 
+## Importing External Validators
+
+If you want to import external validators for your fields, you can inject code
+per-model by annotating the model with a rich-comment code block in your Prisma
+schema:
+
+````prisma
+/// ```@zod
+/// import { fileNameRegex } from "my-regex-library"
+/// ```
+model Document {
+  id       String @id @default(cuid())
+  filename String /// @zod.regex(fileNameRegex)
+}
+````
+
+For code to be injected, the code block has to:
+
+-   Start with \`\`\`@zod on its own line
+-   End with \`\`\` on its own line
+
+Everything in between will be injected as-is, just after the imports.
+
 ## Examples
 
 <!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->

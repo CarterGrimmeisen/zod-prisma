@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider = "../../../bin/cli.js"
+  output   = "../actual/"
+}
+
+/// ```@zod
+/// import { fileNameRegex } from "../regex"
+/// ```
+model Document {
+  id       String @id @default(cuid())
+  filename String @unique /// @zod.regex(fileNameRegex)
+  author   String
+  contents String
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}
+
+/// ```@zod
+/// import { fileNameRegex } from "../regex"
+/// ```
+model Presentation {
+  id       String   @id @default(cuid())
+  filename String   @unique /// @zod.regex(fileNameRegex)
+  author   String
+  contents String[]
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}
+
+/// ```@zod
+/// import { fileNameRegex } from "../regex"
+/// ```
+model Spreadsheet {
+  id       String @id @default(cuid())
+  filename String @unique /// @zod.regex(fileNameRegex)
+  author   String
+  contents Json
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}
