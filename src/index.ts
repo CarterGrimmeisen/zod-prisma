@@ -107,20 +107,18 @@ generatorHandler({
 
 			const enumFields = model.fields.filter((f) => f.kind === 'enum')
 
-			let relativePath = prismaClient?.output?.value
-				? path.relative(outputPath, prismaClient.output.value)
-				: null
-			if (
-				relativePath &&
-				!(
-					relativePath.startsWith('./') ||
-					relativePath.startsWith('../')
-				)
+			let relativePath = path.relative(
+				outputPath,
+				prismaClient!.output!.value
+			)
+
+			if (relativePath.endsWith('/node_modules/@prisma/client')) {
+				relativePath = '@prisma/client'
+			} else if (
+				!relativePath.startsWith('./') &&
+				!relativePath.startsWith('../')
 			) {
 				relativePath = `./${relativePath}`
-			}
-			if (relativePath?.endsWith('/node_modules/@prisma/client')) {
-				relativePath = '@prisma/client'
 			}
 
 			const relationFields = model.fields.filter(
@@ -134,7 +132,7 @@ generatorHandler({
 				sourceFile.addImportDeclaration({
 					kind: StructureKind.ImportDeclaration,
 					isTypeOnly: enumFields.length === 0,
-					moduleSpecifier: relativePath ?? '@prisma/client',
+					moduleSpecifier: relativePath,
 					namedImports:
 						relationModel !== false && relationFields.length > 0
 							? [model.name, ...enumFields.map((f) => f.type)]
