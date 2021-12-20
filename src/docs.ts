@@ -20,5 +20,5 @@ export const computeModifiers = (docString: string) => {
 	return docString
 		.split('\n')
 		.filter((line) => line.trimLeft().startsWith('@zod'))
-		.map((line) => line.trim().split('@zod.').slice(-1)[0])
+		.map((line) => line.trim().split('@zod.').at(-1))
 }

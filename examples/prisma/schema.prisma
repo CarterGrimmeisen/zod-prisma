@@ -16,110 +16,14 @@ generator zod {
   relationModel = "default"
 }
 
-model Auth {
-  userEmail String @id
-  user      User   @relation(fields: [userEmail], references: [email])
-  hash      String
-}
-
-enum UserType {
-  USER
-  AGENT
-  ADMIN
-}
-
-/// A super duper cool Prisma model
 model User {
-  /// The user's email address (used to identify them)
-  /// Some other line of documentation
-  /// @zod.email({ message: 'Must be a valid email address' })
-  /// @zod.min(7, { message: 'Should be at least 7 characters' })
-  /// @remark The generate zod schema
-  /// @example
-  /// ```ts
-  ///  z.string()
-  ///    .email({ message: 'Must be a valid email address' })
-  ///    .min(7, { message: 'Should be at least 7 characters' })
-  /// ```
-  email String   @id
-  name  String
-  type  UserType
-
-  /// @zod.min(1)
-  liked    Listing[] @relation("liked")
-  showings Showing[]
-
-  auth Auth?
-
-  // Agent Specific Fields
-  agency   Agency? @relation(fields: [agencyId], references: [id])
-  agencyId String? @db.Uuid
-
-  listings Listing[] @relation("listings")
+  id    Int    @id @default(autoincrement())
+  meta  Json
+  posts Post[]
 }
 
-model Agency {
-  id      String @id @default(uuid()) @db.Uuid
-  name    String
-  address String
-  phone   String
-
-  agents User[]
-}
-
-model Listing {
-  mlsn        String  @id @db.Char(7)
-  description String
-  price       Float
-  sqft        Int
-  bedrooms    Int
-  bathrooms   Float
-  hoa         Boolean
-
-  rooms   Room[]
-  images  String[]
-  schools School[]
-  likedBy User[]   @relation("liked")
-
-  street  String
-  city    String
-  state   String @db.Char(2)
-  zipcode Int
-
-  agentEmail String
-  agent      User   @relation("listings", fields: [agentEmail], references: [email])
-
-  showings Showing[]
-
-  occupied  Boolean
-  alarmInfo String
-  dailyHits Int
-}
-
-model Room {
-  id          String @id @default(uuid())
-  name        String
-  description String
-
-  listing     Listing? @relation(fields: [listingMlsn], references: [mlsn])
-  listingMlsn String   @db.Char(7)
-}
-
-model School {
-  id       String    @id @default(uuid())
-  name     String
-  grades   Int[]
-  listings Listing[]
-}
-
-model Showing {
-  id    String   @id @default(uuid())
-  when  DateTime
-  who   User     @relation(fields: [userEmail], references: [email])
-  where Listing  @relation(fields: [listingMlsn], references: [mlsn])
-
-  confirmed Boolean
-
-  userEmail   String
-  listingMlsn String @db.Char(7)
+model Post {
+  id       Int  @id @default(autoincrement())
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
 }

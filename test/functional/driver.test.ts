@@ -6,10 +6,11 @@ import { pathExists, readFile } from 'fs-extra'
 jest.setTimeout(120000)
 
 const ftForDir = (dir: string) => async () => {
+	const tsconfig = resolve(__dirname, 'tsconfig.json')
 	const actualDir = resolve(__dirname, dir, 'actual')
 	const expectedDir = resolve(__dirname, dir, 'expected')
 
-	const results = await execa('npx', ['prisma', 'generate'], {
+	const generateResults = await execa('npx', ['prisma', 'generate'], {
 		cwd: resolve(__dirname, dir),
 		timeout: 30000,
 	})
@@ -45,7 +46,11 @@ const ftForDir = (dir: string) => async () => {
 		})
 	)
 
-	expect(results.exitCode).toBe(0)
+	expect(generateResults.exitCode).toBe(0)
+
+	const typeCheckResults = await execa('npx', ['tsc', '--project', tsconfig])
+
+	expect(typeCheckResults.exitCode).toBe(0)
 }
 
 describe('Functional Tests', () => {
