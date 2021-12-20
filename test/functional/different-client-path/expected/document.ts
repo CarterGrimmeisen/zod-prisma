@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { Document } from "../prisma/.client"
 
 export const DocumentModel = z.object({
   id: z.string(),

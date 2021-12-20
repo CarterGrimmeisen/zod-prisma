@@ -56,4 +56,5 @@ describe('Functional Tests', () => {
 	test.concurrent('Recursive Schema', ftForDir('recursive'))
 	test.concurrent('relationModel = false', ftForDir('relationFalse'))
   test.concurrent('Code injection', ftForDir('code-injection'))
+	test.concurrent('Imports', ftForDir('imports'))
 })

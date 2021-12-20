@@ -46,11 +46,11 @@ export const getZodConstructor = (
 		zodType = getRelatedModelName(field.type)
 	}
 
-	if (!field.isRequired) extraModifiers.push('nullable()')
 	if (field.isList) extraModifiers.push('array()')
 	if (field.documentation) {
 		extraModifiers.push(...computeModifiers(field.documentation))
 	}
+	if (!field.isRequired) extraModifiers.push('nullable()')
 
 	return `${zodType}${extraModifiers.join('.')}`
 }
