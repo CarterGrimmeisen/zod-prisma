@@ -6,7 +6,6 @@ import { pathExists, readFile } from 'fs-extra'
 jest.setTimeout(120000)
 
 const ftForDir = (dir: string) => async () => {
-	const tsconfig = resolve(__dirname, 'tsconfig.json')
 	const actualDir = resolve(__dirname, dir, 'actual')
 	const expectedDir = resolve(__dirname, dir, 'expected')
 
@@ -48,7 +47,13 @@ const ftForDir = (dir: string) => async () => {
 
 	expect(generateResults.exitCode).toBe(0)
 
-	const typeCheckResults = await execa('npx', ['tsc', '--project', tsconfig])
+	const typeCheckResults = await execa('npx', [
+		'tsc',
+		'--strict',
+		'--pretty',
+		'--noEmit',
+		...expectedFiles,
+	])
 
 	expect(typeCheckResults.exitCode).toBe(0)
 }
@@ -59,6 +64,7 @@ describe('Functional Tests', () => {
 	test.concurrent('Docs', ftForDir('docs'))
 	test.concurrent('Different Client Path', ftForDir('different-client-path'))
 	test.concurrent('Recursive Schema', ftForDir('recursive'))
-	test.concurrent('relationModel = false', ftForDir('relationFalse'))
+	test.concurrent('relationModel = false', ftForDir('relation-false'))
 	test.concurrent('Imports', ftForDir('imports'))
+	test.concurrent('JSON', ftForDir('json'))
 })
