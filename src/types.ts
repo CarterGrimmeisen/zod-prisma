@@ -31,7 +31,7 @@ export const getZodConstructor = (
 				zodType = 'z.number()'
 				break
 			case 'Json':
-				zodType = 'z.any()'
+				zodType = 'jsonSchema'
 				break
 			case 'Boolean':
 				zodType = 'z.boolean()'
