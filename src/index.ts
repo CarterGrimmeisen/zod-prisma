@@ -1,3 +1,6 @@
+// @ts-ignore Importing package.json for automated synchronization of version numbers
+import { version } from '../package.json'
+
 import path from 'path'
 import { generatorHandler, DMMF } from '@prisma/generator-helper'
 import { Project, StructureKind, VariableDeclarationKind } from 'ts-morph'
@@ -28,9 +31,9 @@ const configSchema = z.object({
 generatorHandler({
 	onManifest() {
 		return {
+			version,
 			prettyName: 'Zod Schemas',
 			defaultOutput: 'zod',
-			version: '0.2.1',
 		}
 	},
 	onGenerate(options) {
