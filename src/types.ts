@@ -1,5 +1,5 @@
 import type { DMMF } from '@prisma/generator-helper'
-import { computeModifiers } from './docs'
+import { computeCustomSchema, computeModifiers } from './docs'
 
 export const getZodConstructor = (
 	field: DMMF.Field,
@@ -48,6 +48,7 @@ export const getZodConstructor = (
 
 	if (field.isList) extraModifiers.push('array()')
 	if (field.documentation) {
+		zodType = computeCustomSchema(field.documentation) ?? zodType
 		extraModifiers.push(...computeModifiers(field.documentation))
 	}
 	if (!field.isRequired) extraModifiers.push('nullable()')

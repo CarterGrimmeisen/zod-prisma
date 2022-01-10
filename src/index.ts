@@ -26,6 +26,7 @@ const configSchema = z.object({
 		}),
 	modelSuffix: z.string().default('Model'),
 	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
+	imports: z.string().optional(),
 })
 
 generatorHandler({
@@ -54,7 +55,8 @@ generatorHandler({
 				'Incorrect config provided. Please check the values you provided and try again.'
 			)
 
-		const { relationModel, modelSuffix, modelCase } = parsedConfig.data
+		const { relationModel, modelSuffix, modelCase, imports } =
+			parsedConfig.data
 
 		const formatModelName = (name: string, prefix = '') => {
 			if (modelCase === 'camelCase') {
@@ -140,6 +142,17 @@ generatorHandler({
 						relationModel !== false && relationFields.length > 0
 							? [model.name, ...enumFields.map((f) => f.type)]
 							: enumFields.map((f) => f.type),
+				})
+			}
+
+			if (imports) {
+				sourceFile.addImportDeclaration({
+					kind: StructureKind.ImportDeclaration,
+					moduleSpecifier: path.relative(
+						outputPath,
+						path.resolve(path.dirname(options.schemaPath), imports)
+					),
+					namespaceImport: 'imports',
 				})
 			}
 
