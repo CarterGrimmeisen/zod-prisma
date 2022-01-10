@@ -67,5 +67,5 @@ describe('Functional Tests', () => {
 	test.concurrent('relationModel = false', ftForDir('relation-false'))
 	test.concurrent('Imports', ftForDir('imports'))
 	test.concurrent('JSON', ftForDir('json'))
-	test.concurrent('Custom Import', ftForDir('custom-import'))
+	test.concurrent('Config Import', ftForDir('config-import'))
 })
