@@ -13,14 +13,15 @@
 		"bin"
 	],
 	"engines": {
-		"node": ">=14"
+		"node": ">=14",
+		"pnpm": ">=3"
 	},
 	"scripts": {
 		"start": "dts watch",
 		"build": "dts build",
 		"test": "dts build && dts test",
-		"lint": "dts lint src test/*.test.ts test/**/*.test.ts",
-		"prepublish": "yarn build",
+		"lint": "tsc --noEmit && dts lint src test/*.test.ts test/**/*.test.ts",
+		"prepublish": "pnpm build",
 		"prepare": "husky install"
 	},
 	"peerDependencies": {
@@ -42,7 +43,9 @@
 	"author": "Carter Grimmeisen",
 	"module": "dist/zod-prisma.esm.js",
 	"devDependencies": {
+		"@prisma/client": "^3.7.0",
 		"@tsconfig/recommended": "^1.0.1",
+		"@types/fs-extra": "^9.0.13",
 		"dts-cli": "^1.1.5",
 		"execa": "^5.1.0",
 		"fast-glob": "^3.2.5",

@@ -19,17 +19,17 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
 
-            - name: Clean yarn cache
-              run: yarn cache clean
+            - name: Clean pnpm cache
+              run: pnpm cache clean
 
             - name: Install deps (no cache)
-              run: yarn install --force
+              run: pnpm install --force
 
             - name: Build
-              run: yarn build
+              run: pnpm build
 
             - name: Lint
-              run: yarn lint
+              run: pnpm lint
 
             - name: Test
-              run: yarn test --ci --maxWorkers=2
+              run: pnpm test --ci --maxWorkers=2
