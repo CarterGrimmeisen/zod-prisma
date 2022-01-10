@@ -30,6 +30,6 @@ export const getJSDocs = (docString?: string) => {
 export const computeModifiers = (docString: string) => {
 	return docString
 		.split('\n')
-		.filter((line) => line.trimLeft().startsWith('@zod'))
+		.filter((line) => line.trimStart().startsWith('@zod'))
 		.map((line) => line.trim().split('@zod.').slice(-1)[0])
 }

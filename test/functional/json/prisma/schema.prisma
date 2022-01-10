@@ -3,17 +3,17 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("PRISMA_DB_URL")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
+  output   = ".client"
 }
 
 generator zod {
-  provider      = "../bin/cli.js"
-  output        = "./zod"
-  relationModel = "default"
+  provider = "../../../bin/cli.js"
+  output   = "../actual/"
 }
 
 model User {

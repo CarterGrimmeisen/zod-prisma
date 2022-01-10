@@ -153,9 +153,24 @@ generatorHandler({
 				writeArray(writer, getJSDocs(model.documentation))
 			)
 
+			const hasJson = model.fields.some((f) => f.type === 'Json')
+			if (hasJson) {
+				sourceFile.addStatements((writer) => {
+					writer.newLine()
+					writeArray(writer, [
+						'// Helper schema for JSON data',
+						'type Literal = boolean | null | number | string',
+						'type Json = Literal | { [key: string]: Json } | Json[]',
+						'const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])',
+						'const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))',
+					])
+				})
+			}
+
 			sourceFile.addVariableStatement({
 				declarationKind: VariableDeclarationKind.Const,
 				isExported: true,
+				leadingTrivia: (writer) => writer.conditionalNewLine(hasJson),
 				declarations: [
 					{
 						name: modelName(model.name),

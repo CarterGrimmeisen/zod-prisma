@@ -9,7 +9,7 @@ const ftForDir = (dir: string) => async () => {
 	const actualDir = resolve(__dirname, dir, 'actual')
 	const expectedDir = resolve(__dirname, dir, 'expected')
 
-	const results = await execa('npx', ['prisma', 'generate'], {
+	const generateResults = await execa('npx', ['prisma', 'generate'], {
 		cwd: resolve(__dirname, dir),
 		timeout: 30000,
 	})
@@ -45,7 +45,17 @@ const ftForDir = (dir: string) => async () => {
 		})
 	)
 
-	expect(results.exitCode).toBe(0)
+	expect(generateResults.exitCode).toBe(0)
+
+	const typeCheckResults = await execa('npx', [
+		'tsc',
+		'--strict',
+		'--pretty',
+		'--noEmit',
+		...expectedFiles,
+	])
+
+	expect(typeCheckResults.exitCode).toBe(0)
 }
 
 describe('Functional Tests', () => {
@@ -54,7 +64,8 @@ describe('Functional Tests', () => {
 	test.concurrent('Docs', ftForDir('docs'))
 	test.concurrent('Different Client Path', ftForDir('different-client-path'))
 	test.concurrent('Recursive Schema', ftForDir('recursive'))
-	test.concurrent('relationModel = false', ftForDir('relationFalse'))
+	test.concurrent('relationModel = false', ftForDir('relation-false'))
   test.concurrent('Code injection', ftForDir('code-injection'))
 	test.concurrent('Imports', ftForDir('imports'))
+	test.concurrent('JSON', ftForDir('json'))
 })
