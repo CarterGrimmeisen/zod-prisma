@@ -16,9 +16,25 @@ export const getJSDocs = (docString?: string) => {
 	return lines
 }
 
-export const computeModifiers = (docString: string) => {
-	return docString
+export const getZodDocElements = (docString: string) =>
+	docString
 		.split('\n')
 		.filter((line) => line.trimStart().startsWith('@zod'))
-		.map((line) => line.trim().split('@zod.').slice(-1)[0])
+		.flatMap((line) =>
+			Array.from(line.matchAll(/\.([^().]+\(.*?\))/g), (m) =>
+				m.slice(1)
+			).flat()
+		)
+
+export const computeCustomSchema = (docString: string) => {
+	return getZodDocElements(docString)
+		.find((modifier) => modifier.startsWith('custom('))
+		?.slice(7)
+		.slice(0, -1)
+}
+
+export const computeModifiers = (docString: string) => {
+	return getZodDocElements(docString).filter(
+		(each) => !each.startsWith('custom(')
+	)
 }
