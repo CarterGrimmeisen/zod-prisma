@@ -21,7 +21,7 @@
 		"prepare": "husky install",
 		"prepublish": "dts build",
 		"start": "dts watch",
-		"test": "dts test"
+		"test": "dts test --maxWorkers=4 --verbose"
 	},
 	"prettier": {
 		"printWidth": 100,

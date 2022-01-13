@@ -53,7 +53,7 @@ const ftForDir = (dir: string) => async () => {
 		semicolons: SemicolonPreference.Remove,
 	})
 
-	indexFile.save()
+	await indexFile.save()
 
 	const actualIndexContents = await readFile(`${actualDir}/index.ts`, 'utf-8')
 
