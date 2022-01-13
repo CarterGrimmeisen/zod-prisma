@@ -16,6 +16,7 @@ export const configSchema = z.object({
 		}),
 	modelSuffix: z.string().default('Model'),
 	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
+	useDecimalJs: z.boolean().default(false),
 	imports: z.string().optional(),
 })
 

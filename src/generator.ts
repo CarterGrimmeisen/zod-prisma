@@ -37,6 +37,14 @@ export const writeImportsForModel = (
 		})
 	}
 
+	if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal')) {
+		importList.push({
+			kind: StructureKind.ImportDeclaration,
+			namedImports: ['Decimal'],
+			moduleSpecifier: 'decimal.js',
+		})
+	}
+
 	const enumFields = model.fields.filter((f) => f.kind === 'enum')
 	const relationFields = model.fields.filter((f) => f.kind === 'object')
 	const relativePath = path.relative(outputPath, clientPath)
@@ -78,18 +86,39 @@ export const writeImportsForModel = (
 export const writeTypeSpecificSchemas = (
 	model: DMMF.Model,
 	sourceFile: SourceFile,
-	_config: Config,
+	config: Config,
 	_prismaOptions: PrismaOptions
 ) => {
 	if (model.fields.some((f) => f.type === 'Json')) {
 		sourceFile.addStatements((writer) => {
 			writer.newLine()
 			writeArray(writer, [
-				'// Helper schema for JSON data',
+				'// Helper schema for JSON fields',
 				'type Literal = boolean | null | number | string',
 				'type Json = Literal | { [key: string]: Json } | Json[]',
 				'const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])',
 				'const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))',
+			])
+		})
+	}
+
+	if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal')) {
+		sourceFile.addStatements((writer) => {
+			writer.newLine()
+			writeArray(writer, [
+				'// Helper schema for Decimal fields',
+				'z',
+				'.instanceof(Decimal)',
+				'.or(z.string())',
+				'.or(z.number())',
+				'.refine((value) => {',
+				'  try {',
+				'    return new Decimal(value);',
+				'  } catch (error) {',
+				'    return false;',
+				'  }',
+				'})',
+				'.transform((value) => new Decimal(value));',
 			])
 		})
 	}
