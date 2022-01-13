@@ -8,58 +8,7 @@ import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from '../../config'
 import { populateModelFile, generateBarrelFile } from '../../generator'
 
-jest.setTimeout(120000)
-
-/* const ftForDir = (dir: string) => async () => {
-	const actualDir = resolve(__dirname, dir, 'actual')
-	const expectedDir = resolve(__dirname, dir, 'expected')
-
-	const generateResults = await execa('npx', ['prisma', 'generate'], {
-		cwd: resolve(__dirname, dir),
-		timeout: 30000,
-	})
-
-	const actualFiles = await glob(resolve(actualDir, '*.ts'))
-	const expectedFiles = await glob(resolve(expectedDir, '*.ts'))
-
-	const files = Array.from(
-		new Set([
-			...actualFiles.map((path) => basename(path)),
-			...expectedFiles.map((path) => basename(path)),
-		])
-	)
-
-	await Promise.all(
-		files.map(async (file) => {
-			const [actualExists, expectedExists] = await Promise.all([
-				pathExists(resolve(actualDir, file)),
-				pathExists(resolve(expectedDir, file)),
-			])
-
-			if (!actualExists) throw new Error(`${file} exists in expected but not actual!`)
-			else if (!expectedExists) throw new Error(`${file} exists in actual but not expected!`)
-
-			const [actualContents, expectedContents] = await Promise.all([
-				readFile(resolve(actualDir, file), 'utf-8'),
-				readFile(resolve(expectedDir, file), 'utf-8'),
-			])
-
-			expect(actualContents).toStrictEqual(expectedContents)
-		})
-	)
-
-	expect(generateResults.exitCode).toBe(0)
-
-	const typeCheckResults = await execa('npx', [
-		'tsc',
-		'--strict',
-		'--pretty',
-		'--noEmit',
-		...expectedFiles,
-	])
-
-	expect(typeCheckResults.exitCode).toBe(0)
-} */
+jest.setTimeout(30000)
 
 const ftForDir = (dir: string) => async () => {
 	const schemaFile = resolve(__dirname, dir, 'prisma/schema.prisma')
@@ -137,16 +86,6 @@ const ftForDir = (dir: string) => async () => {
 	])
 
 	expect(typeCheckResults.exitCode).toBe(0)
-
-	// expect(
-	// 	project
-	// 		.getPreEmitDiagnostics()
-	// 		.filter(
-	// 			(each) =>
-	// 				each.compilerObject.messageText !==
-	// 				"Cannot find module 'zod' or its corresponding type declarations."
-	// 		)
-	// ).toEqual([])
 
 	await project.save()
 }
