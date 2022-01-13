@@ -47,6 +47,21 @@ const ftForDir = (dir: string) => async () => {
 
 	generateBarrelFile(dmmf.datamodel.models, indexFile)
 
+	indexFile.formatText({
+		indentSize: 2,
+		convertTabsToSpaces: true,
+		semicolons: SemicolonPreference.Remove,
+	})
+
+	indexFile.save()
+
+	const actualIndexContents = await readFile(`${actualDir}/index.ts`, 'utf-8')
+
+	const expectedIndexFile = resolve(expectedDir, `index.ts`)
+	const expectedIndexContents = await readFile(resolve(expectedDir, expectedIndexFile), 'utf-8')
+
+	expect(actualIndexContents).toStrictEqual(expectedIndexContents)
+
 	await Promise.all(
 		dmmf.datamodel.models.map(async (model) => {
 			const sourceFile = project.createSourceFile(

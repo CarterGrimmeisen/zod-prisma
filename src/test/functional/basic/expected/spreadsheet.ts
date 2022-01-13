@@ -1,6 +1,6 @@
 import * as z from "zod"
 
-// Helper schema for JSON data
+// Helper schema for JSON fields
 type Literal = boolean | null | number | string
 type Json = Literal | { [key: string]: Json } | Json[]
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])

@@ -2,7 +2,7 @@ import * as z from "zod"
 import type { Spreadsheet } from "../prisma/.client"
 import { CompletePresentation, RelatedPresentationModel } from "./index"
 
-// Helper schema for JSON data
+// Helper schema for JSON fields
 type Literal = boolean | null | number | string
 type Json = Literal | { [key: string]: Json } | Json[]
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])

@@ -47,6 +47,12 @@ generatorHandler({
 
 		generateBarrelFile(models, indexFile)
 
+		indexFile.formatText({
+			indentSize: 2,
+			convertTabsToSpaces: true,
+			semicolons: SemicolonPreference.Remove,
+		})
+
 		models.forEach((model) => {
 			const sourceFile = project.createSourceFile(
 				`${outputPath}/${model.name.toLowerCase()}.ts`,
