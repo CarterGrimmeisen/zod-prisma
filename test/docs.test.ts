@@ -3,15 +3,20 @@ import { computeModifiers, getJSDocs } from '../src/docs'
 describe('docs Package', () => {
 	test('computeModifiers', () => {
 		const modifiers = computeModifiers(`
-			@zod.email()
+			@zod.email().optional()
 			@zod.url()
 			@zod.uuid()
 			Banana
 			@example something something
     `)
 
-		expect(modifiers.length).toBe(3)
-		expect(modifiers).toStrictEqual(['email()', 'url()', 'uuid()'])
+		expect(modifiers.length).toBe(4)
+		expect(modifiers).toStrictEqual([
+			'email()',
+			'optional()',
+			'url()',
+			'uuid()',
+		])
 	})
 
 	test('getJSDocs', () => {
