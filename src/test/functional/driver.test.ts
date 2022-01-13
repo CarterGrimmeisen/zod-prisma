@@ -8,7 +8,7 @@ import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from '../../config'
 import { populateModelFile, generateBarrelFile } from '../../generator'
 
-jest.setTimeout(30000)
+jest.setTimeout(120000)
 
 const ftForDir = (dir: string) => async () => {
 	const schemaFile = resolve(__dirname, dir, 'prisma/schema.prisma')
