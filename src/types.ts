@@ -3,9 +3,8 @@ import { computeCustomSchema, computeModifiers } from './docs'
 
 export const getZodConstructor = (
 	field: DMMF.Field,
-	getRelatedModelName = (
-		name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg
-	) => name.toString()
+	getRelatedModelName = (name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg) =>
+		name.toString()
 ) => {
 	let zodType = 'z.unknown()'
 	let extraModifiers: string[] = ['']

@@ -1,8 +1,11 @@
 {
+	"name": "zod-prisma",
 	"version": "0.3.2",
-	"license": "MIT",
 	"description": "A Prisma generator that creates Zod schemas for all of your models",
+	"license": "MIT",
+	"author": "Carter Grimmeisen",
 	"main": "dist/index.js",
+	"module": "dist/zod-prisma.esm.js",
 	"typings": "dist/index.d.ts",
 	"bin": {
 		"zod-prisma": "bin/cli.js"
@@ -12,38 +15,37 @@
 		"src",
 		"bin"
 	],
-	"engines": {
-		"node": ">=14",
-		"pnpm": ">=3"
-	},
 	"scripts": {
-		"start": "dts watch",
 		"build": "dts build",
-		"test": "dts build && dts test",
 		"lint": "tsc --noEmit && dts lint src test/*.test.ts test/**/*.test.ts",
-		"prepublish": "pnpm build",
-		"prepare": "husky install"
-	},
-	"peerDependencies": {
-		"prisma": "^3.4.2",
-		"zod": "^3.0.0"
+		"prepare": "husky install",
+		"prepublish": "dts build",
+		"start": "dts watch",
+		"test": "dts test"
 	},
 	"prettier": {
-		"printWidth": 80,
+		"printWidth": 100,
 		"semi": false,
 		"singleQuote": true,
-		"trailingComma": "es5",
 		"tabWidth": 4,
+		"trailingComma": "es5",
 		"useTabs": true
+	},
+	"eslintConfig": {
+		"rules": {
+			"react-hooks/rules-of-hooks": "off"
+		}
 	},
 	"jest": {
 		"testEnvironment": "node"
 	},
-	"name": "zod-prisma",
-	"author": "Carter Grimmeisen",
-	"module": "dist/zod-prisma.esm.js",
+	"dependencies": {
+		"@prisma/generator-helper": "~3.7.0",
+		"ts-morph": "^13.0.2"
+	},
 	"devDependencies": {
-		"@prisma/client": "^3.7.0",
+		"@prisma/client": "~3.7.0",
+		"@prisma/sdk": "~3.7.0",
 		"@tsconfig/recommended": "^1.0.1",
 		"@types/fs-extra": "^9.0.13",
 		"dts-cli": "^1.1.5",
@@ -57,8 +59,11 @@
 		"typescript": "^4.5.4",
 		"zod": "^3.11.6"
 	},
-	"dependencies": {
-		"@prisma/generator-helper": "^3.3.0",
-		"ts-morph": "^13.0.2"
+	"peerDependencies": {
+		"prisma": "^3.4.2",
+		"zod": "^3.0.0"
+	},
+	"engines": {
+		"node": ">=14"
 	}
 }

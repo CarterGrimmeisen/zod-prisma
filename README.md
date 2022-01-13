@@ -103,11 +103,11 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This project utilizes pnpm and if you plan on contributing, you should too.
+This project utilizes yarn and if you plan on contributing, you should too.
 
 -   npm
     ```sh
-    npm install -g pnpm
+    npm install -g yarn
     ```
 
 ### Installation
@@ -115,7 +115,7 @@ This project utilizes pnpm and if you plan on contributing, you should too.
 1. Add zod-prisma as a dev dependency
 
     ```sh
-    pnpm install -D zod-prisma
+    yarn add -D zod-prisma
     ```
 
 2. Add the zod-prisma generator to your schema.prisma
@@ -204,9 +204,7 @@ Generated code:
 ```ts
 export const PostModel = z.object({
 	id: z.string().uuid(),
-	title: z
-		.string()
-		.max(255, { message: 'The title must be shorter than 256 characters' }),
+	title: z.string().max(255, { message: 'The title must be shorter than 256 characters' }),
 	contents: z.string().max(10240),
 })
 ```
