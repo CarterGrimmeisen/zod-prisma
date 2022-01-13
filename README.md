@@ -41,7 +41,7 @@
     <a href="https://github.com/CarterGrimmeisen/zod-prisma"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/test/functional">View Demo</a>
+    <a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional">View Demo</a>
     ·
     <a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Report Bug</a>
     ·
@@ -213,7 +213,7 @@ export const PostModel = z.object({
 
 <!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
 
-_For examples, please refer to the [Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples) or the [Functional Tests](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/test/functional)_
+_For examples, please refer to the [Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples) or the [Functional Tests](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional)_
 
 <!-- ROADMAP -->
 
