@@ -17,7 +17,7 @@
 	],
 	"scripts": {
 		"build": "dts build",
-		"lint": "tsc --noEmit && dts lint src test/*.test.ts test/**/*.test.ts",
+		"lint": "tsc --noEmit && dts lint src --ignore-pattern src/test/functional",
 		"prepare": "husky install",
 		"prepublish": "dts build",
 		"start": "dts watch",

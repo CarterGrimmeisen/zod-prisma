@@ -94,8 +94,6 @@ const ftForDir = (dir: string) => async () => {
 		schemaPath: schemaFile,
 	}
 
-	// console.log(prismaOptions)
-
 	const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true })
 
 	generateBarrelFile(dmmf.datamodel.models, indexFile)
