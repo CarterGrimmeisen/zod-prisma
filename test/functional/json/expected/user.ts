@@ -11,6 +11,7 @@ const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.arr
 export const UserModel = z.object({
   id: z.number().int(),
   meta: jsonSchema,
+  optionalMeta: jsonSchema.nullable(),
 })
 
 export interface CompleteUser extends User {

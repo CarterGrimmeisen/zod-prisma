@@ -17,9 +17,10 @@ generator zod {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  meta  Json
-  posts Post[]
+  id           Int    @id @default(autoincrement())
+  meta         Json
+  optionalMeta Json?
+  posts        Post[]
 }
 
 model Post {
