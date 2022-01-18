@@ -50,7 +50,7 @@ export const getZodConstructor = (
 		zodType = computeCustomSchema(field.documentation) ?? zodType
 		extraModifiers.push(...computeModifiers(field.documentation))
 	}
-	if (!field.isRequired) extraModifiers.push('nullable()')
+	if (!field.isRequired) extraModifiers.push('nullish()')
 
 	return `${zodType}${extraModifiers.join('.')}`
 }
