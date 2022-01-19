@@ -20,7 +20,7 @@ describe('types Package', () => {
 
 		const constructor = getZodConstructor(field)
 
-		expect(constructor).toBe('z.string().array().max(64).min(1).nullable()')
+		expect(constructor).toBe('z.string().array().max(64).min(1).nullish()')
 	})
 
 	test('regression - unknown type', () => {

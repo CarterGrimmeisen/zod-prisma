@@ -1,5 +1,4 @@
 import * as z from "zod"
-import type { Presentation } from "../prisma/.client"
 import { CompleteSpreadsheet, RelatedSpreadsheetModel } from "./index"
 
 export const PresentationModel = z.object({
@@ -11,7 +10,7 @@ export const PresentationModel = z.object({
   updated: z.date(),
 })
 
-export interface CompletePresentation extends Presentation {
+export interface CompletePresentation extends z.infer<typeof PresentationModel> {
   spreadsheets: CompleteSpreadsheet[]
 }
 

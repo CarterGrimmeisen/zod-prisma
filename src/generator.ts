@@ -49,15 +49,12 @@ export const writeImportsForModel = (
 	const relationFields = model.fields.filter((f) => f.kind === 'object')
 	const relativePath = path.relative(outputPath, clientPath)
 
-	if ((config.relationModel !== false && relationFields.length > 0) || enumFields.length > 0) {
+	if (enumFields.length > 0) {
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
 			moduleSpecifier: relativePath,
-			namedImports:
-				config.relationModel !== false && relationFields.length > 0
-					? [model.name, ...enumFields.map((f) => f.type)]
-					: enumFields.map((f) => f.type),
+			namedImports: enumFields.map((f) => f.type),
 		})
 	}
 
@@ -94,9 +91,13 @@ export const writeTypeSpecificSchemas = (
 			writer.newLine()
 			writeArray(writer, [
 				'// Helper schema for JSON fields',
-				'type Literal = boolean | null | number | string',
+				`type Literal = boolean | number | string${
+					config.prismaJsonNullability ? '' : '| null'
+				}`,
 				'type Json = Literal | { [key: string]: Json } | Json[]',
-				'const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])',
+				`const literalSchema = z.union([z.string(), z.number(), z.boolean()${
+					config.prismaJsonNullability ? '' : ', z.null()'
+				}])`,
 				'const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))',
 			])
 		})
@@ -175,7 +176,7 @@ export const generateRelatedSchemaForModel = (
 	sourceFile.addInterface({
 		name: `Complete${model.name}`,
 		isExported: true,
-		extends: (writer) => writer.write(model.name),
+		extends: [`z.infer<typeof ${modelName(model.name)}>`],
 		properties: relationFields.map((f) => ({
 			name: f.name,
 			type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`,

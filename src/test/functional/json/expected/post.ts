@@ -1,5 +1,4 @@
 import * as z from "zod"
-import type { Post } from "../prisma/.client"
 import { CompleteUser, RelatedUserModel } from "./index"
 
 export const PostModel = z.object({
@@ -7,7 +6,7 @@ export const PostModel = z.object({
   authorId: z.number().int(),
 })
 
-export interface CompletePost extends Post {
+export interface CompletePost extends z.infer<typeof PostModel> {
   author: CompleteUser
 }
 

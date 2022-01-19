@@ -35,6 +35,7 @@ export const getZodConstructor = (
 			case 'Boolean':
 				zodType = 'z.boolean()'
 				break
+			// TODO: Proper type for bytes fields
 			case 'Bytes':
 				zodType = 'z.unknown()'
 				break
@@ -50,7 +51,7 @@ export const getZodConstructor = (
 		zodType = computeCustomSchema(field.documentation) ?? zodType
 		extraModifiers.push(...computeModifiers(field.documentation))
 	}
-	if (!field.isRequired) extraModifiers.push('nullish()')
+	if (!field.isRequired && field.type !== 'Json') extraModifiers.push('nullish()')
 
 	return `${zodType}${extraModifiers.join('.')}`
 }

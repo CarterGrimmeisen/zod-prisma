@@ -1,23 +1,14 @@
 import { z } from 'zod'
 
+const configBoolean = z.enum(['true', 'false']).transform((arg) => JSON.parse(arg))
+
 export const configSchema = z.object({
-	relationModel: z
-		.enum(['default', 'true', 'false'])
-		.default('true')
-		.transform((val) => {
-			switch (val) {
-				case 'default':
-					return val
-				case 'true':
-					return true
-				case 'false':
-					return false
-			}
-		}),
+	relationModel: configBoolean.default('true').or(z.literal('default')),
 	modelSuffix: z.string().default('Model'),
 	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
 	useDecimalJs: z.boolean().default(false),
 	imports: z.string().optional(),
+	prismaJsonNullability: configBoolean.default('true'),
 })
 
 export type Config = z.infer<typeof configSchema>

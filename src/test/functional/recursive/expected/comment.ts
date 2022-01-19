@@ -1,5 +1,4 @@
 import * as z from "zod"
-import type { Comment } from "../prisma/.client"
 
 export const CommentModel = z.object({
   id: z.string(),
@@ -8,7 +7,7 @@ export const CommentModel = z.object({
   parentId: z.string(),
 })
 
-export interface CompleteComment extends Comment {
+export interface CompleteComment extends z.infer<typeof CommentModel> {
   parent: CompleteComment
   children: CompleteComment[]
 }

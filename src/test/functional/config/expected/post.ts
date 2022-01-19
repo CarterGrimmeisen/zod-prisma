@@ -1,5 +1,4 @@
 import * as z from "zod"
-import type { Post } from "../prisma/.client"
 import { CompleteUser, userSchema } from "./index"
 
 export const _postSchema = z.object({
@@ -9,7 +8,7 @@ export const _postSchema = z.object({
   userId: z.string(),
 })
 
-export interface CompletePost extends Post {
+export interface CompletePost extends z.infer<typeof _postSchema> {
   author: CompleteUser
 }
 

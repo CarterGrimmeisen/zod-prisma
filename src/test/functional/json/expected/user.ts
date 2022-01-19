@@ -1,11 +1,10 @@
 import * as z from "zod"
-import type { User } from "../prisma/.client"
 import { CompletePost, RelatedPostModel } from "./index"
 
 // Helper schema for JSON fields
-type Literal = boolean | null | number | string
+type Literal = boolean | number | string
 type Json = Literal | { [key: string]: Json } | Json[]
-const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])
+const literalSchema = z.union([z.string(), z.number(), z.boolean()])
 const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))
 
 export const UserModel = z.object({
@@ -13,7 +12,7 @@ export const UserModel = z.object({
   meta: jsonSchema,
 })
 
-export interface CompleteUser extends User {
+export interface CompleteUser extends z.infer<typeof UserModel> {
   posts: CompletePost[]
 }
 
