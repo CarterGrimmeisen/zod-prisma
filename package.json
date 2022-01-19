@@ -1,6 +1,6 @@
 {
 	"name": "zod-prisma",
-	"version": "0.3.2",
+	"version": "0.5.0",
 	"description": "A Prisma generator that creates Zod schemas for all of your models",
 	"license": "MIT",
 	"author": "Carter Grimmeisen",
@@ -73,9 +73,9 @@
 		"zod": "^3.11.6"
 	},
 	"peerDependencies": {
+		"decimal.js": "^10.0.0",
 		"prisma": "^3.0.0",
-		"zod": "^3.0.0",
-		"decimal.js": "^10.0.0"
+		"zod": "^3.0.0"
 	},
 	"peerDependenciesMeta": {
 		"decimal.js": {
