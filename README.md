@@ -129,25 +129,25 @@ npm install -g yarn
 
     ```prisma
     generator zod {
-      provider                = "zod-prisma"
-      output                  = "./zod" // (default) the directory where generated zod schemas will be saved
+      provider                 = "zod-prisma"
+      output                   = "./zod" // (default) the directory where generated zod schemas will be saved
 
-      relationModel           = true // (default) Create and export both plain and related models.
+      relationModel            = true // (default) Create and export both plain and related models.
       // relationModel         = "default" // Do not export model without relations.
       // relationModel         = false // Do not generate related model
 
-      modelCase               = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
+      modelCase                = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
       // modelCase             = "camelCase" // Output models using camel case (ex. userModel, postModel)
 
-      modelSuffix             = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
+      modelSuffix              = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
 
       // useDecimalJs          = false // (default) represent the prisma Decimal type using as a JS number
-      useDecimalJs            = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
+      useDecimalJs             = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
 
-      imports                 = null // (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
+      imports                  = null // (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
 
       // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
-      prismaJsonNullability   = true // (default) uses prisma's scheme for JSON field nullability
+      prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
     }
     ```
