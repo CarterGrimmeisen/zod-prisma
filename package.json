@@ -53,7 +53,7 @@
 		"testEnvironment": "node"
 	},
 	"dependencies": {
-		"@prisma/generator-helper": "~3.7.0",
+		"@prisma/generator-helper": "~3.8.1",
 		"ts-morph": "^13.0.2"
 	},
 	"devDependencies": {
