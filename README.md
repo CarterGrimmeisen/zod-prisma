@@ -116,6 +116,9 @@ This project utilizes yarn and if you plan on contributing, you should too.
 
 ### Installation
 
+0. **Ensure your tsconfig.json enables the compiler's strict mode.**
+	 **Zod requires it and so do we, you will experience TS errors without strict mode enabled**
+
 1. Add zod-prisma as a dev dependency
 
 		```sh
@@ -144,7 +147,7 @@ This project utilizes yarn and if you plan on contributing, you should too.
 			imports                 = null # (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
 
 			# https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
-			prismaJsonNullability   = true # (default) uses prisma's scheme for JSON field nullability 
+			prismaJsonNullability   = true # (default) uses prisma's scheme for JSON field nullability
 			# prismaJsonNullability = false # allows null assignment to optional JSON fields
 		}
 		```
