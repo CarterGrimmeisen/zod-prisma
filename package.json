@@ -25,7 +25,6 @@
 	],
 	"files": [
 		"dist",
-		"src",
 		"bin"
 	],
 	"scripts": {
