@@ -3,7 +3,6 @@
 node_modules
 dist
 examples/prisma/zod
-test/functional/*/actual
-test/functional/*/prisma/.client
-test/functional/*/package-lock.json
-test/functional/*/package.json
+/src/test/functional/*/actual
+/src/test/functional/*/prisma/.client/*
+!/src/test/functional/*/prisma/.client/index.ts

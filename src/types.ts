@@ -3,9 +3,8 @@ import { computeCustomSchema, computeModifiers } from './docs'
 
 export const getZodConstructor = (
 	field: DMMF.Field,
-	getRelatedModelName = (
-		name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg
-	) => name.toString()
+	getRelatedModelName = (name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg) =>
+		name.toString()
 ) => {
 	let zodType = 'z.unknown()'
 	let extraModifiers: string[] = ['']
@@ -36,6 +35,7 @@ export const getZodConstructor = (
 			case 'Boolean':
 				zodType = 'z.boolean()'
 				break
+			// TODO: Proper type for bytes fields
 			case 'Bytes':
 				zodType = 'z.unknown()'
 				break
@@ -51,7 +51,7 @@ export const getZodConstructor = (
 		zodType = computeCustomSchema(field.documentation) ?? zodType
 		extraModifiers.push(...computeModifiers(field.documentation))
 	}
-	if (!field.isRequired) extraModifiers.push('nullable()')
+	if (!field.isRequired && field.type !== 'Json') extraModifiers.push('nullish()')
 
 	return `${zodType}${extraModifiers.join('.')}`
 }

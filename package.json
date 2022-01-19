@@ -1,69 +1,88 @@
 {
+	"name": "zod-prisma",
 	"version": "0.3.2",
-	"license": "MIT",
 	"description": "A Prisma generator that creates Zod schemas for all of your models",
+	"license": "MIT",
+	"author": "Carter Grimmeisen",
+	"homepage": "https://github.com/CarterGrimmeisen/zod-prisma#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/CarterGrimmeisen/zod-prisma.git"
+	},
+	"bugs": {
+		"url": "https://github.com/CarterGrimmeisen/zod-prisma/issues"
+	},
 	"main": "dist/index.js",
+	"module": "dist/zod-prisma.esm.js",
 	"typings": "dist/index.d.ts",
 	"bin": {
 		"zod-prisma": "bin/cli.js"
 	},
+	"keywords": [
+		"zod",
+		"prisma",
+		"generator"
+	],
 	"files": [
 		"dist",
 		"src",
 		"bin"
 	],
-	"engines": {
-		"node": ">=14"
-	},
 	"scripts": {
-		"start": "tsdx watch",
-		"build": "tsdx build",
-		"test": "tsdx build && tsdx test",
-		"lint": "tsdx lint src test/*.test.ts test/**/*.test.ts",
-		"prepublish": "yarn build",
-		"prepare": "husky install"
-	},
-	"peerDependencies": {
-		"prisma": "^3.4.2",
-		"zod": "^3.0.0"
+		"build": "dts build",
+		"lint": "tsc --noEmit && dts lint src --ignore-pattern src/test/functional",
+		"prepare": "husky install",
+		"prepublish": "dts build",
+		"start": "dts watch",
+		"test": "dts test --maxWorkers=4 --verbose"
 	},
 	"prettier": {
-		"printWidth": 80,
+		"printWidth": 100,
 		"semi": false,
 		"singleQuote": true,
-		"trailingComma": "es5",
 		"tabWidth": 4,
+		"trailingComma": "es5",
 		"useTabs": true
 	},
-	"name": "zod-prisma",
-	"author": "Carter Grimmeisen",
-	"module": "dist/zod-prisma.esm.js",
-	"resolutions": {
-		"eslint": "^7.17.0",
-		"typescript": "4.5.4"
+	"eslintConfig": {
+		"rules": {
+			"react-hooks/rules-of-hooks": "off"
+		}
+	},
+	"jest": {
+		"testEnvironment": "node"
+	},
+	"dependencies": {
+		"@prisma/generator-helper": "~3.7.0",
+		"ts-morph": "^13.0.2"
 	},
 	"devDependencies": {
-		"@types/fs-extra": "^9.0.11",
-		"@typescript-eslint/eslint-plugin": "^5.7.0",
-		"@typescript-eslint/parser": "^5.7.0",
-		"decimal.js": "^10.3.1",
-		"eslint": "^7.17.0",
-		"eslint-config-react-app": "^6.0.0",
-		"eslint-plugin-prettier": "^4.0.0",
+		"@prisma/client": "~3.7.0",
+		"@prisma/sdk": "~3.7.0",
+		"@tsconfig/recommended": "^1.0.1",
+		"@types/fs-extra": "^9.0.13",
+		"dts-cli": "^1.1.5",
 		"execa": "^5.1.0",
 		"fast-glob": "^3.2.5",
 		"fs-extra": "^10.0.0",
 		"husky": "^7.0.4",
 		"jest-mock-extended": "^2.0.4",
-		"prettier": "^2.3.0",
 		"prisma": "^3.4.2",
-		"tsdx": "^0.14.1",
-		"tslib": "^2.2.0",
+		"tslib": "^2.3.1",
 		"typescript": "^4.5.4",
 		"zod": "^3.11.6"
 	},
-	"dependencies": {
-		"@prisma/generator-helper": "^3.3.0",
-		"ts-morph": "^13.0.2"
+	"peerDependencies": {
+		"prisma": "^3.0.0",
+		"zod": "^3.0.0",
+		"decimal.js": "^10.0.0"
+	},
+	"peerDependenciesMeta": {
+		"decimal.js": {
+			"optional": true
+		}
+	},
+	"engines": {
+		"node": ">=14"
 	}
 }

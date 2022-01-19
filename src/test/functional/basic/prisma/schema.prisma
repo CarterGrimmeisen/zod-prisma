@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = ""
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider = "zod-prisma"
+  output   = "../actual/"
+}
+
+model Document {
+  id       String @id @default(cuid())
+  filename String @unique
+  author   String
+  contents String
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}
+
+model Presentation {
+  id       String   @id @default(cuid())
+  filename String   @unique
+  author   String
+  contents String[]
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}
+
+model Spreadsheet {
+  id       String @id @default(cuid())
+  filename String @unique
+  author   String
+  contents Json
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}

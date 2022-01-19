@@ -1,0 +1,26 @@
+datasource db {
+  provider = "postgresql"
+  url      = ""
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider = "zod-prisma"
+  output   = "../actual/"
+  imports  = "./zod-utils"
+}
+
+model Document {
+  id       String  @id @default(cuid())
+  filename String  @unique
+  author   String
+  contents String
+  size     Decimal /// @zod.custom(imports.decimalSchema)
+
+  created DateTime @default(now())
+  updated DateTime @default(now())
+}

@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = ""
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider      = "zod-prisma"
+  output        = "../actual/"
+  relationModel = true
+}
+
+model Comment {
+  id       String    @id @default(uuid())
+  author   String
+  contents String
+  parentId String
+  parent   Comment   @relation("lineage", fields: [parentId], references: [id])
+  children Comment[] @relation("lineage")
+}
