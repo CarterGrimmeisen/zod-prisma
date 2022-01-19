@@ -6,7 +6,7 @@ export const configSchema = z.object({
 	relationModel: configBoolean.default('true').or(z.literal('default')),
 	modelSuffix: z.string().default('Model'),
 	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
-	useDecimalJs: z.boolean().default(false),
+	useDecimalJs: configBoolean.default('false'),
 	imports: z.string().optional(),
 	prismaJsonNullability: configBoolean.default('true'),
 })

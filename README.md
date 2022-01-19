@@ -29,61 +29,60 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/CarterGrimmeisen/zod-prisma">
-    <img src="https://raw.githubusercontent.com/CarterGrimmeisen/zod-prisma/main/images/zod-prisma.svg" alt="Logo" width="120" height="120">
-  </a>
-
-  <h3 align="center">Zod Prisma</h3>
-
-  <p align="center">
-    A custom prisma generator that creates Zod schemas from your Prisma model.
-    <br />
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional">View Demo</a>
-    ·
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Request Feature</a>
-  </p>
+	<a href="https://github.com/CarterGrimmeisen/zod-prisma">
+		<img src="https://raw.githubusercontent.com/CarterGrimmeisen/zod-prisma/main/images/zod-prisma.svg" alt="Logo" width="120" height="120">
+	</a>
+	<h3 align="center">Zod Prisma</h3>
+	<p align="center">
+		A custom prisma generator that creates Zod schemas from your Prisma model.
+		<br />
+		<a href="https://github.com/CarterGrimmeisen/zod-prisma"><strong>Explore the docs »</strong></a>
+		<br />
+		<br />
+		<a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional">View Demo</a>
+		·
+		<a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Report Bug</a>
+		·
+		<a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Request Feature</a>
+	</p>
 </p>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a>
-      <ul>
-      <li><a href="#jsdoc-generation">JSDoc Generation</a></li>
-      <li><a href="#extending-zod-fields">Extending Zod Fields</a></li>
-      <li>
+	<summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+	<ol>
+		<li>
+			<a href="#about-the-project">About The Project</a>
+			<ul>
+				<li><a href="#built-with">Built With</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#getting-started">Getting Started</a>
+			<ul>
+				<li><a href="#prerequisites">Prerequisites</a></li>
+				<li><a href="#installation">Installation</a></li>
+			</ul>
+		</li>
+		<li><a href="#usage">Usage</a>
+			<ul>
+			<li><a href="#jsdoc-generation">JSDoc Generation</a></li>
+			<li><a href="#extending-zod-fields">Extending Zod Fields</a></li>
+			<li>
 				<a href="#importing-helpers">Importing Helpers</a>
 				<ul>
-      	<li><a href="#custom-zod-schema">Custom Zod Schemas</a></li>
+				<li><a href="#custom-zod-schema">Custom Zod Schemas</a></li>
 				</ul>
 			</li>
-      </ul>
-    </li>
-    <li><a href="#examples">Examples</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
+			<li><a href="#json-fields">JSON Fields</a></li>
+			</ul>
+		</li>
+		<li><a href="#examples">Examples</a></li>
+		<li><a href="#roadmap">Roadmap</a></li>
+		<li><a href="#contributing">Contributing</a></li>
+		<li><a href="#license">License</a></li>
+		<li><a href="#contact">Contact</a></li>
+	</ol>
 </details>
 
 <!-- ABOUT THE PROJECT -->
@@ -97,7 +96,7 @@ This provides a way of automatically generating them with your prisma
 
 ### Built With
 
--   [TSDX](https://github.com/formium/tsdx)
+-   [dts-cli](https://github.com/weiran-zsd/dts-cli)
 -   [Zod](https://github.com/colinhacks/zod)
 -   [Based on this gist](https://gist.github.com/deckchairlabs/8a11c33311c01273deec7e739417dbc9)
 
@@ -111,37 +110,46 @@ To get a local copy up and running follow these simple steps.
 
 This project utilizes yarn and if you plan on contributing, you should too.
 
--   npm
-    ```sh
-    npm install -g yarn
-    ```
+		```sh
+		npm install -g yarn
+		```
 
 ### Installation
 
 1. Add zod-prisma as a dev dependency
 
-    ```sh
-    yarn add -D zod-prisma
-    ```
+		```sh
+		yarn add -D zod-prisma
+		```
 
 2. Add the zod-prisma generator to your schema.prisma
 
-    ```prisma
-    generator zod {
-      provider      = "zod-prisma"
-      output        = "./zod"
-      relationModel = "default" # Do not export model without relations.
-      # relationModel = true # Create and export both plain and related models.
-      # relationModel = false # Do not generate related model
+		```prisma
+		generator zod {
+			provider                = "zod-prisma"
+			output                  = "./zod" # (default) the directory where generated zod schemas will be saved
 
-      modelCase = "PascalCase" # (default) Output models using pascal case (ex. UserModel, PostModel)
-      # modelCase = "camelCase" # Output models using camel case (ex. userModel, postModel)
+			relationModel           = true # (default) Create and export both plain and related models.
+			# relationModel         = "default" # Do not export model without relations.
+			# relationModel         = false # Do not generate related model
 
-      modelSuffix = "Model" # (default) Suffix to apply to your prisma models when naming Zod schemas
-    }
-    ```
+			modelCase               = "PascalCase" # (default) Output models using pascal case (ex. UserModel, PostModel)
+			# modelCase             = "camelCase" # Output models using camel case (ex. userModel, postModel)
 
-3. Run `npx prisma generate` to generate your zod schemas
+			modelSuffix             = "Model" # (default) Suffix to apply to your prisma models when naming Zod schemas
+
+			# useDecimalJs          = false # (default) represent the prisma Decimal type using as a JS number
+			useDecimalJs            = true # represent the prisma Decimal type using Decimal.js (as Prisma does)
+
+			imports                 = null # (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
+
+			# https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
+			prismaJsonNullability   = true # (default) uses prisma's scheme for JSON field nullability 
+			# prismaJsonNullability = false # allows null assignment to optional JSON fields
+		}
+		```
+
+3. Run `npx prisma generate` or `yarn prisma generate` to generate your zod schemas
 4. Import the generated schemas form your selected output location
 
 <!-- USAGE EXAMPLES -->
@@ -157,15 +165,15 @@ in the Prisma schema will be transformed into JSDoc for the associated fields:
 
 ```prisma
 model Post {
-  /// The unique identifier for the post
-  /// @default {Generated by database}
-  id String @id @default(uuid())
+	/// The unique identifier for the post
+	/// @default {Generated by database}
+	id String @id @default(uuid())
 
-  /// A brief title that describes the contents of the post
-  title String
+	/// A brief title that describes the contents of the post
+	title String
 
-  /// The actual contents of the post.
-  contents String
+	/// The actual contents of the post.
+	contents String
 }
 ```
 
@@ -196,12 +204,12 @@ to extend your Zod schema fields:
 
 ```prisma
 model Post {
-  id String @id @default(uuid()) /// @zod.uuid()
+	id String @id @default(uuid()) /// @zod.uuid()
 
-  /// @zod.max(255, { message: "The title must be shorter than 256 characters" })
-  title String
+	/// @zod.max(255, { message: "The title must be shorter than 256 characters" })
+	title String
 
-  contents String /// @zod.max(10240)
+	contents String /// @zod.max(10240)
 }
 ```
 
@@ -246,6 +254,14 @@ This can be accomplished by using the special comment directive `@zod.custom()`.
 By specifying the custom schema within the parentheses you can replace the autogenerated type that would normally be assigned to the field.
 
 > For instance if you wanted to use `z.preprocess`
+
+### JSON Fields
+
+JSON fields in Prisma disallow null values. This is to disambiguate between setting a field's value to NULL in the database and having
+a value of null stored in the JSON. In accordance with this zod-prisma will default to disallowing null values, even if your JSON field is optional.
+
+If you would like to revert this behavior and allow null assignment to JSON fields,
+you can set `prismaJsonNullability` to `false` in the generator options.
 
 ## Examples
 
