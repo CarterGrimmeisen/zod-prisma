@@ -1,6 +1,6 @@
 {
 	"name": "zod-prisma",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "A Prisma generator that creates Zod schemas for all of your models",
 	"license": "MIT",
 	"author": "Carter Grimmeisen",
