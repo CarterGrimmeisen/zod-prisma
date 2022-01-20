@@ -52,12 +52,12 @@
 		"testEnvironment": "node"
 	},
 	"dependencies": {
-		"@prisma/generator-helper": "~3.7.0",
+		"@prisma/generator-helper": "~3.8.1",
 		"parenthesis": "^3.1.8",
 		"ts-morph": "^13.0.2"
 	},
 	"devDependencies": {
-		"@prisma/client": "~3.7.0",
+		"@prisma/client": "~3.8.1",
 		"@prisma/sdk": "~3.7.0",
 		"@tsconfig/recommended": "^1.0.1",
 		"@types/fs-extra": "^9.0.13",
