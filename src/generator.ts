@@ -7,7 +7,7 @@ import {
 	VariableDeclarationKind,
 } from 'ts-morph'
 import { Config, PrismaOptions } from './config'
-import { needsRelatedModel, useModelNames, writeArray } from './util'
+import { dotSlash, needsRelatedModel, useModelNames, writeArray } from './util'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
 
@@ -30,9 +30,8 @@ export const writeImportsForModel = (
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			namespaceImport: 'imports',
-			moduleSpecifier: path.relative(
-				outputPath,
-				path.resolve(path.dirname(schemaPath), config.imports)
+			moduleSpecifier: dotSlash(
+				path.relative(outputPath, path.resolve(path.dirname(schemaPath), config.imports))
 			),
 		})
 	}

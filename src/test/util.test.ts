@@ -1,5 +1,5 @@
 import type { CodeBlockWriter } from 'ts-morph'
-import { writeArray } from '../util'
+import { dotSlash, writeArray } from '../util'
 
 import { mock } from 'jest-mock-extended'
 
@@ -38,5 +38,10 @@ describe('Util Package', () => {
 		expect(writer.conditionalNewLine).toHaveBeenCalledWith(false)
 		expect(writer.conditionalNewLine).toHaveBeenCalledWith(false)
 		expect(writer.conditionalNewLine).toHaveBeenCalledTimes(4)
+	})
+
+	test('dotSlash', () => {
+		expect(dotSlash('../banana')).toBe('../banana')
+		expect(dotSlash('test/1/2/3')).toBe('./test/1/2/3')
 	})
 })

@@ -24,3 +24,13 @@ export const useModelNames = ({ modelCase, modelSuffix, relationModel }: Config)
 
 export const needsRelatedModel = (model: DMMF.Model, config: Config) =>
 	model.fields.some((field) => field.kind === 'object') && config.relationModel !== false
+
+export const chunk = <T extends any[]>(input: T, size: number): T[] => {
+	return input.reduce((arr, item, idx) => {
+		return idx % size === 0
+			? [...arr, [item]]
+			: [...arr.slice(0, -1), [...arr.slice(-1)[0], item]]
+	}, [])
+}
+
+export const dotSlash = (path: string) => (path.startsWith('../') ? path : './' + path)
