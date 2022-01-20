@@ -24,14 +24,14 @@
 		"generator"
 	],
 	"files": [
-		"dist",
-		"bin"
+		"bin",
+		"dist"
 	],
 	"scripts": {
-		"build": "dts build",
+		"build": "dts build --target node --format cjs --rollupTypes",
 		"lint": "tsc --noEmit && dts lint src --ignore-pattern src/test/functional",
 		"prepare": "husky install",
-		"prepublish": "dts build",
+		"prepublish": "dts build --target node --format cjs --rollupTypes",
 		"start": "dts watch",
 		"test": "dts test --maxWorkers=4 --verbose"
 	},
