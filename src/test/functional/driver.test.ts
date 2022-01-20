@@ -115,5 +115,6 @@ describe('Functional Tests', () => {
 	test.concurrent('Relation - 1 to 1', ftForDir('relation-1to1'))
 	test.concurrent('Imports', ftForDir('imports'))
 	test.concurrent('JSON', ftForDir('json'))
+	test.concurrent('Optional fields', ftForDir('optional'))
 	test.concurrent('Config Import', ftForDir('config-import'))
 })
