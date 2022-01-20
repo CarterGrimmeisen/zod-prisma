@@ -53,6 +53,7 @@
 	},
 	"dependencies": {
 		"@prisma/generator-helper": "~3.7.0",
+		"parenthesis": "^3.1.8",
 		"ts-morph": "^13.0.2"
 	},
 	"devDependencies": {
