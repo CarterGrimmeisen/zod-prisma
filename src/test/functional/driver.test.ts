@@ -114,5 +114,6 @@ describe('Functional Tests', () => {
 	test.concurrent('relationModel = false', ftForDir('relation-false'))
 	test.concurrent('Imports', ftForDir('imports'))
 	test.concurrent('JSON', ftForDir('json'))
+	test.concurrent('Optional fields', ftForDir('optional'))
 	test.concurrent('Config Import', ftForDir('config-import'))
 })
