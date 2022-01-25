@@ -1,6 +1,7 @@
 import { DMMF } from '@prisma/generator-helper'
 import type { CodeBlockWriter } from 'ts-morph'
 import { Config } from './config'
+import { sep } from 'path'
 
 export const writeArray = (writer: CodeBlockWriter, array: string[], newLine = true) =>
 	array.forEach((line) => writer.write(line).conditionalNewLine(newLine))
@@ -34,9 +35,10 @@ export const chunk = <T extends any[]>(input: T, size: number): T[] => {
 }
 
 export const dotSlash = (path: string) => {
-	if (path.includes('/node_modules/')) return path.split('/node_modules/').slice(-1)[0]
+	if (path.includes(`${sep}node_modules${sep}`))
+		return path.split(`${sep}node_modules${sep}`).slice(-1)[0]
 
-	if (path.startsWith('../')) return path
+	if (path.startsWith(`..${sep}`)) return path
 
-	return './' + path
+	return `.${sep}${path}`
 }
