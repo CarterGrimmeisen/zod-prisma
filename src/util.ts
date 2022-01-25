@@ -33,4 +33,10 @@ export const chunk = <T extends any[]>(input: T, size: number): T[] => {
 	}, [])
 }
 
-export const dotSlash = (path: string) => (path.startsWith('../') ? path : './' + path)
+export const dotSlash = (path: string) => {
+	if (path.includes('/node_modules/')) return path.split('/node_modules/').slice(-1)[0]
+
+	if (path.startsWith('../')) return path
+
+	return './' + path
+}

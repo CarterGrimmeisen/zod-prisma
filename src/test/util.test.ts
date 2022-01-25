@@ -43,5 +43,6 @@ describe('Util Package', () => {
 	test('dotSlash', () => {
 		expect(dotSlash('../banana')).toBe('../banana')
 		expect(dotSlash('test/1/2/3')).toBe('./test/1/2/3')
+		expect(dotSlash('../../node_modules/@prisma/client')).toBe('@prisma/client')
 	})
 })

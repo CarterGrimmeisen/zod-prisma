@@ -52,7 +52,7 @@ export const writeImportsForModel = (
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
-			moduleSpecifier: relativePath,
+			moduleSpecifier: dotSlash(relativePath),
 			namedImports: enumFields.map((f) => f.type),
 		})
 	}
