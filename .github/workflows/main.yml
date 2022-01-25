@@ -1,4 +1,4 @@
-name: CI
+name: Lint and Test
 on: [push, workflow_dispatch]
 jobs:
     build:
@@ -7,8 +7,8 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                node: ['14.x']
-                os: [ubuntu-latest]
+                node: ['14.x', '16.x']
+                os: [ubuntu-latest, macos-latest, windows-latest]
 
         steps:
             - name: Checkout repo
@@ -18,12 +18,10 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node }}
-
-            - name: Clean yarn cache
-              run: yarn cache clean
+                  cache: 'npm'
 
             - name: Install deps (no cache)
-              run: yarn install --force
+              run: yarn install --frozen-lockfile
 
             - name: Build
               run: yarn build
