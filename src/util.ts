@@ -41,7 +41,7 @@ export const dotSlash = (input: string) => {
 
 	if (converted.includes(`/node_modules/`)) return converted.split(`/node_modules/`).slice(-1)[0]
 
-	if (converted.startsWith(`../`)) return input
+	if (converted.startsWith(`../`)) return converted
 
 	return './' + converted
 }
