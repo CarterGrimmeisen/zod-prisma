@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'path/posix'
 import { DMMF } from '@prisma/generator-helper'
 import {
 	ImportDeclarationStructure,
@@ -122,8 +122,6 @@ export const writeTypeSpecificSchemas = (
 			])
 		})
 	}
-
-	// TODO: Add Decimal
 }
 
 export const generateSchemaForModel = (

@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'path/posix'
 import { configSchema, PrismaOptions } from '../config'
 import { writeImportsForModel } from '../generator'
 import { getDMMF } from '@prisma/sdk'
