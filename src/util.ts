@@ -1,4 +1,4 @@
-import { posix as path } from 'path'
+import path from 'path'
 import { DMMF } from '@prisma/generator-helper'
 import type { CodeBlockWriter } from 'ts-morph'
 import { Config } from './config'
@@ -35,10 +35,12 @@ export const chunk = <T extends any[]>(input: T, size: number): T[] => {
 }
 
 export const dotSlash = (input: string) => {
-	if (input.includes(`${path.sep}node_modules${path.sep}`))
-		return input.split(`${path.sep}node_modules${path.sep}`).slice(-1)[0]
+	const converted = input.split(path.sep).join(path.posix.sep)
 
-	if (input.startsWith(`..${path.sep}`)) return input
+	if (converted.includes(`${path.posix.sep}node_modules${path.posix.sep}`))
+		return converted.split(`${path.posix.sep}node_modules${path.posix.sep}`).slice(-1)[0]
 
-	return `.${path.sep}${input}`
+	if (converted.startsWith(`..${path.posix.sep}`)) return input
+
+	return `.${path.posix.sep}${converted}`
 }

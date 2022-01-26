@@ -1,4 +1,4 @@
-import { posix as path } from 'path'
+import path from 'path'
 import { configSchema, PrismaOptions } from '../config'
 import { writeImportsForModel } from '../generator'
 import { getDMMF } from '@prisma/sdk'

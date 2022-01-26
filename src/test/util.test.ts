@@ -1,7 +1,7 @@
+import { mock } from 'jest-mock-extended'
+import path from 'path'
 import type { CodeBlockWriter } from 'ts-morph'
 import { dotSlash, writeArray } from '../util'
-
-import { mock } from 'jest-mock-extended'
 
 describe('Util Package', () => {
 	test('writeArray: default newLines', () => {
@@ -44,5 +44,10 @@ describe('Util Package', () => {
 		expect(dotSlash('../banana')).toBe('../banana')
 		expect(dotSlash('test/1/2/3')).toBe('./test/1/2/3')
 		expect(dotSlash('../../node_modules/@prisma/client')).toBe('@prisma/client')
+
+		if (path.sep !== path.posix.sep) {
+			expect(dotSlash('test\\1\\2\\3')).toBe('./test/1/2/3')
+			expect(dotSlash('..\\..\\node_modules\\@prisma\\client')).toBe('@prisma/client')
+		}
 	})
 })
