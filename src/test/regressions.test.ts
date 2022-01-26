@@ -1,4 +1,4 @@
-import { resolve } from 'path/posix'
+import { posix as path } from 'path'
 import { configSchema, PrismaOptions } from '../config'
 import { writeImportsForModel } from '../generator'
 import { getDMMF } from '@prisma/sdk'
@@ -8,9 +8,9 @@ describe('Regression Tests', () => {
 	test('#92', async () => {
 		const config = configSchema.parse({})
 		const prismaOptions: PrismaOptions = {
-			clientPath: resolve(__dirname, '../node_modules/@prisma/client'),
-			outputPath: resolve(__dirname, './prisma/zod'),
-			schemaPath: resolve(__dirname, './prisma/schema.prisma'),
+			clientPath: path.resolve(__dirname, '../node_modules/@prisma/client'),
+			outputPath: path.resolve(__dirname, './prisma/zod'),
+			schemaPath: path.resolve(__dirname, './prisma/schema.prisma'),
 		}
 
 		const {

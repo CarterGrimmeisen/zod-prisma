@@ -1,4 +1,4 @@
-import path from 'path/posix'
+import { posix as path } from 'path'
 import { DMMF } from '@prisma/generator-helper'
 import type { CodeBlockWriter } from 'ts-morph'
 import { Config } from './config'

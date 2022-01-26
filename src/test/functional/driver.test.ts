@@ -2,7 +2,7 @@ import glob from 'fast-glob'
 import execa from 'execa'
 import { getDMMF, getConfig } from '@prisma/sdk'
 import { readFile } from 'fs-extra'
-import { resolve, dirname } from 'path/posix'
+import { posix as path } from 'path'
 import { Project } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from '../../config'
@@ -11,9 +11,9 @@ import { populateModelFile, generateBarrelFile } from '../../generator'
 jest.setTimeout(120000)
 
 const ftForDir = (dir: string) => async () => {
-	const schemaFile = resolve(__dirname, dir, 'prisma/schema.prisma')
-	const expectedDir = resolve(__dirname, dir, 'expected')
-	const actualDir = resolve(__dirname, dir, 'actual')
+	const schemaFile = path.resolve(__dirname, dir, 'prisma/schema.prisma')
+	const expectedDir = path.resolve(__dirname, dir, 'expected')
+	const actualDir = path.resolve(__dirname, dir, 'actual')
 
 	const project = new Project()
 
@@ -34,8 +34,8 @@ const ftForDir = (dir: string) => async () => {
 		(generator) => generator.provider.value === 'prisma-client-js'
 	)!
 
-	const outputPath = resolve(dirname(schemaFile), generator.output!.value)
-	const clientPath = resolve(dirname(schemaFile), prismaClient.output!.value)
+	const outputPath = path.resolve(path.dirname(schemaFile), generator.output!.value)
+	const clientPath = path.resolve(path.dirname(schemaFile), prismaClient.output!.value)
 
 	const prismaOptions: PrismaOptions = {
 		clientPath,
@@ -57,8 +57,11 @@ const ftForDir = (dir: string) => async () => {
 
 	const actualIndexContents = await readFile(`${actualDir}/index.ts`, 'utf-8')
 
-	const expectedIndexFile = resolve(expectedDir, `index.ts`)
-	const expectedIndexContents = await readFile(resolve(expectedDir, expectedIndexFile), 'utf-8')
+	const expectedIndexFile = path.resolve(expectedDir, `index.ts`)
+	const expectedIndexContents = await readFile(
+		path.resolve(expectedDir, expectedIndexFile),
+		'utf-8'
+	)
 
 	expect(actualIndexContents).toStrictEqual(expectedIndexContents)
 
@@ -84,8 +87,11 @@ const ftForDir = (dir: string) => async () => {
 				'utf-8'
 			)
 
-			const expectedFile = resolve(expectedDir, `${model.name.toLowerCase()}.ts`)
-			const expectedContents = await readFile(resolve(expectedDir, expectedFile), 'utf-8')
+			const expectedFile = path.resolve(expectedDir, `${model.name.toLowerCase()}.ts`)
+			const expectedContents = await readFile(
+				path.resolve(expectedDir, expectedFile),
+				'utf-8'
+			)
 
 			expect(actualContents).toStrictEqual(expectedContents)
 		})
@@ -93,12 +99,10 @@ const ftForDir = (dir: string) => async () => {
 
 	project.save()
 
-	const typeCheckResults = await execa(resolve(__dirname, '../../../node_modules/.bin/tsc'), [
-		'--strict',
-		'--pretty',
-		'--noEmit',
-		...(await glob(`${actualDir}/*.ts`)),
-	])
+	const typeCheckResults = await execa(
+		path.resolve(__dirname, '../../../node_modules/.bin/tsc'),
+		['--strict', '--pretty', '--noEmit', ...(await glob(`${actualDir}/*.ts`))]
+	)
 
 	expect(typeCheckResults.exitCode).toBe(0)
 
