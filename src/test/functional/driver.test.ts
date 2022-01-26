@@ -8,7 +8,7 @@ import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from '../../config'
 import { populateModelFile, generateBarrelFile } from '../../generator'
 
-jest.setTimeout(120000)
+jest.setTimeout(10000)
 
 const ftForDir = (dir: string) => async () => {
 	const schemaFile = path.resolve(__dirname, dir, 'prisma/schema.prisma')
@@ -97,15 +97,6 @@ const ftForDir = (dir: string) => async () => {
 		})
 	)
 
-	project.save()
-
-	const typeCheckResults = await execa(
-		path.resolve(__dirname, '../../../node_modules/.bin/tsc'),
-		['--strict', '--pretty', '--noEmit', ...(await glob(`${actualDir}/*.ts`))]
-	)
-
-	expect(typeCheckResults.exitCode).toBe(0)
-
 	await project.save()
 }
 
@@ -121,4 +112,13 @@ describe('Functional Tests', () => {
 	test.concurrent('JSON', ftForDir('json'))
 	test.concurrent('Optional fields', ftForDir('optional'))
 	test.concurrent('Config Import', ftForDir('config-import'))
+
+	test.concurrent('Type Check Everything', async () => {
+		const typeCheckResults = await execa(
+			path.resolve(__dirname, '../../../node_modules/.bin/tsc'),
+			['--strict', '--noEmit', ...(await glob(`${__dirname}/*/expected/*.ts`))]
+		)
+
+		expect(typeCheckResults.exitCode).toBe(0)
+	})
 })
