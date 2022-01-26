@@ -1,4 +1,3 @@
-import path from 'path'
 import { DMMF } from '@prisma/generator-helper'
 import type { CodeBlockWriter } from 'ts-morph'
 import { Config } from './config'
@@ -35,12 +34,14 @@ export const chunk = <T extends any[]>(input: T, size: number): T[] => {
 }
 
 export const dotSlash = (input: string) => {
-	const converted = input.split(path.sep).join(path.posix.sep)
+	const converted = input
+		.replace(/^\\\\\?\\/, '')
+		.replace(/\\/g, '/')
+		.replace(/\/\/+/g, '/')
 
-	if (converted.includes(`${path.posix.sep}node_modules${path.posix.sep}`))
-		return converted.split(`${path.posix.sep}node_modules${path.posix.sep}`).slice(-1)[0]
+	if (converted.includes(`/node_modules/`)) return converted.split(`/node_modules/`).slice(-1)[0]
 
-	if (converted.startsWith(`..${path.posix.sep}`)) return input
+	if (converted.startsWith(`../`)) return input
 
-	return `.${path.posix.sep}${converted}`
+	return './' + converted
 }
