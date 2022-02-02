@@ -14,6 +14,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Disable auto CRLF to facilitate testing
+      - name: Disable Auto CRLF
+        run: git config --global core.autocrlf false
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
