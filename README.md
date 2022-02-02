@@ -20,7 +20,7 @@
 -->
 
 [![NPM][npm-shield]][npm-url]
-[![Contributors][contributors-shield]][contributors-url]
+[![Downloads][downloads-shield]][npm-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -39,7 +39,7 @@
     <a href="https://github.com/CarterGrimmeisen/zod-prisma"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional">View Demo</a>
+    <a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/test/functional">View Demo</a>
     ·
     <a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Report Bug</a>
     ·
@@ -270,7 +270,7 @@ you can set `prismaJsonNullability` to `false` in the generator options.
 
 <!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
 
-_For examples, please refer to the [Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples) or the [Functional Tests](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional)_
+_For examples, please refer to the [Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples) or the [Functional Tests](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/test/functional)_
 
 <!-- ROADMAP -->
 
@@ -307,10 +307,9 @@ Project Link: [https://github.com/CarterGrimmeisen/zod-prisma](https://github.co
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[npm-shield]: https://img.shields.io/npm/v/zod-prisma?style=for-the-badge
+[npm-shield]: https://img.shields.io/npm/v/zod-prisma?color=blue&style=for-the-badge
 [npm-url]: https://www.npmjs.com/package/zod-prisma
-[contributors-shield]: https://img.shields.io/github/contributors/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[contributors-url]: https://github.com/CarterGrimmeisen/zod-prisma/graphs/contributors
+[downloads-shield]: https://img.shields.io/npm/dw/zod-prisma?style=for-the-badge
 [forks-shield]: https://img.shields.io/github/forks/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
 [forks-url]: https://github.com/CarterGrimmeisen/zod-prisma/network/members
 [stars-shield]: https://img.shields.io/github/stars/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
