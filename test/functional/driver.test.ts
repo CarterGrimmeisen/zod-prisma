@@ -122,6 +122,8 @@ describe("Functional Tests", () => {
   test.concurrent("Optional fields", ftForDir("optional"))
   test.concurrent("Config Import", ftForDir("config-import"))
 
+  // TODO: Expected files are now included in project level tsconfig and will be type-checked in the lint step
+  // Meaning this could eventually be removed if I feel like it
   test.concurrent(
     "Type Check Everything",
     async () => {
