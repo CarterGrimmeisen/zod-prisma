@@ -39,7 +39,7 @@
     "test": "vitest run",
     "prepublishOnly": "pnpm run build",
     "prepare": "husky install",
-    "lint": "tsc --noEmit && eslint src/*.ts test/*.test.ts test/**/*.test.ts"
+    "lint": "tsc --noEmit && eslint vitest.config.ts src/*.ts test/*.test.ts test/**/*.test.ts"
   },
   "license": "MIT",
   "devDependencies": {
