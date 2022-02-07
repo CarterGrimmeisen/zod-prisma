@@ -122,17 +122,21 @@ describe("Functional Tests", () => {
   test.concurrent("Optional fields", ftForDir("optional"))
   test.concurrent("Config Import", ftForDir("config-import"))
 
-  test.concurrent("Type Check Everything", async () => {
-    const typeCheckResults = await execa(
-      path.resolve(__dirname, "../../node_modules/.bin/tsc"),
-      [
-        "--strict",
-        "--noEmit",
-        "--skipLibCheck",
-        ...(await glob(`${__dirname}/*/expected/*.ts`)),
-      ],
-    )
+  test.concurrent(
+    "Type Check Everything",
+    async () => {
+      const typeCheckResults = await execa(
+        path.resolve(__dirname, "../../node_modules/.bin/tsc"),
+        [
+          "--strict",
+          "--noEmit",
+          "--skipLibCheck",
+          ...(await glob(`${__dirname}/*/expected/*.ts`)),
+        ],
+      )
 
-    expect(typeCheckResults.exitCode).toBe(0)
-  })
+      expect(typeCheckResults.exitCode).toBe(0)
+    },
+    20000,
+  )
 })
