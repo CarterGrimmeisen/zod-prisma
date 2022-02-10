@@ -1,4 +1,4 @@
-import { DMMF } from "@prisma/generator-helper"
+import type { DMMF } from "@prisma/generator-helper"
 import type { CodeBlockWriter } from "ts-morph"
 import { Config } from "./config"
 
@@ -8,35 +8,25 @@ export const writeArray = (
   newLine = true,
 ) => array.forEach((line) => writer.write(line).conditionalNewLine(newLine))
 
-export const useModelNames = ({
-  modelCase,
-  modelSuffix,
-  relationModel,
-}: Config) => {
-  const formatModelName = (name: string, prefix = "") => {
-    if (modelCase === "camelCase") {
+export const schemaNameFormatter = ({ schemaCase, schemaSuffix }: Config) => {
+  const formatter = (name: string) => {
+    if (schemaCase === "camelCase") {
       name = name.slice(0, 1).toLowerCase() + name.slice(1)
     }
-    return `${prefix}${name}${modelSuffix}`
+    return `${name}${schemaSuffix}`
   }
 
   return {
-    modelName: (name: string) =>
-      formatModelName(name, relationModel === "default" ? "_" : ""),
-    relatedModelName: (
-      name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg,
-    ) =>
-      formatModelName(
-        relationModel === "default"
-          ? name.toString()
-          : `Related${name.toString()}`,
-      ),
+    baseSchema: (name: string) => formatter(`${name}Base`),
+    schema: (name: string) => formatter(name),
+    relationsSchema: (name: string) => formatter(`${name}Relations`),
+    createSchema: (name: string) => formatter(`${name}Create`),
+    updateSchema: (name: string) => formatter(`${name}Update`),
   }
 }
 
-export const needsRelatedModel = (model: DMMF.Model, config: Config) =>
-  model.fields.some((field) => field.kind === "object") &&
-  config.relationModel !== false
+export const needsRelatedSchema = (model: DMMF.Model) =>
+  model.fields.some((field) => field.kind === "object")
 
 // Too lazy to figure out why unknown[] here causes type errors
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

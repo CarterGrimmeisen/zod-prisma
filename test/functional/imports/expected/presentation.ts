@@ -1,7 +1,7 @@
 import * as z from "zod"
-import { CompleteSpreadsheet, RelatedSpreadsheetModel } from "./index"
+import { SpreadsheetRelations, spreadsheetSchema, spreadsheetBaseSchema } from "./index"
 
-export const PresentationModel = z.object({
+export const presentationBaseSchema = z.object({
   id: z.string(),
   filename: z.string(),
   author: z.string(),
@@ -10,15 +10,24 @@ export const PresentationModel = z.object({
   updated: z.date(),
 })
 
-export interface CompletePresentation extends z.infer<typeof PresentationModel> {
-  spreadsheets: CompleteSpreadsheet[]
+export interface PresentationRelations {
+  spreadsheets: (z.infer<typeof spreadsheetBaseSchema> & SpreadsheetRelations)[]
 }
 
-/**
- * RelatedPresentationModel contains all relations on your model in addition to the scalars
- *
- * NOTE: Lazy required in case of potential circular dependencies within schema
- */
-export const RelatedPresentationModel: z.ZodSchema<CompletePresentation> = z.lazy(() => PresentationModel.extend({
-  spreadsheets: RelatedSpreadsheetModel.array(),
-}))
+const presentationRelationsSchema: z.ZodObject<{
+  [K in keyof PresentationRelations]-?: z.ZodType<PresentationRelations[K]>
+}> = z.object({
+  spreadsheets: z.lazy(() => spreadsheetSchema).array(),
+})
+
+export const presentationSchema = presentationBaseSchema.merge(presentationRelationsSchema)
+
+export const presentationCreateSchema = presentationSchema.partial({
+  id: true,
+  contents: true,
+  spreadsheets: true,
+  created: true,
+  updated: true,
+})
+
+export const presentationUpdateSchema = presentationSchema.partial()

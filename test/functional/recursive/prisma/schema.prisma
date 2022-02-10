@@ -22,6 +22,6 @@ model Comment {
   author   String
   contents String
   parentId String
-  parent   Comment   @relation("lineage", fields: [parentId], references: [id])
+  parent   Comment?  @relation("lineage", fields: [parentId], references: [id])
   children Comment[] @relation("lineage")
 }

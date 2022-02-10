@@ -1,15 +1,20 @@
 import path from "path"
 import { DMMF } from "@prisma/generator-helper"
-import {
-  ImportDeclarationStructure,
-  SourceFile,
-  StructureKind,
-  VariableDeclarationKind,
-} from "ts-morph"
+import { ImportDeclarationStructure, SourceFile, StructureKind } from "ts-morph"
 import { Config, PrismaOptions } from "./config"
-import { dotSlash, needsRelatedModel, useModelNames, writeArray } from "./util"
-import { getJSDocs } from "./docs"
-import { getZodConstructor } from "./types"
+import {
+  dotSlash,
+  needsRelatedSchema,
+  schemaNameFormatter,
+  writeArray,
+} from "./util"
+import {
+  generateBaseSchema,
+  generateCreateSchema,
+  generateRelationsSchema,
+  generateSchema,
+  generateUpdateSchema,
+} from "./schemas"
 
 export const writeImportsForModel = (
   model: DMMF.Model,
@@ -17,7 +22,7 @@ export const writeImportsForModel = (
   config: Config,
   { schemaPath, outputPath, clientPath }: PrismaOptions,
 ) => {
-  const { relatedModelName } = useModelNames(config)
+  const { schema, baseSchema } = schemaNameFormatter(config)
   const importList: ImportDeclarationStructure[] = [
     {
       kind: StructureKind.ImportDeclaration,
@@ -39,7 +44,7 @@ export const writeImportsForModel = (
     })
   }
 
-  if (config.useDecimalJs && model.fields.some((f) => f.type === "Decimal")) {
+  if (config.decimalJs && model.fields.some((f) => f.type === "Decimal")) {
     importList.push({
       kind: StructureKind.ImportDeclaration,
       namedImports: ["Decimal"],
@@ -60,7 +65,7 @@ export const writeImportsForModel = (
     })
   }
 
-  if (config.relationModel !== false && relationFields.length > 0) {
+  if (relationFields.length > 0) {
     const filteredFields = relationFields.filter((f) => f.type !== model.name)
 
     if (filteredFields.length > 0) {
@@ -70,8 +75,9 @@ export const writeImportsForModel = (
         namedImports: Array.from(
           new Set(
             filteredFields.flatMap((f) => [
-              `Complete${f.type}`,
-              relatedModelName(f.type),
+              `${f.type}Relations`,
+              schema(f.type),
+              baseSchema(f.type),
             ]),
           ),
         ),
@@ -100,12 +106,14 @@ export const writeTypeSpecificSchemas = (
         `const literalSchema = z.union([z.string(), z.number(), z.boolean()${
           config.prismaJsonNullability ? "" : ", z.null()"
         }])`,
-        "const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))",
+        "const jsonSchema: z.ZodSchema<Json> = z.lazy(() =>",
+        "  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]),",
+        ")",
       ])
     })
   }
 
-  if (config.useDecimalJs && model.fields.some((f) => f.type === "Decimal")) {
+  if (config.decimalJs && model.fields.some((f) => f.type === "Decimal")) {
     sourceFile.addStatements((writer) => {
       writer.newLine()
       writeArray(writer, [
@@ -127,110 +135,6 @@ export const writeTypeSpecificSchemas = (
   }
 }
 
-export const generateSchemaForModel = (
-  model: DMMF.Model,
-  sourceFile: SourceFile,
-  config: Config,
-  _prismaOptions: PrismaOptions,
-) => {
-  const { modelName } = useModelNames(config)
-
-  sourceFile.addVariableStatement({
-    declarationKind: VariableDeclarationKind.Const,
-    isExported: true,
-    leadingTrivia: (writer) => writer.blankLineIfLastNot(),
-    declarations: [
-      {
-        name: modelName(model.name),
-        initializer(writer) {
-          writer
-            .write("z.object(")
-            .inlineBlock(() => {
-              model.fields
-                .filter((f) => f.kind !== "object")
-                .forEach((field) => {
-                  writeArray(writer, getJSDocs(field.documentation))
-                  writer
-                    .write(`${field.name}: ${getZodConstructor(field)}`)
-                    .write(",")
-                    .newLine()
-                })
-            })
-            .write(")")
-        },
-      },
-    ],
-  })
-}
-
-export const generateRelatedSchemaForModel = (
-  model: DMMF.Model,
-  sourceFile: SourceFile,
-  config: Config,
-  _prismaOptions: PrismaOptions,
-) => {
-  const { modelName, relatedModelName } = useModelNames(config)
-
-  const relationFields = model.fields.filter((f) => f.kind === "object")
-
-  sourceFile.addInterface({
-    name: `Complete${model.name}`,
-    isExported: true,
-    extends: [`z.infer<typeof ${modelName(model.name)}>`],
-    properties: relationFields.map((f) => ({
-      hasQuestionToken: !f.isRequired,
-      name: f.name,
-      type: `Complete${f.type}${f.isList ? "[]" : ""}${
-        !f.isRequired ? " | null" : ""
-      }`,
-    })),
-  })
-
-  sourceFile.addStatements((writer) =>
-    writeArray(writer, [
-      "",
-      "/**",
-      ` * ${relatedModelName(
-        model.name,
-      )} contains all relations on your model in addition to the scalars`,
-      " *",
-      " * NOTE: Lazy required in case of potential circular dependencies within schema",
-      " */",
-    ]),
-  )
-
-  sourceFile.addVariableStatement({
-    declarationKind: VariableDeclarationKind.Const,
-    isExported: true,
-    declarations: [
-      {
-        name: relatedModelName(model.name),
-        type: `z.ZodSchema<Complete${model.name}>`,
-        initializer(writer) {
-          writer
-            .write(`z.lazy(() => ${modelName(model.name)}.extend(`)
-            .inlineBlock(() => {
-              relationFields.forEach((field) => {
-                writeArray(writer, getJSDocs(field.documentation))
-
-                writer
-                  .write(
-                    `${field.name}: ${getZodConstructor(
-                      field,
-                      relatedModelName,
-                    )}`,
-                  )
-                  .write(",")
-                  .newLine()
-              })
-            })
-            .write("))")
-        },
-      },
-    ],
-  })
-}
-
 export const populateModelFile = (
   model: DMMF.Model,
   sourceFile: SourceFile,
@@ -239,9 +143,14 @@ export const populateModelFile = (
 ) => {
   writeImportsForModel(model, sourceFile, config, prismaOptions)
   writeTypeSpecificSchemas(model, sourceFile, config, prismaOptions)
-  generateSchemaForModel(model, sourceFile, config, prismaOptions)
-  if (needsRelatedModel(model, config))
-    generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions)
+
+  generateBaseSchema(model, sourceFile, config, prismaOptions)
+  if (needsRelatedSchema(model))
+    generateRelationsSchema(model, sourceFile, config, prismaOptions)
+
+  generateSchema(model, sourceFile, config, prismaOptions)
+  generateCreateSchema(model, sourceFile, config, prismaOptions)
+  generateUpdateSchema(model, sourceFile, config, prismaOptions)
 }
 
 export const generateBarrelFile = (

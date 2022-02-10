@@ -5,12 +5,11 @@ const configBoolean = z
   .transform((arg) => JSON.parse(arg))
 
 export const configSchema = z.object({
-  relationModel: configBoolean.default("true").or(z.literal("default")),
-  modelSuffix: z.string().default("Model"),
-  modelCase: z.enum(["PascalCase", "camelCase"]).default("PascalCase"),
-  useDecimalJs: configBoolean.default("false"),
+  decimalJs: configBoolean.default("false"),
   imports: z.string().optional(),
   prismaJsonNullability: configBoolean.default("true"),
+  schemaSuffix: z.string().default("Schema"),
+  schemaCase: z.enum(["PascalCase", "camelCase"]).default("camelCase"),
 })
 
 export type Config = z.infer<typeof configSchema>

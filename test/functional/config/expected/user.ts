@@ -1,21 +1,27 @@
 import * as z from "zod"
-import { CompletePost, postSchema } from "./index"
+import { PostRelations, postSchema, postBaseSchema } from "./index"
 
-export const _userSchema = z.object({
+export const userBaseSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
 })
 
-export interface CompleteUser extends z.infer<typeof _userSchema> {
-  posts: CompletePost[]
+export interface UserRelations {
+  posts: (z.infer<typeof postBaseSchema> & PostRelations)[]
 }
 
-/**
- * userSchema contains all relations on your model in addition to the scalars
- *
- * NOTE: Lazy required in case of potential circular dependencies within schema
- */
-export const userSchema: z.ZodSchema<CompleteUser> = z.lazy(() => _userSchema.extend({
-  posts: postSchema.array(),
-}))
+const userRelationsSchema: z.ZodObject<{
+  [K in keyof UserRelations]-?: z.ZodType<UserRelations[K]>
+}> = z.object({
+  posts: z.lazy(() => postSchema).array(),
+})
+
+export const userSchema = userBaseSchema.merge(userRelationsSchema)
+
+export const userCreateSchema = userSchema.partial({
+  id: true,
+  posts: true,
+})
+
+export const userUpdateSchema = userSchema.partial()

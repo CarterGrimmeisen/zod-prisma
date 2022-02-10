@@ -1,19 +1,24 @@
 import * as z from "zod"
-import { CompleteUser, RelatedUserModel } from "./index"
+import { UserRelations, userSchema, userBaseSchema } from "./index"
 
-export const KeychainModel = z.object({
+export const keychainBaseSchema = z.object({
   userID: z.string(),
 })
 
-export interface CompleteKeychain extends z.infer<typeof KeychainModel> {
-  owner: CompleteUser
+export interface KeychainRelations {
+  owner: z.infer<typeof userBaseSchema> & UserRelations
 }
 
-/**
- * RelatedKeychainModel contains all relations on your model in addition to the scalars
- *
- * NOTE: Lazy required in case of potential circular dependencies within schema
- */
-export const RelatedKeychainModel: z.ZodSchema<CompleteKeychain> = z.lazy(() => KeychainModel.extend({
-  owner: RelatedUserModel,
-}))
+const keychainRelationsSchema: z.ZodObject<{
+  [K in keyof KeychainRelations]-?: z.ZodType<KeychainRelations[K]>
+}> = z.object({
+  owner: z.lazy(() => userSchema),
+})
+
+export const keychainSchema = keychainBaseSchema.merge(keychainRelationsSchema)
+
+export const keychainCreateSchema = keychainSchema.partial({
+  userID: true,
+})
+
+export const keychainUpdateSchema = keychainSchema.partial()

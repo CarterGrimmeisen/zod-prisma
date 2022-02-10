@@ -1,13 +1,15 @@
 import * as z from "zod"
-import { CompletePresentation, RelatedPresentationModel } from "./index"
+import { PresentationRelations, presentationSchema, presentationBaseSchema } from "./index"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
 type Json = Literal | { [key: string]: Json } | Json[]
 const literalSchema = z.union([z.string(), z.number(), z.boolean()])
-const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))
+const jsonSchema: z.ZodSchema<Json> = z.lazy(() =>
+  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]),
+)
 
-export const SpreadsheetModel = z.object({
+export const spreadsheetBaseSchema = z.object({
   id: z.string(),
   filename: z.string(),
   author: z.string(),
@@ -16,15 +18,23 @@ export const SpreadsheetModel = z.object({
   updated: z.date(),
 })
 
-export interface CompleteSpreadsheet extends z.infer<typeof SpreadsheetModel> {
-  presentations: CompletePresentation[]
+export interface SpreadsheetRelations {
+  presentations: (z.infer<typeof presentationBaseSchema> & PresentationRelations)[]
 }
 
-/**
- * RelatedSpreadsheetModel contains all relations on your model in addition to the scalars
- *
- * NOTE: Lazy required in case of potential circular dependencies within schema
- */
-export const RelatedSpreadsheetModel: z.ZodSchema<CompleteSpreadsheet> = z.lazy(() => SpreadsheetModel.extend({
-  presentations: RelatedPresentationModel.array(),
-}))
+const spreadsheetRelationsSchema: z.ZodObject<{
+  [K in keyof SpreadsheetRelations]-?: z.ZodType<SpreadsheetRelations[K]>
+}> = z.object({
+  presentations: z.lazy(() => presentationSchema).array(),
+})
+
+export const spreadsheetSchema = spreadsheetBaseSchema.merge(spreadsheetRelationsSchema)
+
+export const spreadsheetCreateSchema = spreadsheetSchema.partial({
+  id: true,
+  presentations: true,
+  created: true,
+  updated: true,
+})
+
+export const spreadsheetUpdateSchema = spreadsheetSchema.partial()

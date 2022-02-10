@@ -1,20 +1,26 @@
 import * as z from "zod"
-import { CompleteUser, RelatedUserModel } from "./index"
+import { UserRelations, userSchema, userBaseSchema } from "./index"
 
-export const PostModel = z.object({
+export const postBaseSchema = z.object({
   id: z.number().int(),
   authorId: z.number().int(),
 })
 
-export interface CompletePost extends z.infer<typeof PostModel> {
-  author: CompleteUser
+export interface PostRelations {
+  author: z.infer<typeof userBaseSchema> & UserRelations
 }
 
-/**
- * RelatedPostModel contains all relations on your model in addition to the scalars
- *
- * NOTE: Lazy required in case of potential circular dependencies within schema
- */
-export const RelatedPostModel: z.ZodSchema<CompletePost> = z.lazy(() => PostModel.extend({
-  author: RelatedUserModel,
-}))
+const postRelationsSchema: z.ZodObject<{
+  [K in keyof PostRelations]-?: z.ZodType<PostRelations[K]>
+}> = z.object({
+  author: z.lazy(() => userSchema),
+})
+
+export const postSchema = postBaseSchema.merge(postRelationsSchema)
+
+export const postCreateSchema = postSchema.partial({
+  id: true,
+  authorId: true,
+})
+
+export const postUpdateSchema = postSchema.partial()

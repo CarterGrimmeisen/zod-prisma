@@ -3,9 +3,7 @@ import { computeCustomSchema, computeModifiers } from "./docs"
 
 export const getZodConstructor = (
   field: DMMF.Field,
-  getRelatedModelName = (
-    name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg,
-  ) => name.toString(),
+  getRelatedSchemaName = (name: string) => name,
 ) => {
   let zodType = "z.unknown()"
   const extraModifiers: string[] = [""]
@@ -44,7 +42,7 @@ export const getZodConstructor = (
   } else if (field.kind === "enum") {
     zodType = `z.nativeEnum(${field.type})`
   } else if (field.kind === "object") {
-    zodType = getRelatedModelName(field.type)
+    zodType = getRelatedSchemaName(field.type.toString())
   }
 
   if (field.isList) extraModifiers.push("array()")
@@ -53,8 +51,7 @@ export const getZodConstructor = (
     extraModifiers.push(...computeModifiers(field.documentation))
   }
   if (!field.isRequired && field.type !== "Json")
-    extraModifiers.push("nullish()")
-  // if (field.hasDefaultValue) extraModifiers.push('optional()')
+    extraModifiers.push("nullable()")
 
   return `${zodType}${extraModifiers.join(".")}`
 }
