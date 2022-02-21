@@ -2,7 +2,7 @@ import { execa } from "execa"
 import { expectTypeOf } from "expect-type"
 import { removeAsync as remove } from "fs-jetpack"
 import { resolve } from "path"
-import { beforeAll, describe, test } from "vitest"
+import { beforeAll, describe, expect, test } from "vitest"
 import { z } from "zod"
 import type { Prisma } from "./prisma/.client"
 
@@ -59,6 +59,8 @@ describe("usage tests", () => {
         }),
       },
     }).toMatchTypeOf<Prisma.CommentUpdateInput>()
+
+    expect(true)
   })
 
   test("useful default schema types", async () => {
@@ -105,5 +107,7 @@ describe("usage tests", () => {
       contents: "This is a comment",
       meta: null,
     }).not.toMatchTypeOf<z.infer<typeof commentCreateSchema>>()
+
+    expect(true)
   })
 })
