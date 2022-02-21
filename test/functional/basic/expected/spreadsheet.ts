@@ -19,10 +19,12 @@ export const spreadsheetBaseSchema = z.object({
 
 export const spreadsheetSchema = spreadsheetBaseSchema
 
-export const spreadsheetCreateSchema = spreadsheetSchema.partial({
+export const spreadsheetCreateSchema = spreadsheetBaseSchema.partial({
   id: true,
   created: true,
   updated: true,
 })
 
-export const spreadsheetUpdateSchema = spreadsheetSchema.partial()
+export const spreadsheetUpdateSchema = spreadsheetBaseSchema
+  .partial()
+  

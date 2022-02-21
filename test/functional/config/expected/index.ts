@@ -1,2 +1,2 @@
-export * from "./user"
-export * from "./post"
+export { UserModel, UserCreateModel, UserUpdateModel } from "./user"
+export { PostModel, PostCreateModel, PostUpdateModel } from "./post"

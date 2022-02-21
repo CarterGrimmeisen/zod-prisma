@@ -12,15 +12,18 @@ generator client {
 }
 
 generator zod {
-  provider = "zod-prisma"
-  output   = "../expected/"
+  provider = "../../dist/cli.js"
+  output   = "./zod"
 }
 
 model Comment {
   id       String    @id @default(uuid())
   author   String
   contents String
-  parentId String
+  parentId String?
+  some     String[]
+  /// Some Json metadata
+  meta     Json?
   parent   Comment?  @relation("lineage", fields: [parentId], references: [id])
   children Comment[] @relation("lineage")
 }

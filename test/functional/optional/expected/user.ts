@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { PostRelations, postSchema, postBaseSchema } from "./index"
+import { PostRelations, postRelationsSchema, postBaseSchema } from "./post"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
@@ -11,25 +11,34 @@ const jsonSchema: z.ZodSchema<Json> = z.lazy(() =>
 
 export const userBaseSchema = z.object({
   id: z.number().int(),
-  meta: jsonSchema,
+  meta: jsonSchema.nullable(),
 })
 
 export interface UserRelations {
-  posts?: (z.infer<typeof postBaseSchema> & PostRelations) | null
+  posts: (z.infer<typeof postBaseSchema> & PostRelations) | null
 }
 
-const userRelationsSchema: z.ZodObject<{
-  [K in keyof UserRelations]-?: z.ZodType<UserRelations[K]>
+export const userRelationsSchema: z.ZodObject<{
+  [K in keyof UserRelations]: z.ZodType<UserRelations[K]>
 }> = z.object({
-  posts: z.lazy(() => postSchema).nullable(),
+  posts: z.lazy(() => postBaseSchema.merge(postRelationsSchema)).nullable(),
 })
 
-export const userSchema = userBaseSchema.merge(userRelationsSchema)
+export const userSchema = userBaseSchema
+  .merge(userRelationsSchema)
 
-export const userCreateSchema = userSchema.partial({
-  id: true,
-  meta: true,
-  posts: true,
-})
+export const userCreateSchema = userBaseSchema
+  .extend({
+    meta: userBaseSchema.shape.meta.unwrap(),
+  }).partial({
+    id: true,
+    meta: true,
+    posts: true,
+  })
 
-export const userUpdateSchema = userSchema.partial()
+export const userUpdateSchema = userBaseSchema
+  .extend({
+    meta: userBaseSchema.shape.meta.unwrap(),
+  })
+  .partial()
+  

@@ -1,10 +1,10 @@
-import { describe, test, expect } from "vitest"
-
+import { getDMMF } from "@prisma/sdk"
 import path from "path"
+import { Project } from "ts-morph"
+import { SemicolonPreference } from "typescript"
+import { describe, expect, test } from "vitest"
 import { configSchema, PrismaOptions } from "../src/config"
 import { writeImportsForModel } from "../src/generator"
-import { getDMMF } from "@prisma/sdk"
-import { Project } from "ts-morph"
 
 describe("Regression Tests", () => {
   test("#92", async () => {
@@ -36,8 +36,19 @@ describe("Regression Tests", () => {
 
     writeImportsForModel(model, testFile, config, prismaOptions)
 
-    expect(testFile.print()).toBe(
-      'import * as z from "zod";\nimport { UserType } from "@prisma/client";\n',
+    testFile.formatText({
+      indentSize: 2,
+      convertTabsToSpaces: true,
+      semicolons: SemicolonPreference.Remove,
+    })
+
+    expect(testFile.getFullText()).toBe(
+      `import * as z from "zod"
+      import { UserType } from "@prisma/client"
+      `
+        .split("\n")
+        .map((l) => l.trim())
+        .join("\n"),
     )
   })
 })

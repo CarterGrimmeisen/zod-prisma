@@ -1,25 +1,28 @@
 import * as z from "zod"
-import { KeychainRelations, keychainSchema, keychainBaseSchema } from "./index"
+import { KeychainRelations, keychainRelationsSchema, keychainBaseSchema } from "./keychain"
 
 export const userBaseSchema = z.object({
   id: z.string(),
 })
 
 export interface UserRelations {
-  keychain?: (z.infer<typeof keychainBaseSchema> & KeychainRelations) | null
+  keychain: (z.infer<typeof keychainBaseSchema> & KeychainRelations) | null
 }
 
-const userRelationsSchema: z.ZodObject<{
-  [K in keyof UserRelations]-?: z.ZodType<UserRelations[K]>
+export const userRelationsSchema: z.ZodObject<{
+  [K in keyof UserRelations]: z.ZodType<UserRelations[K]>
 }> = z.object({
-  keychain: z.lazy(() => keychainSchema).nullable(),
+  keychain: z.lazy(() => keychainBaseSchema.merge(keychainRelationsSchema)).nullable(),
 })
 
-export const userSchema = userBaseSchema.merge(userRelationsSchema)
+export const userSchema = userBaseSchema
+  .merge(userRelationsSchema)
 
-export const userCreateSchema = userSchema.partial({
+export const userCreateSchema = userBaseSchema.partial({
   id: true,
   keychain: true,
 })
 
-export const userUpdateSchema = userSchema.partial()
+export const userUpdateSchema = userBaseSchema
+  .partial()
+  

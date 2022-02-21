@@ -4,13 +4,16 @@ const configBoolean = z
   .enum(["true", "false"])
   .transform((arg) => JSON.parse(arg))
 
-export const configSchema = z.object({
-  decimalJs: configBoolean.default("false"),
-  imports: z.string().optional(),
-  prismaJsonNullability: configBoolean.default("true"),
-  schemaSuffix: z.string().default("Schema"),
-  schemaCase: z.enum(["PascalCase", "camelCase"]).default("camelCase"),
-})
+export const configSchema = z
+  .object({
+    excludeRelations: configBoolean.default("false"),
+    decimalJs: configBoolean.default("false"),
+    imports: z.string().optional(),
+    prismaJsonNullability: configBoolean.default("true"),
+    schemaSuffix: z.string().default("Schema"),
+    schemaCase: z.enum(["PascalCase", "camelCase"]).default("camelCase"),
+  })
+  .strict("Config cannot contain extra options")
 
 export type Config = z.infer<typeof configSchema>
 

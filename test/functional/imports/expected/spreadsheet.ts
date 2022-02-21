@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { PresentationRelations, presentationSchema, presentationBaseSchema } from "./index"
+import { PresentationRelations, presentationRelationsSchema, presentationBaseSchema } from "./presentation"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
@@ -22,19 +22,22 @@ export interface SpreadsheetRelations {
   presentations: (z.infer<typeof presentationBaseSchema> & PresentationRelations)[]
 }
 
-const spreadsheetRelationsSchema: z.ZodObject<{
-  [K in keyof SpreadsheetRelations]-?: z.ZodType<SpreadsheetRelations[K]>
+export const spreadsheetRelationsSchema: z.ZodObject<{
+  [K in keyof SpreadsheetRelations]: z.ZodType<SpreadsheetRelations[K]>
 }> = z.object({
-  presentations: z.lazy(() => presentationSchema).array(),
+  presentations: z.lazy(() => presentationBaseSchema.merge(presentationRelationsSchema)).array(),
 })
 
-export const spreadsheetSchema = spreadsheetBaseSchema.merge(spreadsheetRelationsSchema)
+export const spreadsheetSchema = spreadsheetBaseSchema
+  .merge(spreadsheetRelationsSchema)
 
-export const spreadsheetCreateSchema = spreadsheetSchema.partial({
+export const spreadsheetCreateSchema = spreadsheetBaseSchema.partial({
   id: true,
   presentations: true,
   created: true,
   updated: true,
 })
 
-export const spreadsheetUpdateSchema = spreadsheetSchema.partial()
+export const spreadsheetUpdateSchema = spreadsheetBaseSchema
+  .partial()
+  

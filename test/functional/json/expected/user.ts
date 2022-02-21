@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { PostRelations, postSchema, postBaseSchema } from "./index"
+import { PostRelations, postRelationsSchema, postBaseSchema } from "./post"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
@@ -18,17 +18,20 @@ export interface UserRelations {
   posts: (z.infer<typeof postBaseSchema> & PostRelations)[]
 }
 
-const userRelationsSchema: z.ZodObject<{
-  [K in keyof UserRelations]-?: z.ZodType<UserRelations[K]>
+export const userRelationsSchema: z.ZodObject<{
+  [K in keyof UserRelations]: z.ZodType<UserRelations[K]>
 }> = z.object({
-  posts: z.lazy(() => postSchema).array(),
+  posts: z.lazy(() => postBaseSchema.merge(postRelationsSchema)).array(),
 })
 
-export const userSchema = userBaseSchema.merge(userRelationsSchema)
+export const userSchema = userBaseSchema
+  .merge(userRelationsSchema)
 
-export const userCreateSchema = userSchema.partial({
+export const userCreateSchema = userBaseSchema.partial({
   id: true,
   posts: true,
 })
 
-export const userUpdateSchema = userSchema.partial()
+export const userUpdateSchema = userBaseSchema
+  .partial()
+  

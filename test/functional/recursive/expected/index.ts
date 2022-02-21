@@ -1,1 +1,1 @@
-export * from "./comment"
+export { commentSchema, commentCreateSchema, commentUpdateSchema } from "./comment"

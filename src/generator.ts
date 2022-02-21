@@ -1,13 +1,7 @@
+import type { DMMF } from "@prisma/generator-helper"
 import path from "path"
-import { DMMF } from "@prisma/generator-helper"
 import { ImportDeclarationStructure, SourceFile, StructureKind } from "ts-morph"
-import { Config, PrismaOptions } from "./config"
-import {
-  dotSlash,
-  needsRelatedSchema,
-  schemaNameFormatter,
-  writeArray,
-} from "./util"
+import type { Config, PrismaOptions } from "./config"
 import {
   generateBaseSchema,
   generateCreateSchema,
@@ -15,6 +9,12 @@ import {
   generateSchema,
   generateUpdateSchema,
 } from "./schemas"
+import {
+  dotSlash,
+  needsRelatedSchema,
+  schemaNameFormatter,
+  writeArray,
+} from "./util"
 
 export const writeImportsForModel = (
   model: DMMF.Model,
@@ -22,7 +22,7 @@ export const writeImportsForModel = (
   config: Config,
   { schemaPath, outputPath, clientPath }: PrismaOptions,
 ) => {
-  const { schema, baseSchema } = schemaNameFormatter(config)
+  const { baseSchema, relationsSchema } = schemaNameFormatter(config)
   const importList: ImportDeclarationStructure[] = [
     {
       kind: StructureKind.ImportDeclaration,
@@ -53,7 +53,6 @@ export const writeImportsForModel = (
   }
 
   const enumFields = model.fields.filter((f) => f.kind === "enum")
-  const relationFields = model.fields.filter((f) => f.kind === "object")
   const relativePath = path.relative(outputPath, clientPath)
 
   if (enumFields.length > 0) {
@@ -65,22 +64,26 @@ export const writeImportsForModel = (
     })
   }
 
-  if (relationFields.length > 0) {
-    const filteredFields = relationFields.filter((f) => f.type !== model.name)
+  if (needsRelatedSchema(model, config)) {
+    const relationFields = model.fields.filter((f) => f.kind === "object")
 
-    if (filteredFields.length > 0) {
-      importList.push({
-        kind: StructureKind.ImportDeclaration,
-        moduleSpecifier: "./index",
-        namedImports: Array.from(
-          new Set(
-            filteredFields.flatMap((f) => [
-              `${f.type}Relations`,
-              schema(f.type),
-              baseSchema(f.type),
-            ]),
-          ),
-        ),
+    const filteredFieldTypes = Array.from(
+      new Set(
+        relationFields.filter((f) => f.type !== model.name).map((f) => f.type),
+      ),
+    )
+
+    if (filteredFieldTypes.length > 0) {
+      filteredFieldTypes.forEach((type) => {
+        importList.push({
+          kind: StructureKind.ImportDeclaration,
+          moduleSpecifier: `./${type.toLowerCase()}`,
+          namedImports: [
+            `${type}Relations`,
+            relationsSchema(type),
+            baseSchema(type),
+          ],
+        })
       })
     }
   }
@@ -145,7 +148,7 @@ export const populateModelFile = (
   writeTypeSpecificSchemas(model, sourceFile, config, prismaOptions)
 
   generateBaseSchema(model, sourceFile, config, prismaOptions)
-  if (needsRelatedSchema(model))
+  if (needsRelatedSchema(model, config))
     generateRelationsSchema(model, sourceFile, config, prismaOptions)
 
   generateSchema(model, sourceFile, config, prismaOptions)
@@ -156,10 +159,18 @@ export const populateModelFile = (
 export const generateBarrelFile = (
   models: DMMF.Model[],
   indexFile: SourceFile,
+  config: Config,
 ) => {
+  const { schema, createSchema, updateSchema } = schemaNameFormatter(config)
+
   models.forEach((model) =>
     indexFile.addExportDeclaration({
       moduleSpecifier: `./${model.name.toLowerCase()}`,
+      namedExports: [
+        schema(model.name),
+        createSchema(model.name),
+        updateSchema(model.name),
+      ],
     }),
   )
 }

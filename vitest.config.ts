@@ -4,6 +4,9 @@ import { defineConfig } from "vite"
 import eslintPlugin from "vite-plugin-eslint"
 
 export default defineConfig({
+  test: {
+    testTimeout: 10000,
+  },
   plugins: [
     eslintPlugin({
       fix: true,

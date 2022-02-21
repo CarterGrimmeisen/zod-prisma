@@ -1,10 +1,9 @@
-import { version } from "../package.json"
-
 import { generatorHandler } from "@prisma/generator-helper"
-import { SemicolonPreference } from "typescript"
-import { configSchema, PrismaOptions } from "./config"
-import { populateModelFile, generateBarrelFile } from "./generator"
 import { Project } from "ts-morph"
+import { SemicolonPreference } from "typescript"
+import { version } from "../package.json"
+import { configSchema, PrismaOptions } from "./config"
+import { generateBarrelFile, populateModelFile } from "./generator"
 
 generatorHandler({
   onManifest() {
@@ -35,10 +34,7 @@ generatorHandler({
       )
 
     const results = configSchema.safeParse(options.generator.config)
-    if (!results.success)
-      throw new Error(
-        "Incorrect config provided. Please check the values you provided and try again.",
-      )
+    if (!results.success) throw new Error(results.error.message)
 
     const config = results.data
     const prismaOptions: PrismaOptions = {
@@ -53,7 +49,7 @@ generatorHandler({
       { overwrite: true },
     )
 
-    generateBarrelFile(models, indexFile)
+    generateBarrelFile(models, indexFile, config)
 
     indexFile.formatText({
       indentSize: 2,

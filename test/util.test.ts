@@ -1,7 +1,6 @@
-import { describe, test, expect, vi } from "vitest"
-
 import path from "path"
 import type { CodeBlockWriter } from "ts-morph"
+import { describe, expect, test, vi } from "vitest"
 import { dotSlash, writeArray } from "../src/util"
 
 describe("Util Package", () => {

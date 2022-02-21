@@ -25,8 +25,9 @@ export const schemaNameFormatter = ({ schemaCase, schemaSuffix }: Config) => {
   }
 }
 
-export const needsRelatedSchema = (model: DMMF.Model) =>
-  model.fields.some((field) => field.kind === "object")
+export const needsRelatedSchema = (model: DMMF.Model, config: Config) =>
+  model.fields.some((field) => field.kind === "object") &&
+  !config.excludeRelations
 
 // Too lazy to figure out why unknown[] here causes type errors
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

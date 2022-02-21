@@ -38,6 +38,7 @@
     "build-fast": "tsup-node src/cli.ts --format cjs,esm",
     "build": "pnpm run build-fast",
     "test": "vitest run",
+    "test:update": "UPDATE_EXPECTED=true vitest run test/functional/driver.test.ts >/dev/null 2>&1; echo Expected outputs updated.",
     "prepublishOnly": "pnpm run build",
     "prepare": "husky install",
     "lint": "tsc --noEmit && eslint vitest.config.ts src/*.ts test/*.test.ts test/**/*.test.ts"
@@ -54,6 +55,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "execa": "6.0.0",
+    "expect-type": "^0.13.0",
     "fast-glob": "3.2.11",
     "fs-jetpack": "4.3.1",
     "husky": "7.0.4",

@@ -10,7 +10,7 @@ generator client {
 
 generator zod {
   provider = "zod-prisma"
-  output   = "../actual/"
+  output   = "../expected/"
   imports  = "./zod-utils"
 }
 

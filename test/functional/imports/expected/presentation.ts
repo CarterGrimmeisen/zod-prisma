@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { SpreadsheetRelations, spreadsheetSchema, spreadsheetBaseSchema } from "./index"
+import { SpreadsheetRelations, spreadsheetRelationsSchema, spreadsheetBaseSchema } from "./spreadsheet"
 
 export const presentationBaseSchema = z.object({
   id: z.string(),
@@ -14,15 +14,16 @@ export interface PresentationRelations {
   spreadsheets: (z.infer<typeof spreadsheetBaseSchema> & SpreadsheetRelations)[]
 }
 
-const presentationRelationsSchema: z.ZodObject<{
-  [K in keyof PresentationRelations]-?: z.ZodType<PresentationRelations[K]>
+export const presentationRelationsSchema: z.ZodObject<{
+  [K in keyof PresentationRelations]: z.ZodType<PresentationRelations[K]>
 }> = z.object({
-  spreadsheets: z.lazy(() => spreadsheetSchema).array(),
+  spreadsheets: z.lazy(() => spreadsheetBaseSchema.merge(spreadsheetRelationsSchema)).array(),
 })
 
-export const presentationSchema = presentationBaseSchema.merge(presentationRelationsSchema)
+export const presentationSchema = presentationBaseSchema
+  .merge(presentationRelationsSchema)
 
-export const presentationCreateSchema = presentationSchema.partial({
+export const presentationCreateSchema = presentationBaseSchema.partial({
   id: true,
   contents: true,
   spreadsheets: true,
@@ -30,4 +31,6 @@ export const presentationCreateSchema = presentationSchema.partial({
   updated: true,
 })
 
-export const presentationUpdateSchema = presentationSchema.partial()
+export const presentationUpdateSchema = presentationBaseSchema
+  .partial()
+  

@@ -1,27 +1,30 @@
 import * as z from "zod"
-import { PostRelations, postSchema, postBaseSchema } from "./index"
+import { PostRelations, PostRelationsModel, PostBaseModel } from "./post"
 
-export const userBaseSchema = z.object({
+export const UserBaseModel = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
 })
 
 export interface UserRelations {
-  posts: (z.infer<typeof postBaseSchema> & PostRelations)[]
+  posts: (z.infer<typeof PostBaseModel> & PostRelations)[]
 }
 
-const userRelationsSchema: z.ZodObject<{
-  [K in keyof UserRelations]-?: z.ZodType<UserRelations[K]>
+export const UserRelationsModel: z.ZodObject<{
+  [K in keyof UserRelations]: z.ZodType<UserRelations[K]>
 }> = z.object({
-  posts: z.lazy(() => postSchema).array(),
+  posts: z.lazy(() => PostBaseModel.merge(PostRelationsModel)).array(),
 })
 
-export const userSchema = userBaseSchema.merge(userRelationsSchema)
+export const UserModel = UserBaseModel
+  .merge(UserRelationsModel)
 
-export const userCreateSchema = userSchema.partial({
+export const UserCreateModel = UserBaseModel.partial({
   id: true,
   posts: true,
 })
 
-export const userUpdateSchema = userSchema.partial()
+export const UserUpdateModel = UserBaseModel
+  .partial()
+  

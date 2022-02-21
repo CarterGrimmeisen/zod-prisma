@@ -1,2 +1,2 @@
-export * from "./user"
-export * from "./post"
+export { userSchema, userCreateSchema, userUpdateSchema } from "./user"
+export { postSchema, postCreateSchema, postUpdateSchema } from "./post"

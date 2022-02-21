@@ -13,7 +13,7 @@ generator client {
 
 generator zod {
   provider = "zod-prisma"
-  output   = "../actual/"
+  output   = "../expected/"
 }
 
 model Document {

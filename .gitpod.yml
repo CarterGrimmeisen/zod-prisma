@@ -3,8 +3,12 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: pnpm install
-    before: npm i -g pnpm
+  - before: npm i -g pnpm
+    init: pnpm install
+    command: echo Ready...
 vscode:
   extensions:
+    - esbenp.prettier-vscode
+    - Prisma.prisma
+    - dbaeumer.vscode-eslint
     - https://github.com/CarterGrimmeisen/min-theme/releases/download/1.5.0/min-theme-1.5.0.vsix

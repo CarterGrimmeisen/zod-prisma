@@ -8,24 +8,27 @@ export const commentBaseSchema = z.object({
 })
 
 export interface CommentRelations {
-  parent?: (z.infer<typeof commentBaseSchema> & CommentRelations) | null
+  parent: (z.infer<typeof commentBaseSchema> & CommentRelations) | null
   children: (z.infer<typeof commentBaseSchema> & CommentRelations)[]
 }
 
-const commentRelationsSchema: z.ZodObject<{
-  [K in keyof CommentRelations]-?: z.ZodType<CommentRelations[K]>
+export const commentRelationsSchema: z.ZodObject<{
+  [K in keyof CommentRelations]: z.ZodType<CommentRelations[K]>
 }> = z.object({
-  parent: z.lazy(() => commentSchema).nullable(),
-  children: z.lazy(() => commentSchema).array(),
+  parent: z.lazy(() => commentBaseSchema.merge(commentRelationsSchema)).nullable(),
+  children: z.lazy(() => commentBaseSchema.merge(commentRelationsSchema)).array(),
 })
 
-export const commentSchema = commentBaseSchema.merge(commentRelationsSchema)
+export const commentSchema = commentBaseSchema
+  .merge(commentRelationsSchema)
 
-export const commentCreateSchema = commentSchema.partial({
+export const commentCreateSchema = commentBaseSchema.partial({
   id: true,
   parentId: true,
   parent: true,
   children: true,
 })
 
-export const commentUpdateSchema = commentSchema.partial()
+export const commentUpdateSchema = commentBaseSchema
+  .partial()
+  

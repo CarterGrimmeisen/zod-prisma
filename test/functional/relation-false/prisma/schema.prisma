@@ -12,9 +12,9 @@ generator client {
 }
 
 generator zod {
-  provider      = "zod-prisma"
-  output        = "../actual/"
-  relationModel = false
+  provider         = "zod-prisma"
+  output           = "../expected/"
+  excludeRelations = true
 }
 
 model User {

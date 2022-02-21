@@ -1,6 +1,5 @@
-import { describe, test, expect } from "vitest"
-
-import { DMMF } from "@prisma/generator-helper"
+import type { DMMF } from "@prisma/generator-helper"
+import { describe, expect, test } from "vitest"
 import { getZodConstructor } from "../src/types"
 
 describe("types Package", () => {

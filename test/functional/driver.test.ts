@@ -1,86 +1,98 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { getConfig, getDMMF } from "@prisma/sdk"
 import glob from "fast-glob"
-import { execa } from "execa"
-import { getDMMF, getConfig } from "@prisma/sdk"
 import { read } from "fs-jetpack"
 import path from "path"
 import { Project } from "ts-morph"
-import { SemicolonPreference } from "typescript"
+import ts, { SemicolonPreference } from "typescript"
+import { describe, expect, test } from "vitest"
 import { configSchema, PrismaOptions } from "../../src/config"
-import { populateModelFile, generateBarrelFile } from "../../src/generator"
-import { describe, test, expect } from "vitest"
+import { generateBarrelFile, populateModelFile } from "../../src/generator"
 
-const ftForDir = (dir: string) => async () => {
-  const schemaFile = path.resolve(__dirname, dir, "prisma/schema.prisma")
-  const expectedDir = path.resolve(__dirname, dir, "expected")
-  const actualDir = path.resolve(__dirname, dir, "actual")
+describe.concurrent("Functional Tests", () => {
+  test.each([
+    ["Basic", "basic"],
+    ["Config", "config"],
+    ["Docs", "docs"],
+    ["Different Client Path", "different-client-path"],
+    ["Recursive Schema", "recursive"],
+    ["relationModel = false", "relation-false"],
+    ["Relation - 1 to 1", "relation-1to1"],
+    ["Imports", "imports"],
+    ["JSON", "json"],
+    ["Optional fields", "optional"],
+    ["Config Import", "config-import"],
+  ])("%s", async (_, dir) => {
+    const schemaFile = path.resolve(__dirname, dir, "prisma/schema.prisma")
+    const expectedDir = path.resolve(__dirname, dir, "expected")
 
-  const project = new Project()
+    const project = new Project({
+      useInMemoryFileSystem: !process.env.UPDATE_EXPECTED,
+    })
 
-  const datamodel = read(schemaFile)
-  if (!datamodel) throw new Error("Datamodel not present.")
+    const datamodel = read(schemaFile)
+    if (!datamodel) throw new Error("Datamodel not present.")
 
-  const dmmf = await getDMMF({
-    datamodel,
-  })
+    const dmmf = await getDMMF({
+      datamodel,
+    })
 
-  const { generators } = await getConfig({
-    datamodel,
-  })
+    const { generators } = await getConfig({
+      datamodel,
+    })
 
-  const generator = generators.find(
-    (generator) => generator.provider.value === "zod-prisma",
-  )!
-  const config = configSchema.parse(generator.config)
+    const generator = generators.find(
+      (generator) => generator.provider.value === "zod-prisma",
+    )!
 
-  const prismaClient = generators.find(
-    (generator) => generator.provider.value === "prisma-client-js",
-  )!
+    const results = configSchema.safeParse(generator.config)
+    if (!results.success) throw new Error(results.error.message)
 
-  const outputPath = path.resolve(
-    path.dirname(schemaFile),
-    generator.output!.value,
-  )
-  const clientPath = path.resolve(
-    path.dirname(schemaFile),
-    prismaClient.output!.value,
-  )
+    const config = results.data
 
-  const prismaOptions: PrismaOptions = {
-    clientPath,
-    outputPath,
-    schemaPath: schemaFile,
-  }
+    const prismaClient = generators.find(
+      (generator) => generator.provider.value === "prisma-client-js",
+    )!
 
-  const indexFile = project.createSourceFile(
-    `${outputPath}/index.ts`,
-    {},
-    { overwrite: true },
-  )
+    const outputPath = path.resolve(
+      path.dirname(schemaFile),
+      generator.output!.value,
+    )
+    const clientPath = path.resolve(
+      path.dirname(schemaFile),
+      prismaClient.output!.value,
+    )
 
-  generateBarrelFile(dmmf.datamodel.models, indexFile)
+    const prismaOptions: PrismaOptions = {
+      clientPath,
+      outputPath,
+      schemaPath: schemaFile,
+    }
 
-  indexFile.formatText({
-    indentSize: 2,
-    convertTabsToSpaces: true,
-    semicolons: SemicolonPreference.Remove,
-  })
+    const indexFile = project.createSourceFile(
+      `${outputPath}/index.ts`,
+      {},
+      { overwrite: true },
+    )
 
-  await indexFile.save()
+    generateBarrelFile(dmmf.datamodel.models, indexFile, config)
 
-  const actualIndexContents = read(`${actualDir}/index.ts`)
+    indexFile.formatText({
+      indentSize: 2,
+      convertTabsToSpaces: true,
+      semicolons: SemicolonPreference.Remove,
+    })
 
-  const expectedIndexFile = path.resolve(expectedDir, `index.ts`)
-  const expectedIndexContents = read(
-    path.resolve(expectedDir, expectedIndexFile),
-  )
+    const expectedIndexFile = path.resolve(expectedDir, `index.ts`)
+    const expectedIndexContents = read(
+      path.resolve(expectedDir, expectedIndexFile),
+    )
 
-  expect(actualIndexContents).toStrictEqual(expectedIndexContents)
+    expect(indexFile.getFullText()).toStrictEqual(expectedIndexContents)
 
-  await Promise.all(
-    dmmf.datamodel.models.map(async (model) => {
+    for (const model of dmmf.datamodel.models) {
       const sourceFile = project.createSourceFile(
-        `${actualDir}/${model.name.toLowerCase()}.ts`,
+        `${outputPath}/${model.name.toLowerCase()}.ts`,
         {},
         { overwrite: true },
       )
@@ -93,52 +105,40 @@ const ftForDir = (dir: string) => async () => {
         semicolons: SemicolonPreference.Remove,
       })
 
-      await sourceFile.save()
-      const actualContents = read(`${actualDir}/${model.name.toLowerCase()}.ts`)
-
       const expectedFile = path.resolve(
         expectedDir,
         `${model.name.toLowerCase()}.ts`,
       )
       const expectedContents = read(path.resolve(expectedDir, expectedFile))
 
-      expect(actualContents).toStrictEqual(expectedContents)
-    }),
-  )
+      expect(sourceFile.getFullText()).toStrictEqual(expectedContents)
+    }
 
-  await project.save()
-}
+    if (process.env.UPDATE_EXPECTED) {
+      console.log("Updating expecteds")
+      await project.save()
+    }
+  })
+})
 
-describe("Functional Tests", () => {
-  test.concurrent("Basic", ftForDir("basic"))
-  test.concurrent("Config", ftForDir("config"))
-  test.concurrent("Docs", ftForDir("docs"))
-  test.concurrent("Different Client Path", ftForDir("different-client-path"))
-  test.concurrent("Recursive Schema", ftForDir("recursive"))
-  test.concurrent("relationModel = false", ftForDir("relation-false"))
-  test.concurrent("Relation - 1 to 1", ftForDir("relation-1to1"))
-  test.concurrent("Imports", ftForDir("imports"))
-  test.concurrent("JSON", ftForDir("json"))
-  test.concurrent("Optional fields", ftForDir("optional"))
-  test.concurrent("Config Import", ftForDir("config-import"))
-
+describe("Type Checking", () => {
   // TODO: Expected files are now included in project level tsconfig and will be type-checked in the lint step
   // Meaning this could eventually be removed if I feel like it
-  test.concurrent(
-    "Type Check Everything",
-    async () => {
-      const typeCheckResults = await execa(
-        path.resolve(__dirname, "../../node_modules/.bin/tsc"),
-        [
-          "--strict",
-          "--noEmit",
-          "--skipLibCheck",
-          ...(await glob(`${__dirname}/*/expected/*.ts`)),
-        ],
-      )
+  test("Check Expectations", async () => {
+    const program = ts.createProgram(
+      await glob(`${__dirname}/*/expected/*.ts`),
+      {
+        strict: true,
+        noEmit: true,
+        skipLibCheck: true,
+      },
+    )
 
-      expect(typeCheckResults.exitCode).toBe(0)
-    },
-    20000,
-  )
+    const diagnostics = [
+      ...ts.getPreEmitDiagnostics(program),
+      ...program.emit().diagnostics,
+    ]
+
+    expect(diagnostics.length).toBe(0)
+  })
 })

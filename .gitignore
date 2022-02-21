@@ -6,3 +6,5 @@ examples/prisma/zod
 /test/functional/*/actual
 /test/functional/*/prisma/.client/*
 !/test/functional/*/prisma/.client/index.ts
+/test/usage/prisma/*
+!/test/usage/prisma/schema.prisma

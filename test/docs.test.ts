@@ -1,5 +1,4 @@
-import { describe, test, expect } from "vitest"
-
+import { describe, expect, test } from "vitest"
 import { computeCustomSchema, computeModifiers, getJSDocs } from "../src/docs"
 
 describe("docs Package", () => {
@@ -38,7 +37,7 @@ describe("docs Package", () => {
         "This is something",
         "How about something else",
         "@something",
-        "@example ur mom",
+        "@example A fourth thing",
       ].join("\n"),
     )
 
@@ -48,7 +47,7 @@ describe("docs Package", () => {
       " * This is something",
       " * How about something else",
       " * @something",
-      " * @example ur mom",
+      " * @example A fourth thing",
       " */",
     ])
   })

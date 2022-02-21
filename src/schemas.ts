@@ -1,6 +1,6 @@
-import { DMMF } from "@prisma/generator-helper"
+import type { DMMF } from "@prisma/generator-helper"
 import { SourceFile, VariableDeclarationKind } from "ts-morph"
-import { Config, PrismaOptions } from "./config"
+import type { Config, PrismaOptions } from "./config"
 import { getJSDocs } from "./docs"
 import { getZodConstructor } from "./types"
 import { needsRelatedSchema, schemaNameFormatter, writeArray } from "./util"
@@ -46,7 +46,7 @@ export const generateRelationsSchema = (
   config: Config,
   _prismaOptions: PrismaOptions,
 ) => {
-  const { schema, relationsSchema, baseSchema } = schemaNameFormatter(config)
+  const { relationsSchema, baseSchema } = schemaNameFormatter(config)
 
   const relationFields = model.fields.filter((f) => f.kind === "object")
 
@@ -55,7 +55,6 @@ export const generateRelationsSchema = (
     isExported: true,
     leadingTrivia: (writer) => writer.blankLineIfLastNot(),
     properties: relationFields.map((f) => ({
-      hasQuestionToken: !f.isRequired,
       name: f.name,
       type: (writer) => {
         let type = `z.infer<typeof ${baseSchema(f.type)}> & ${f.type}Relations`
@@ -71,13 +70,14 @@ export const generateRelationsSchema = (
 
   sourceFile.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
+    isExported: true,
     leadingTrivia: (writer) => writer.blankLineIfLastNot(),
     declarations: [
       {
         name: relationsSchema(model.name),
         type: [
           "z.ZodObject<{",
-          `  [K in keyof ${model.name}Relations]-?: z.ZodType<${model.name}Relations[K]>`,
+          `  [K in keyof ${model.name}Relations]: z.ZodType<${model.name}Relations[K]>`,
           "}>",
         ].join("\n"),
         initializer: (writer) => {
@@ -89,7 +89,10 @@ export const generateRelationsSchema = (
                 writer.writeLine(
                   `${field.name}: ${getZodConstructor(
                     field,
-                    (type: string) => `z.lazy(() => ${schema(type)})`,
+                    (type: string) =>
+                      `z.lazy(() => ${baseSchema(type)}.merge(${relationsSchema(
+                        type,
+                      )}))`,
                   )},`,
                 )
               })
@@ -116,11 +119,12 @@ export const generateSchema = (
     declarations: [
       {
         name: schema(model.name),
-        initializer:
-          `${baseSchema(model.name)}` +
-          (needsRelatedSchema(model)
-            ? `.merge(${relationsSchema(model.name)})`
-            : ""),
+        initializer: (writer) => {
+          writer.write(baseSchema(model.name))
+
+          if (needsRelatedSchema(model, config))
+            writer.newLine().write(`.merge(${relationsSchema(model.name)})`)
+        },
       },
     ],
   })
@@ -132,7 +136,7 @@ export const generateCreateSchema = (
   config: Config,
   _prismaOptions: PrismaOptions,
 ) => {
-  const { schema, createSchema } = schemaNameFormatter(config)
+  const { baseSchema, createSchema } = schemaNameFormatter(config)
 
   sourceFile.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
@@ -142,7 +146,7 @@ export const generateCreateSchema = (
       {
         name: createSchema(model.name),
         initializer: (writer) => {
-          writer.write(`${schema(model.name)}`)
+          writer.write(`${baseSchema(model.name)}`)
 
           const partialFields = model.fields.filter(
             (field) =>
@@ -155,6 +159,24 @@ export const generateCreateSchema = (
                 f.relationFromFields?.includes(field.name),
               ),
           )
+
+          if (model.fields.some((f) => !f.isRequired && f.kind !== "object")) {
+            writer
+              .newLine()
+              .write(".extend(")
+              .inlineBlock(() => {
+                model.fields
+                  .filter((f) => !f.isRequired && f.kind !== "object")
+                  .map((field) => {
+                    writer.writeLine(
+                      `${field.name}: ${baseSchema(model.name)}.shape.${
+                        field.name
+                      }.unwrap(),`,
+                    )
+                  })
+              })
+              .write(")")
+          }
 
           if (partialFields) {
             writer.write(`.partial(`).inlineBlock(() => {
@@ -177,7 +199,7 @@ export const generateUpdateSchema = (
   config: Config,
   _prismaOptions: PrismaOptions,
 ) => {
-  const { schema, updateSchema } = schemaNameFormatter(config)
+  const { baseSchema, updateSchema } = schemaNameFormatter(config)
 
   sourceFile.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
@@ -186,7 +208,29 @@ export const generateUpdateSchema = (
     declarations: [
       {
         name: updateSchema(model.name),
-        initializer: `${schema(model.name)}.partial()`,
+        initializer: (writer) => {
+          writer.write(`${baseSchema(model.name)}`)
+
+          if (model.fields.some((f) => !f.isRequired && f.kind !== "object")) {
+            writer
+              .newLine()
+              .write(".extend(")
+              .inlineBlock(() => {
+                model.fields
+                  .filter((f) => !f.isRequired && f.kind !== "object")
+                  .map((field) => {
+                    writer.writeLine(
+                      `${field.name}: ${baseSchema(model.name)}.shape.${
+                        field.name
+                      }.unwrap(),`,
+                    )
+                  })
+              })
+              .write(")")
+          }
+
+          writer.writeLine(".partial()")
+        },
       },
     ],
   })

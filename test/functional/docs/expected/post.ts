@@ -18,8 +18,10 @@ export const postBaseSchema = z.object({
 
 export const postSchema = postBaseSchema
 
-export const postCreateSchema = postSchema.partial({
+export const postCreateSchema = postBaseSchema.partial({
   id: true,
 })
 
-export const postUpdateSchema = postSchema.partial()
+export const postUpdateSchema = postBaseSchema
+  .partial()
+  

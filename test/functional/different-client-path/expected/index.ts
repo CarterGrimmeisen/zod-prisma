@@ -1,1 +1,1 @@
-export * from "./document"
+export { documentSchema, documentCreateSchema, documentUpdateSchema } from "./document"

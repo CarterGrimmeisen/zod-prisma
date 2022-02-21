@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { UserRelations, userSchema, userBaseSchema } from "./index"
 
 export const postBaseSchema = z.object({
   id: z.string(),
@@ -8,21 +7,13 @@ export const postBaseSchema = z.object({
   userId: z.string(),
 })
 
-export interface PostRelations {
-  author: z.infer<typeof userBaseSchema> & UserRelations
-}
+export const postSchema = postBaseSchema
 
-const postRelationsSchema: z.ZodObject<{
-  [K in keyof PostRelations]-?: z.ZodType<PostRelations[K]>
-}> = z.object({
-  author: z.lazy(() => userSchema),
-})
-
-export const postSchema = postBaseSchema.merge(postRelationsSchema)
-
-export const postCreateSchema = postSchema.partial({
+export const postCreateSchema = postBaseSchema.partial({
   id: true,
   userId: true,
 })
 
-export const postUpdateSchema = postSchema.partial()
+export const postUpdateSchema = postBaseSchema
+  .partial()
+  
