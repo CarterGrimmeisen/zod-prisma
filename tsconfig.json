@@ -18,5 +18,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "exclude": ["examples", "test/functional/*/{prisma,actual}"]
+  "exclude": [
+    "examples",
+    "test/functional/*/{prisma,actual}",
+    "test/usage/usage.ts"
+  ]
 }
