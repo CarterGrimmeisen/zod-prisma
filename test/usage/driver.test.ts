@@ -28,5 +28,5 @@ describe("usage tests", () => {
     })
 
     expect(program.emit().diagnostics).toStrictEqual([])
-  })
+  }, 120000)
 })
