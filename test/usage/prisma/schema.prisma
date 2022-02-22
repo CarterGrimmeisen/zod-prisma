@@ -12,7 +12,7 @@ generator client {
 }
 
 generator zod {
-  provider = "../../dist/cli.js"
+  provider = env("ZOD_PRISMA_PATH")
   output   = "./zod"
 }
 

@@ -15,6 +15,9 @@ describe("usage tests", () => {
       ["generate"],
       {
         cwd: __dirname,
+        env: {
+          ZOD_PRISMA_PATH: resolve(__dirname, "../../dist/cli.js"),
+        },
       },
     )
 
