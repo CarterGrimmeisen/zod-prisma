@@ -48,4 +48,4 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Test
-        run: pnpm build && pnpm test -- --threads false
+        run: pnpm build && pnpx vitest run --threads false
