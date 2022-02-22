@@ -1,7 +1,10 @@
 import { execa } from "execa"
 import { removeAsync as remove } from "fs-jetpack"
 import { resolve } from "path"
-import { describe, test } from "vitest"
+import { describe, expect, test } from "vitest"
+import path from "path"
+
+import ts from "typescript"
 
 describe("usage tests", () => {
   test("match prisma types", async () => {
@@ -14,6 +17,13 @@ describe("usage tests", () => {
         cwd: __dirname,
       },
     )
-    await import("./usage")
+
+    const program = ts.createProgram([path.resolve(__dirname, "usage.ts")], {
+      strict: true,
+      noEmit: true,
+      skipLibCheck: true,
+    })
+
+    expect(program.emit().diagnostics).toStrictEqual([])
   })
 })
