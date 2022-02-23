@@ -45,7 +45,7 @@ const ftForDir = (dir: string) => async () => {
 
 	const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true })
 
-	generateBarrelFile(dmmf.datamodel.models, indexFile)
+	generateBarrelFile(dmmf.datamodel.models, indexFile, config)
 
 	indexFile.formatText({
 		indentSize: 2,
@@ -112,6 +112,7 @@ describe('Functional Tests', () => {
 	test.concurrent('JSON', ftForDir('json'))
 	test.concurrent('Optional fields', ftForDir('optional'))
 	test.concurrent('Config Import', ftForDir('config-import'))
+	test.concurrent('Node esModules', ftForDir('node-es-modules'))
 
 	test.concurrent('Type Check Everything', async () => {
 		const typeCheckResults = await execa(

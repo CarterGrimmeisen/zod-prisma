@@ -46,14 +46,26 @@ export const writeImportsForModel = (
 
 	const enumFields = model.fields.filter((f) => f.kind === 'enum')
 	const relationFields = model.fields.filter((f) => f.kind === 'object')
-	const relativePath = path.relative(outputPath, clientPath)
+	const relativePath = path.relative(
+		outputPath,
+		path.join(
+			clientPath,
+			config.nodeEsModules && !clientPath.includes('node_modules') ? 'index.js' : ''
+		)
+	)
 
 	if (enumFields.length > 0) {
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
 			moduleSpecifier: dotSlash(relativePath),
-			namedImports: enumFields.map((f) => f.type),
+			...(config.nodeEsModules
+				? {
+						namespaceImport: 'Prisma',
+				  }
+				: {
+						namedImports: enumFields.map((f) => f.type),
+				  }),
 		})
 	}
 
@@ -63,7 +75,7 @@ export const writeImportsForModel = (
 		if (filteredFields.length > 0) {
 			importList.push({
 				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: './index',
+				moduleSpecifier: `./index${config.nodeEsModules ? '.js' : ''}`,
 				namedImports: Array.from(
 					new Set(
 						filteredFields.flatMap((f) => [
@@ -77,6 +89,12 @@ export const writeImportsForModel = (
 	}
 
 	sourceFile.addImportDeclarations(importList)
+
+	if (config.nodeEsModules && enumFields.length > 0) {
+		sourceFile.addStatements((writer) => {
+			writer.write(`const { ${enumFields.map((e) => e.type).join(', ')} } = Prisma;`)
+		})
+	}
 }
 
 export const writeTypeSpecificSchemas = (
@@ -239,10 +257,10 @@ export const populateModelFile = (
 		generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions)
 }
 
-export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
+export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, config: Config) => {
 	models.forEach((model) =>
 		indexFile.addExportDeclaration({
-			moduleSpecifier: `./${model.name.toLowerCase()}`,
+			moduleSpecifier: `./${model.name.toLowerCase()}${config.nodeEsModules ? '.js' : ''}`,
 		})
 	)
 }
