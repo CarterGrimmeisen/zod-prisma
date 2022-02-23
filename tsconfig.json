@@ -28,6 +28,7 @@
 		"noEmit": true,
 		"downlevelIteration": true,
 		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
 		"noErrorTruncation": true
 	}
 }

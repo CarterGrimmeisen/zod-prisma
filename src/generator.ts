@@ -53,7 +53,7 @@ export const writeImportsForModel = (
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
 			moduleSpecifier: dotSlash(relativePath),
-			namedImports: enumFields.map((f) => f.type),
+			defaultImport: 'prisma',
 		})
 	}
 

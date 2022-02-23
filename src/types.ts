@@ -41,7 +41,7 @@ export const getZodConstructor = (
 				break
 		}
 	} else if (field.kind === 'enum') {
-		zodType = `z.nativeEnum(${field.type})`
+		zodType = `z.nativeEnum(prisma.${field.type})`
 	} else if (field.kind === 'object') {
 		zodType = getRelatedModelName(field.type)
 	}
