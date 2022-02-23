@@ -75,3 +75,8 @@ export const Status = {
 }
 
 export type Status = typeof Status[keyof typeof Status]
+
+// TODO figure out why TSC fails and we ahd to add this explicitly
+export default {
+	Status,
+}
