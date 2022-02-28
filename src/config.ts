@@ -12,6 +12,15 @@ export const configSchema = z
     prismaJsonNullability: configBoolean.default("true"),
     schemaSuffix: z.string().default("Schema"),
     schemaCase: z.enum(["PascalCase", "camelCase"]).default("camelCase"),
+    nodeEsModules: configBoolean.default("false"),
+
+    // Deprecated config options
+    moduleSuffix: z.undefined({
+      description: "moduleSuffix was renamed to 'schemaSuffix' in v1.0.0",
+    }),
+    moduleCase: z.undefined({
+      description: "moduleCase was renamed to 'schemaCase' in v1.0.0",
+    }),
   })
   .strict("Config cannot contain extra options")
 

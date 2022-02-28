@@ -22,6 +22,7 @@ describe.concurrent("Functional Tests", () => {
     ["JSON", "json"],
     ["Optional fields", "optional"],
     ["Config Import", "config-import"],
+    ["Node esModules", "node-es-modules"],
   ])("%s", async (_, dir) => {
     const schemaFile = path.resolve(__dirname, dir, "prisma/schema.prisma")
     const expectedDir = path.resolve(__dirname, dir, "expected")
@@ -88,7 +89,8 @@ describe.concurrent("Functional Tests", () => {
       path.resolve(expectedDir, expectedIndexFile),
     )
 
-    expect(indexFile.getFullText()).toStrictEqual(expectedIndexContents)
+    if (!process.env.UPDATE_EXPECTED)
+      expect(indexFile.getFullText()).toStrictEqual(expectedIndexContents)
 
     for (const model of dmmf.datamodel.models) {
       const sourceFile = project.createSourceFile(
@@ -111,7 +113,8 @@ describe.concurrent("Functional Tests", () => {
       )
       const expectedContents = read(path.resolve(expectedDir, expectedFile))
 
-      expect(sourceFile.getFullText()).toStrictEqual(expectedContents)
+      if (!process.env.UPDATE_EXPECTED)
+        expect(sourceFile.getFullText()).toStrictEqual(expectedContents)
     }
 
     if (process.env.UPDATE_EXPECTED) {

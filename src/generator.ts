@@ -53,14 +53,28 @@ export const writeImportsForModel = (
   }
 
   const enumFields = model.fields.filter((f) => f.kind === "enum")
-  const relativePath = path.relative(outputPath, clientPath)
+  const relativePath = path.relative(
+    outputPath,
+    path.join(
+      clientPath,
+      config.nodeEsModules && !clientPath.includes("node_modules")
+        ? "index.js"
+        : "",
+    ),
+  )
 
   if (enumFields.length > 0) {
     importList.push({
       kind: StructureKind.ImportDeclaration,
       isTypeOnly: enumFields.length === 0,
       moduleSpecifier: dotSlash(relativePath),
-      namedImports: enumFields.map((f) => f.type),
+      ...(config.nodeEsModules
+        ? {
+            namespaceImport: "Prisma",
+          }
+        : {
+            namedImports: enumFields.map((f) => f.type),
+          }),
     })
   }
 
@@ -77,7 +91,9 @@ export const writeImportsForModel = (
       filteredFieldTypes.forEach((type) => {
         importList.push({
           kind: StructureKind.ImportDeclaration,
-          moduleSpecifier: `./${type.toLowerCase()}`,
+          moduleSpecifier: `./${type.toLowerCase()}${
+            config.nodeEsModules ? ".js" : ""
+          }`,
           namedImports: [
             `${type}Relations`,
             relationsSchema(type),
@@ -89,6 +105,14 @@ export const writeImportsForModel = (
   }
 
   sourceFile.addImportDeclarations(importList)
+
+  if (config.nodeEsModules && enumFields.length > 0) {
+    sourceFile.addStatements((writer) => {
+      writer.write(
+        `const { ${enumFields.map((e) => e.type).join(", ")} } = Prisma;`,
+      )
+    })
+  }
 }
 
 export const writeTypeSpecificSchemas = (
@@ -165,7 +189,9 @@ export const generateBarrelFile = (
 
   models.forEach((model) =>
     indexFile.addExportDeclaration({
-      moduleSpecifier: `./${model.name.toLowerCase()}`,
+      moduleSpecifier: `./${model.name.toLowerCase()}${
+        config.nodeEsModules ? ".js" : ""
+      }`,
       namedExports: [
         schema(model.name),
         createSchema(model.name),

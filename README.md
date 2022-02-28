@@ -150,6 +150,11 @@ npm install -g pnpm
       // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
       prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
+
+      // https://nodejs.org/api/esm.html
+      // https://github.com/prisma/prisma/issues/4816
+      nodeEsModules            = false // (default) omit extensions from relative imports and utilize named exports from Prisma
+      // nodeEsModules         = true // adhere's to node's standards for es module usage by adding extensions to relative imports
     }
     ```
 
