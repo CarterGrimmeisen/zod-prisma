@@ -8,6 +8,8 @@ import ts from "typescript"
 
 describe("usage tests", () => {
   test("match prisma types", async () => {
+    if (process.platform === "win32") return // Prisma generate sporadically fails on Windows
+
     await remove(resolve(__dirname, "./prisma/zod"))
     await remove(resolve(__dirname, "./prisma/.client"))
     await execa(
@@ -28,5 +30,5 @@ describe("usage tests", () => {
     })
 
     expect(program.emit().diagnostics).toStrictEqual([])
-  }, 120000)
+  }, 20000)
 })
