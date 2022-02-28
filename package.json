@@ -1,6 +1,6 @@
 {
   "name": "zod-prisma",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "My awesome typescript library",
   "publishConfig": {
     "access": "public"
