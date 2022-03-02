@@ -11,7 +11,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
 
-var version = "0.5.4";
+var version = "0.5.5";
 
 const configBoolean = /*#__PURE__*/zod.z.enum(['true', 'false']).transform(arg => JSON.parse(arg));
 const configSchema = /*#__PURE__*/zod.z.object({
@@ -113,7 +113,7 @@ const getZodConstructor = (field, getRelatedModelName = name => name.toString())
         break;
 
       case 'Json':
-        zodType = 'jsonSchema';
+        zodType = 'z.any()';
         break;
 
       case 'Boolean':
@@ -203,13 +203,6 @@ const writeImportsForModel = (model, sourceFile, config, {
   sourceFile.addImportDeclarations(importList);
 };
 const writeTypeSpecificSchemas = (model, sourceFile, config, _prismaOptions) => {
-  if (model.fields.some(f => f.type === 'Json')) {
-    sourceFile.addStatements(writer => {
-      writer.newLine();
-      writeArray(writer, ['// Helper schema for JSON fields', `type Literal = boolean | number | string${config.prismaJsonNullability ? '' : '| null'}`, 'type Json = Literal | { [key: string]: Json } | Json[]', `const literalSchema = z.union([z.string(), z.number(), z.boolean()${config.prismaJsonNullability ? '' : ', z.null()'}])`, 'const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]))']);
-    });
-  }
-
   if (config.useDecimalJs && model.fields.some(f => f.type === 'Decimal')) {
     sourceFile.addStatements(writer => {
       writer.newLine();
