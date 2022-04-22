@@ -15,7 +15,7 @@ export const writeImportsForModel = (
 	model: DMMF.Model,
 	sourceFile: SourceFile,
 	config: Config,
-	{ schemaPath, outputPath, clientPath }: PrismaOptions
+	{ schemaPath, outputPath }: PrismaOptions
 ) => {
 	const { relatedModelName } = useModelNames(config)
 	const importList: ImportDeclarationStructure[] = [
@@ -46,13 +46,12 @@ export const writeImportsForModel = (
 
 	const enumFields = model.fields.filter((f) => f.kind === 'enum')
 	const relationFields = model.fields.filter((f) => f.kind === 'object')
-	const relativePath = path.relative(outputPath, clientPath)
 
 	if (enumFields.length > 0) {
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
-			moduleSpecifier: dotSlash(relativePath),
+			moduleSpecifier: dotSlash('enums'),
 			namedImports: enumFields.map((f) => f.type),
 		})
 	}
@@ -245,4 +244,18 @@ export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) 
 			moduleSpecifier: `./${model.name.toLowerCase()}`,
 		})
 	)
+}
+
+export const generateEnumsFile = (enums: DMMF.DatamodelEnum[], enumsFile: SourceFile) => {
+	enums.forEach(({ name, values }) => {
+		const members = values.map(({ name: memberName }) => {
+			return { name: memberName, value: memberName }
+		})
+		enumsFile
+			.addEnum({
+				name,
+				members,
+			})
+			.setIsExported(true)
+	})
 }
