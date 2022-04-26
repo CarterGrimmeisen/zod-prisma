@@ -124,6 +124,15 @@ export const writeTypeSpecificSchemas = (
 	}
 }
 
+export const writeAdditionalDoc = (
+	_model: DMMF.Model,
+	sourceFile: SourceFile,
+	config: Config,
+	_prismaOptions: PrismaOptions
+) => {
+	if (config.additionalDoc) sourceFile.insertStatements(0, config.additionalDoc)
+}
+
 export const generateSchemaForModel = (
 	model: DMMF.Model,
 	sourceFile: SourceFile,
@@ -237,6 +246,7 @@ export const populateModelFile = (
 	generateSchemaForModel(model, sourceFile, config, prismaOptions)
 	if (needsRelatedModel(model, config))
 		generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions)
+	writeAdditionalDoc(model, sourceFile, config, prismaOptions)
 }
 
 export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
