@@ -75,6 +75,7 @@
         </ul>
       </li>
       <li><a href="#json-fields">JSON Fields</a></li>
+      <li><a href="#disabled">Disabled</a></li>
       </ul>
     </li>
     <li><a href="#examples">Examples</a></li>
@@ -265,6 +266,14 @@ a value of null stored in the JSON. In accordance with this zod-prisma will defa
 
 If you would like to revert this behavior and allow null assignment to JSON fields,
 you can set `prismaJsonNullability` to `false` in the generator options.
+
+### Disabled
+
+To disable the execution of this generator, just add an environment variable to the environment in which prisma generate is run.
+
+```sh
+ZOD_PRISMA_DISABLE=true npx prisma generate
+```
 
 ## Examples
 

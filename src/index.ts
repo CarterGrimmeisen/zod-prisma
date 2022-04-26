@@ -15,7 +15,9 @@ generatorHandler({
 			defaultOutput: 'zod',
 		}
 	},
-	onGenerate(options) {
+	async onGenerate(options) {
+		if (process.env.ZOD_PRISMA_DISABLE) return console.log('zod-prisma generator is disabled')
+
 		const project = new Project()
 
 		const models = options.dmmf.datamodel.models
