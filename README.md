@@ -149,6 +149,9 @@ npm install -g yarn
       // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
       prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
+      
+      additionalDoc            = null // (default) will insert any document at the beginning of a line in the model files
+      // additionalDoc         = "// @ts-nocheck" // e.g. disables type checking for typescripts.
     }
     ```
 
