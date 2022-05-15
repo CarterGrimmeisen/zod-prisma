@@ -7,6 +7,7 @@ export const configSchema = z.object({
 	modelSuffix: z.string().default('Model'),
 	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
 	useDecimalJs: configBoolean.default('false'),
+	zodPath: z.string().default('zod'),
 	imports: z.string().optional(),
 	prismaJsonNullability: configBoolean.default('true'),
 })

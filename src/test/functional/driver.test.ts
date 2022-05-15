@@ -105,6 +105,7 @@ describe('Functional Tests', () => {
 	test.concurrent('Config', ftForDir('config'))
 	test.concurrent('Docs', ftForDir('docs'))
 	test.concurrent('Different Client Path', ftForDir('different-client-path'))
+	test.concurrent('Different Zod Path', ftForDir('different-zod-path'))
 	test.concurrent('Recursive Schema', ftForDir('recursive'))
 	test.concurrent('relationModel = false', ftForDir('relation-false'))
 	test.concurrent('Relation - 1 to 1', ftForDir('relation-1to1'))
