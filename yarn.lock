@@ -4712,6 +4712,13 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
+nestjs-zod@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/nestjs-zod/-/nestjs-zod-0.3.0.tgz#bbfc670697b048f26289d0603fda6a6476f9f291"
+  integrity sha512-sDmSlJi2BFDU0WjwP2i1u1NGz+qPwXAZB4bCIWfM+66xt8B0JRzXLbTaXyolWyORYRvOusf7W2n+UAxcR5sBig==
+  dependencies:
+    zod "3.14.3"
+
 new-github-issue-url@0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/new-github-issue-url/-/new-github-issue-url-0.2.1.tgz#e17be1f665a92de465926603e44b9f8685630c1d"
@@ -6416,6 +6423,11 @@ zip-stream@^3.0.1:
     archiver-utils "^2.1.0"
     compress-commons "^3.0.0"
     readable-stream "^3.6.0"
+
+zod@3.14.3:
+  version "3.14.3"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.14.3.tgz#60e86341c05883c281fe96a0e79acea48a09f123"
+  integrity sha512-OzwRCSXB1+/8F6w6HkYHdbuWysYWnAF4fkRgKDcSFc54CE+Sv0rHXKfeNUReGCrHukm1LNpi6AYeXotznhYJbQ==
 
 zod@^3.11.6:
   version "3.11.6"
