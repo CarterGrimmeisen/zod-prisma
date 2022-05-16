@@ -58,7 +58,7 @@
 	},
 	"devDependencies": {
 		"@prisma/client": "~3.8.1",
-		"@prisma/sdk": "~3.7.0",
+		"@prisma/sdk": "~3.14.0",
 		"@tsconfig/recommended": "^1.0.1",
 		"@types/fs-extra": "^9.0.13",
 		"dts-cli": "^1.1.5",
