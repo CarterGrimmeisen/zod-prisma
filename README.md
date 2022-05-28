@@ -135,7 +135,6 @@ npm install -g yarn
       modelCase                = "PascalCase"
       modelSuffix              = "Model"
       useDecimalJs             = true
-      imports                  = null
       prismaJsonNullability    = true
     }
     ```
