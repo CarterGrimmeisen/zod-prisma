@@ -146,6 +146,10 @@ npm install -g yarn
 
       imports                  = null // (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
 
+      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-7-beta/#ecmascript-module-support-in-node-js
+      includeJSExtension       = true // includes the .js extension on relative import/exports to comply with ESM in TS syntax requirements ()
+      // includeJSExtension    = false // (default) leaves relative import/exports extensionless
+
       // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
       prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
