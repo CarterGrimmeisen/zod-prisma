@@ -45,7 +45,7 @@ generatorHandler({
 			{ overwrite: true }
 		)
 
-		generateBarrelFile(models, indexFile)
+		generateBarrelFile(models, indexFile, config)
 
 		indexFile.formatText({
 			indentSize: 2,

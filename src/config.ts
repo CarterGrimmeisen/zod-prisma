@@ -8,6 +8,7 @@ export const configSchema = z.object({
 	modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
 	useDecimalJs: configBoolean.default('false'),
 	imports: z.string().optional(),
+	includeJSExtension: configBoolean.default('false'),
 	prismaJsonNullability: configBoolean.default('true'),
 })
 

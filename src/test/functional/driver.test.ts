@@ -45,7 +45,7 @@ const ftForDir = (dir: string) => async () => {
 
 	const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true })
 
-	generateBarrelFile(dmmf.datamodel.models, indexFile)
+	generateBarrelFile(dmmf.datamodel.models, indexFile, config)
 
 	indexFile.formatText({
 		indentSize: 2,
@@ -105,6 +105,7 @@ describe('Functional Tests', () => {
 	test.concurrent('Config', ftForDir('config'))
 	test.concurrent('Docs', ftForDir('docs'))
 	test.concurrent('Different Client Path', ftForDir('different-client-path'))
+	test.concurrent('JS Extension', ftForDir('js-extension'))
 	test.concurrent('Recursive Schema', ftForDir('recursive'))
 	test.concurrent('relationModel = false', ftForDir('relation-false'))
 	test.concurrent('Relation - 1 to 1', ftForDir('relation-1to1'))
