@@ -41,7 +41,8 @@
     "test:update": "UPDATE_EXPECTED=true vitest run test/functional/driver.test.ts >/dev/null 2>&1; echo Expected outputs updated.",
     "prepublishOnly": "pnpm run build",
     "prepare": "husky install",
-    "lint": "tsc --noEmit && eslint vitest.config.ts src/*.ts test/*.test.ts test/**/*.test.ts"
+    "lint": "tsc --noEmit && eslint vitest.config.ts src/*.ts test/*.test.ts test/**/*.test.ts",
+    "lint:fix": "tsc --noEmit && eslint --fix vitest.config.ts src/*.ts test/*.test.ts test/**/*.test.ts"
   },
   "license": "MIT",
   "devDependencies": {

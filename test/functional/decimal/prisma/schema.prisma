@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = ""
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider  = "zod-prisma"
+  output    = "../expected/"
+  decimalJs = true
+}
+
+model Addition {
+  id String @id @default(cuid())
+
+  addendOne Decimal
+  addendTwo Decimal
+  sum       Decimal
+}

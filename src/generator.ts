@@ -145,7 +145,7 @@ export const writeTypeSpecificSchemas = (
       writer.newLine()
       writeArray(writer, [
         "// Helper schema for Decimal fields",
-        "z",
+        "const decimalSchema = z",
         ".instanceof(Decimal)",
         ".or(z.string())",
         ".or(z.number())",

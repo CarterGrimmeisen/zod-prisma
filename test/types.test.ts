@@ -1,5 +1,6 @@
 import type { DMMF } from "@prisma/generator-helper"
 import { describe, expect, test } from "vitest"
+import { Config } from "../src/config"
 import { getZodConstructor } from "../src/types"
 
 describe("types Package", () => {
@@ -19,7 +20,7 @@ describe("types Package", () => {
       documentation: ["@zod.max(64)", "@zod.min(1)"].join("\n"),
     }
 
-    const constructor = getZodConstructor(field)
+    const constructor = getZodConstructor({ decimalJs: false } as Config, field)
 
     expect(constructor).toBe("z.string().array().max(64).min(1).nullable()")
   })
@@ -39,7 +40,7 @@ describe("types Package", () => {
       type: "SomeUnknownType",
     }
 
-    const constructor = getZodConstructor(field)
+    const constructor = getZodConstructor({ decimalJs: false } as Config, field)
 
     expect(constructor).toBe("z.unknown()")
   })

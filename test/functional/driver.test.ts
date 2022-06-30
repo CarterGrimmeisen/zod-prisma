@@ -13,6 +13,7 @@ describe.concurrent("Functional Tests", () => {
   test.each([
     ["Basic", "basic"],
     ["Config", "config"],
+    ["Decimal.js", "decimal"],
     ["Docs", "docs"],
     ["Different Client Path", "different-client-path"],
     ["Recursive Schema", "recursive"],

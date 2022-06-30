@@ -29,7 +29,7 @@ export const generateBaseSchema = (
                 .forEach((field) => {
                   writeArray(writer, getJSDocs(field.documentation))
                   writer
-                    .write(`${field.name}: ${getZodConstructor(field)}`)
+                    .write(`${field.name}: ${getZodConstructor(config, field)}`)
                     .write(",")
                     .newLine()
                 })
@@ -88,6 +88,7 @@ export const generateRelationsSchema = (
                 writeArray(writer, getJSDocs(field.documentation))
                 writer.writeLine(
                   `${field.name}: ${getZodConstructor(
+                    config,
                     field,
                     (type: string) =>
                       `z.lazy(() => ${baseSchema(type)}.merge(${relationsSchema(
