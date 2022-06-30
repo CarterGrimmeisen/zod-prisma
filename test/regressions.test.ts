@@ -130,4 +130,12 @@ describe("Regression Tests", () => {
       'import * as z from "zod"\nimport { userTypeSchema } from "./usertype.js"\n',
     )
   })
+
+  test("#110", () => {
+    const config = configSchema.parse({
+      imports: "null",
+    })
+
+    expect(config.imports).toBe(null)
+  })
 })

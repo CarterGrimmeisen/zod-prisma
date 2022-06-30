@@ -8,7 +8,11 @@ export const configSchema = z
   .object({
     excludeRelations: configBoolean.default("false"),
     decimalJs: configBoolean.default("false"),
-    imports: z.string().optional(),
+    imports: z
+      .string()
+      .nullable()
+      .default(null)
+      .transform((str) => (str === "null" ? null : str)),
     prismaJsonNullability: configBoolean.default("true"),
     schemaSuffix: z.string().default("Schema"),
     schemaCase: z.enum(["PascalCase", "camelCase"]).default("camelCase"),
