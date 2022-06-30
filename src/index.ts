@@ -30,20 +30,11 @@ generatorHandler({
         "Could not get output path for zod-prisma generator. This SHOULD NOT happen. Please create a new issue on Github.",
       )
 
-    const clientPath = options.otherGenerators.find(
-      (each) => each.provider.value === "prisma-client-js",
-    )?.output?.value
-    if (!clientPath)
-      throw new Error(
-        "Could not find prisma client generator. This is needed for proper type checking",
-      )
-
     const results = configSchema.safeParse(options.generator.config)
     if (!results.success) throw new Error(results.error.message)
 
     const config = results.data
     const prismaOptions: PrismaOptions = {
-      clientPath,
       outputPath,
       schemaPath,
     }

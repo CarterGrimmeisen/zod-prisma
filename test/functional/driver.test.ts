@@ -57,21 +57,12 @@ describe.concurrent("Functional Tests", () => {
 
     const config = results.data
 
-    const prismaClient = generators.find(
-      (generator) => generator.provider.value === "prisma-client-js",
-    )!
-
     const outputPath = path.resolve(
       path.dirname(schemaFile),
       generator.output!.value,
     )
-    const clientPath = path.resolve(
-      path.dirname(schemaFile),
-      prismaClient.output!.value,
-    )
 
     const prismaOptions: PrismaOptions = {
-      clientPath,
       outputPath,
       schemaPath: schemaFile,
     }

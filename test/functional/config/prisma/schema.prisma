@@ -6,11 +6,6 @@ datasource db {
   url      = ""
 }
 
-generator client {
-  provider = "prisma-client-js"
-  output   = ".client"
-}
-
 generator zod {
   provider     = "zod-prisma"
   output       = "../expected/"

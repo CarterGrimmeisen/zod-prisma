@@ -10,7 +10,6 @@ describe("Regression Tests", () => {
   test("#92", async () => {
     const config = configSchema.parse({})
     const prismaOptions: PrismaOptions = {
-      clientPath: path.resolve(__dirname, "../node_modules/@prisma/client"),
       outputPath: path.resolve(__dirname, "./prisma/zod"),
       schemaPath: path.resolve(__dirname, "./prisma/schema.prisma"),
     }
@@ -52,7 +51,6 @@ describe("Regression Tests", () => {
       nodeEsModules: "true",
     })
     const prismaOptions: PrismaOptions = {
-      clientPath: path.resolve(__dirname, "../node_modules/@prisma/client"),
       outputPath: path.resolve(__dirname, "./prisma/zod"),
       schemaPath: path.resolve(__dirname, "./prisma/schema.prisma"),
     }
@@ -94,7 +92,6 @@ describe("Regression Tests", () => {
       nodeEsModules: "true",
     })
     const prismaOptions: PrismaOptions = {
-      clientPath: path.resolve(__dirname, "../node_modules/@prisma/client"),
       outputPath: path.resolve(__dirname, "./prisma/zod"),
       schemaPath: path.resolve(__dirname, "./prisma/schema.prisma"),
     }

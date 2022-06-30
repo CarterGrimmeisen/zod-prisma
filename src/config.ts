@@ -33,7 +33,6 @@ export type Config = z.infer<typeof configSchema>
 export type PrismaOptions = {
   schemaPath: string
   outputPath: string
-  clientPath: string
 }
 
 export type Names = {
