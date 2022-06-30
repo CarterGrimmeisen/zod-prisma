@@ -2,12 +2,11 @@ import { execa } from "execa"
 import { removeAsync as remove } from "fs-jetpack"
 import { resolve } from "path"
 import { describe, expect, test } from "vitest"
-import path from "path"
 
 import ts from "typescript"
 
 describe("usage tests", () => {
-  if (process.platform !== "win32")
+  if (process.platform !== "win32") {
     test("match prisma types", async () => {
       await remove(resolve(__dirname, "./prisma/zod"))
       await remove(resolve(__dirname, "./prisma/.client"))
@@ -22,7 +21,7 @@ describe("usage tests", () => {
         },
       )
 
-      const program = ts.createProgram([path.resolve(__dirname, "usage.ts")], {
+      const program = ts.createProgram([resolve(__dirname, "usage.ts")], {
         strict: true,
         noEmit: true,
         skipLibCheck: true,
@@ -30,4 +29,7 @@ describe("usage tests", () => {
 
       expect(ts.getPreEmitDiagnostics(program)).toStrictEqual([])
     }, 20000)
+  } else {
+    test("Running on Windows")
+  }
 })

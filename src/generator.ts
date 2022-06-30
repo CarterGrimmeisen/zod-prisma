@@ -44,10 +44,14 @@ export const writeImportsForModel = (
         kind: StructureKind.ImportDeclaration,
         namespaceImport: "imports",
         moduleSpecifier: /^\.{1,2}\//.test(config.imports)
-          ? path.relative(
-              outputPath,
-              path.resolve(path.dirname(schemaPath), config.imports),
-            )
+          ? path
+              .relative(
+                outputPath,
+                path.resolve(path.dirname(schemaPath), config.imports),
+              )
+              .replace(/^\\\\\?\\/, "")
+              .replace(/\\/g, "/")
+              .replace(/\/\/+/g, "/")
           : config.imports,
       })
     }
