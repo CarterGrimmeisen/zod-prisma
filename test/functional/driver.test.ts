@@ -164,11 +164,6 @@ describe("Type Checking", () => {
       },
     )
 
-    const diagnostics = [
-      ...program.emit().diagnostics,
-      ...ts.getPreEmitDiagnostics(program),
-    ]
-
-    expect(diagnostics.map((each) => each.messageText)).toStrictEqual([])
+    expect(ts.getPreEmitDiagnostics(program)).toStrictEqual([])
   })
 })

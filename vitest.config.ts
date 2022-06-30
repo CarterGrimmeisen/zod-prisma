@@ -5,7 +5,7 @@ import eslintPlugin from "vite-plugin-eslint"
 
 export default defineConfig({
   test: {
-    testTimeout: 10000,
+    testTimeout: 20000,
   },
   plugins: [
     eslintPlugin({
