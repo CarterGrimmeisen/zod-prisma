@@ -130,31 +130,43 @@ npm install -g pnpm
 
     ```prisma
     generator zod {
-      provider                 = "zod-prisma"
-      output                   = "./zod" /// (default) the directory where generated zod schemas will be saved
+      provider = "zod-prisma"
+      /// (default) the directory where generated zod schemas will be saved
+      output   = "./zod"
 
-      relationModel            = true /// (default) Create and export both plain and related models.
-      /// relationModel        = "default" /// Do not export model without relations.
-      /// relationModel        = false /// Do not generate related model
+      /// (default) Include relation fields when generating schemas.
+      excludeRelations = false
+      /// Exclude relation fields when generating schemas
+      /// excludeRelations     = true
 
-      modelCase                = "PascalCase" /// (default) Output models using pascal case (ex. UserModel, PostModel)
-      /// modelCase            = "camelCase" /// Output models using camel case (ex. userModel, postModel)
+      /// (default) Output models using camel case (ex. userModel, postModel)
+      schemaCase = "camelCase"
+      /// Output models using pascal case (ex. UserModel, PostModel)
+      /// schemaCase           = "PascalCase"
 
-      modelSuffix              = "Model" /// (default) Suffix to apply to your prisma models when naming Zod schemas
+      /// (default) Suffix to apply to your prisma models when naming Zod schemas
+      schemaSuffix = "Schema"
 
-      /// useDecimalJs         = false /// (default) represent the prisma Decimal type using as a JS number
-      useDecimalJs             = true /// represent the prisma Decimal type using Decimal.js (as Prisma does)
+      /// represent the prisma Decimal type using Decimal.js (as Prisma does)
+      decimalJs = true
+      /// (default) represent the prisma Decimal type using as a JS number
+      /// decimalJs            = false
 
-      imports                  = null /// (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
+      /// (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
+      imports = null
 
       /// https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
-      prismaJsonNullability     = true /// (default) uses prisma's scheme for JSON field nullability
-      /// prismaJsonNullability = false /// allows null assignment to optional JSON fields
+      /// (default) uses prisma's scheme for JSON field nullability
+      prismaJsonNullability = true
+      /// allows null assignment to optional JSON fields
+      /// prismaJsonNullability = false
 
       /// https://nodejs.org/api/esm.html
       /// https://github.com/prisma/prisma/issues/4816
-      nodeEsModules            = false /// (default) omit extensions from relative imports and utilize named exports from Prisma
-      /// nodeEsModules        = true /// adhere's to node's standards for es module usage by adding extensions to relative imports
+      /// (default) omit extensions from relative imports and utilize named exports from Prisma
+      nodeEsModules = false
+      /// adhere's to node's standards for es module usage by adding extensions to relative imports
+      /// nodeEsModules        = true
     }
     ```
 
