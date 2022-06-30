@@ -33,7 +33,6 @@ describe("usage tests", () => {
         ...ts.getPreEmitDiagnostics(program),
       ]
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      expect(diagnostics).toStrictEqual([])
+      expect(diagnostics.map((each) => each.messageText)).toStrictEqual([])
     }, 20000)
 })

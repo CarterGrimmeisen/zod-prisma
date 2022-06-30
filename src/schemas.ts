@@ -1,7 +1,7 @@
 import type { DMMF } from "@prisma/generator-helper"
 import { SourceFile, VariableDeclarationKind } from "ts-morph"
 import type { Config, PrismaOptions } from "./config"
-import { getJSDocs } from "./docs"
+import { computeModifiers, getJSDocs } from "./docs"
 import { getZodConstructor } from "./types"
 import { needsRelatedSchema, schemaNameFormatter, writeArray } from "./util"
 
@@ -125,6 +125,14 @@ export const generateSchema = (
 
           if (needsRelatedSchema(model, config))
             writer.newLine().write(`.merge(${relationsSchema(model.name)})`)
+
+          const schemaModifiers =
+            model.documentation && computeModifiers(model.documentation)
+          if (schemaModifiers) {
+            schemaModifiers.forEach((mod) => {
+              writer.newLine().write(`.${mod}`)
+            })
+          }
         },
       },
     ],

@@ -17,17 +17,18 @@ describe.concurrent("Functional Tests", () => {
   test.each([
     ["Basic", "basic"],
     ["Config", "config"],
+    ["Config Import", "config-import"],
     ["Decimal.js", "decimal"],
-    ["Docs", "docs"],
     ["Different Client Path", "different-client-path"],
-    ["Recursive Schema", "recursive"],
-    ["relationModel = false", "relation-false"],
-    ["Relation - 1 to 1", "relation-1to1"],
+    ["Docs", "docs"],
     ["Imports", "imports"],
     ["JSON", "json"],
-    ["Optional fields", "optional"],
-    ["Config Import", "config-import"],
     ["Node esModules", "node-es-modules"],
+    ["Optional fields", "optional"],
+    ["Recursive Schema", "recursive"],
+    ["Relation - 1 to 1", "relation-1to1"],
+    ["relationModel = false", "relation-false"],
+    ["Schema-Level Modifiers", "schema-modifiers"],
   ])("%s", async (_, dir) => {
     const schemaFile = path.resolve(__dirname, dir, "prisma/schema.prisma")
     const expectedDir = path.resolve(__dirname, dir, "expected")
@@ -172,6 +173,11 @@ describe("Type Checking", () => {
       },
     )
 
-    expect(program.emit().diagnostics).toStrictEqual([])
+    const diagnostics = [
+      ...program.emit().diagnostics,
+      ...ts.getPreEmitDiagnostics(program),
+    ]
+
+    expect(diagnostics.map((each) => each.messageText)).toStrictEqual([])
   })
 })

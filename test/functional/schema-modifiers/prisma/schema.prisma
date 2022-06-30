@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = ""
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = ".client"
+}
+
+generator zod {
+  provider = "zod-prisma"
+  output   = "../expected/"
+}
+
+/// @zod.refine((val) => val.type === 'PRIVATE' || val.company !== null, { path: ['company'], message: 'Required if type is company' })
+model Address {
+  id      String      @id @unique @default(uuid())
+  type    AddressType
+  company String? /// @zod.min(1).max(50)
+  address String /// @zod.min(1).max(50)
+  zipCode String /// @zod.min(1).max(10)
+  city    String /// @zod.min(1).max(50)
+}
+
+enum AddressType {
+  PRIVATE
+  COMPANY
+}
