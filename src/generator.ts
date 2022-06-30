@@ -38,16 +38,24 @@ export const writeImportsForModel = (
   ]
 
   if (config.imports) {
-    importList.push({
-      kind: StructureKind.ImportDeclaration,
-      namespaceImport: "imports",
-      moduleSpecifier: dotSlash(
-        path.relative(
-          outputPath,
-          path.resolve(path.dirname(schemaPath), config.imports),
+    const usesImports = model.fields.some(
+      (field) =>
+        field.documentation &&
+        /\s*@zod.*[^.\w]imports\.\w+\W/.test(field.documentation),
+    )
+
+    if (usesImports) {
+      importList.push({
+        kind: StructureKind.ImportDeclaration,
+        namespaceImport: "imports",
+        moduleSpecifier: dotSlash(
+          path.relative(
+            outputPath,
+            path.resolve(path.dirname(schemaPath), config.imports),
+          ),
         ),
-      ),
-    })
+      })
+    }
   }
 
   if (config.decimalJs && model.fields.some((f) => f.type === "Decimal")) {

@@ -135,4 +135,57 @@ describe("Regression Tests", () => {
 
     expect(config.imports).toBe(null)
   })
+
+  test("#113", async () => {
+    const config = configSchema.parse({
+      imports: "./regressions.test",
+    })
+    const prismaOptions: PrismaOptions = {
+      outputPath: path.resolve(__dirname, "./prisma/zod"),
+      schemaPath: path.resolve(__dirname, "./prisma/schema.prisma"),
+    }
+
+    const {
+      datamodel: {
+        models: [userModel, postModel],
+      },
+    } = await getDMMF({
+      datamodel: `model User {
+				id			String @id
+				type		String
+			}
+      
+      model Post {
+        id String @id
+        body String /// @zod.custom(imports.commentSchema)
+      }`,
+    })
+
+    const project = new Project()
+    const testFile = project.createSourceFile("test.ts")
+
+    writeImportsForModel(userModel, testFile, config, prismaOptions)
+
+    testFile.formatText({
+      indentSize: 2,
+      convertTabsToSpaces: true,
+      semicolons: SemicolonPreference.Remove,
+    })
+
+    expect(testFile.getFullText()).toBe('import * as z from "zod"\n')
+
+    testFile.removeText(0, testFile.getEnd())
+
+    writeImportsForModel(postModel, testFile, config, prismaOptions)
+
+    testFile.formatText({
+      indentSize: 2,
+      convertTabsToSpaces: true,
+      semicolons: SemicolonPreference.Remove,
+    })
+
+    expect(testFile.getFullText()).toBe(
+      'import * as z from "zod"\nimport * as imports from "../regressions.test"\n',
+    )
+  })
 })
