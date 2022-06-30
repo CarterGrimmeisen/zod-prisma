@@ -137,12 +137,12 @@ npm install -g pnpm
       /// (default) Include relation fields when generating schemas.
       excludeRelations = false
       /// Exclude relation fields when generating schemas
-      /// excludeRelations     = true
+      /// excludeRelations = true
 
       /// (default) Output models using camel case (ex. userModel, postModel)
       schemaCase = "camelCase"
       /// Output models using pascal case (ex. UserModel, PostModel)
-      /// schemaCase           = "PascalCase"
+      /// schemaCase = "PascalCase"
 
       /// (default) Suffix to apply to your prisma models when naming Zod schemas
       schemaSuffix = "Schema"
@@ -150,7 +150,7 @@ npm install -g pnpm
       /// represent the prisma Decimal type using Decimal.js (as Prisma does)
       decimalJs = true
       /// (default) represent the prisma Decimal type using as a JS number
-      /// decimalJs            = false
+      /// decimalJs = false
 
       /// (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
       imports = null
@@ -166,7 +166,7 @@ npm install -g pnpm
       /// (default) omit extensions from relative imports and utilize named exports from Prisma
       nodeEsModules = false
       /// adhere's to node's standards for es module usage by adding extensions to relative imports
-      /// nodeEsModules        = true
+      /// nodeEsModules = true
     }
     ```
 
