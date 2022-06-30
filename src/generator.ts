@@ -14,12 +14,7 @@ import {
   generateSchema,
   generateUpdateSchema,
 } from "./schemas"
-import {
-  dotSlash,
-  needsRelatedSchema,
-  schemaNameFormatter,
-  writeArray,
-} from "./util"
+import { needsRelatedSchema, schemaNameFormatter, writeArray } from "./util"
 
 export const writeImportsForModel = (
   model: DMMF.Model,
@@ -48,12 +43,12 @@ export const writeImportsForModel = (
       importList.push({
         kind: StructureKind.ImportDeclaration,
         namespaceImport: "imports",
-        moduleSpecifier: dotSlash(
-          path.relative(
-            outputPath,
-            path.resolve(path.dirname(schemaPath), config.imports),
-          ),
-        ),
+        moduleSpecifier: /^\.{1,2}\//.test(config.imports)
+          ? path.relative(
+              outputPath,
+              path.resolve(path.dirname(schemaPath), config.imports),
+            )
+          : config.imports,
       })
     }
   }

@@ -1,7 +1,6 @@
-import path from "path"
 import type { CodeBlockWriter } from "ts-morph"
 import { describe, expect, test, vi } from "vitest"
-import { dotSlash, writeArray } from "../src/util"
+import { writeArray } from "../src/util"
 
 describe("Util Package", () => {
   test("writeArray: default newLines", () => {
@@ -44,18 +43,5 @@ describe("Util Package", () => {
     expect(writer.conditionalNewLine).toHaveBeenCalledWith(false)
     expect(writer.conditionalNewLine).toHaveBeenCalledWith(false)
     expect(writer.conditionalNewLine).toHaveBeenCalledTimes(4)
-  })
-
-  test("dotSlash", () => {
-    expect(dotSlash("../banana")).toBe("../banana")
-    expect(dotSlash("test/1/2/3")).toBe("./test/1/2/3")
-    expect(dotSlash("../../node_modules/@prisma/client")).toBe("@prisma/client")
-
-    if (path.sep !== path.posix.sep) {
-      expect(dotSlash("test\\1\\2\\3")).toBe("./test/1/2/3")
-      expect(dotSlash("..\\..\\node_modules\\@prisma\\client")).toBe(
-        "@prisma/client",
-      )
-    }
   })
 })

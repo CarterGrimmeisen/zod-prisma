@@ -87,6 +87,41 @@ describe("Regression Tests", () => {
     )
   })
 
+  test("#104", async () => {
+    const config = configSchema.parse({
+      imports: "my-cool-package",
+    })
+    const prismaOptions: PrismaOptions = {
+      outputPath: path.resolve(__dirname, "./prisma/zod"),
+      schemaPath: path.resolve(__dirname, "./prisma/schema.prisma"),
+    }
+
+    const {
+      datamodel: {
+        models: [model],
+      },
+    } = await getDMMF({
+      datamodel: `model User {
+				id			    String @id
+				type		    String /// @zod.custom(imports.myCoolSchema)
+			}`,
+    })
+    const project = new Project()
+    const testFile = project.createSourceFile("test.ts")
+
+    writeImportsForModel(model, testFile, config, prismaOptions)
+
+    testFile.formatText({
+      indentSize: 2,
+      convertTabsToSpaces: true,
+      semicolons: SemicolonPreference.Remove,
+    })
+
+    expect(testFile.getFullText()).toBe(
+      'import * as z from "zod"\nimport * as imports from "my-cool-package"\n',
+    )
+  })
+
   test("#109", async () => {
     const config = configSchema.parse({
       nodeEsModules: "true",
@@ -150,7 +185,10 @@ describe("Regression Tests", () => {
         models: [userModel, postModel],
       },
     } = await getDMMF({
-      datamodel: `model User {
+      datamodel: ` /// Something something imports.commentSchema something
+      
+      
+      model User {
 				id			String @id
 				type		String
 			}
