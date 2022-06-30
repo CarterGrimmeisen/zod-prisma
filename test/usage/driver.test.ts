@@ -28,6 +28,12 @@ describe("usage tests", () => {
         skipLibCheck: true,
       })
 
-      expect(program.emit().diagnostics).toStrictEqual([])
+      const diagnostics = [
+        ...program.emit().diagnostics,
+        ...ts.getPreEmitDiagnostics(program),
+      ]
+
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      expect(diagnostics).toStrictEqual([])
     }, 20000)
 })

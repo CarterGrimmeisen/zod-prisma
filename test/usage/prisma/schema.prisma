@@ -16,12 +16,18 @@ generator zod {
   output   = "./zod"
 }
 
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
 model Comment {
   id       String    @id @default(uuid())
   author   String
   contents String
   parentId String?
   some     String[]
+  status   Status
   /// Some Json metadata
   meta     Json?
   parent   Comment?  @relation("lineage", fields: [parentId], references: [id])

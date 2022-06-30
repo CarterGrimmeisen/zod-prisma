@@ -22,6 +22,7 @@ export const schemaNameFormatter = ({ schemaCase, schemaSuffix }: Config) => {
     relationsSchema: (name: string) => formatter(`${name}Relations`),
     createSchema: (name: string) => formatter(`${name}Create`),
     updateSchema: (name: string) => formatter(`${name}Update`),
+    enumSchema: (name: string) => formatter(name),
   }
 }
 

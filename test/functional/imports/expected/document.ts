@@ -1,12 +1,12 @@
 import * as z from "zod"
-import { Status } from "../prisma/.client"
+import { statusSchema } from "./status"
 
 export const documentBaseSchema = z.object({
   id: z.string(),
   filename: z.string(),
   author: z.string(),
   contents: z.string(),
-  status: z.nativeEnum(Status),
+  status: statusSchema,
   created: z.date(),
   updated: z.date(),
 })

@@ -1,6 +1,11 @@
 import type { DMMF } from "@prisma/generator-helper"
 import path from "path"
-import { ImportDeclarationStructure, SourceFile, StructureKind } from "ts-morph"
+import {
+  ImportDeclarationStructure,
+  SourceFile,
+  StructureKind,
+  VariableDeclarationKind,
+} from "ts-morph"
 import type { Config, PrismaOptions } from "./config"
 import {
   generateBaseSchema,
@@ -20,9 +25,10 @@ export const writeImportsForModel = (
   model: DMMF.Model,
   sourceFile: SourceFile,
   config: Config,
-  { schemaPath, outputPath, clientPath }: PrismaOptions,
+  { schemaPath, outputPath }: PrismaOptions,
 ) => {
-  const { baseSchema, relationsSchema } = schemaNameFormatter(config)
+  const { baseSchema, relationsSchema, enumSchema } =
+    schemaNameFormatter(config)
   const importList: ImportDeclarationStructure[] = [
     {
       kind: StructureKind.ImportDeclaration,
@@ -53,29 +59,18 @@ export const writeImportsForModel = (
   }
 
   const enumFields = model.fields.filter((f) => f.kind === "enum")
-  const relativePath = path.relative(
-    outputPath,
-    path.join(
-      clientPath,
-      config.nodeEsModules && !clientPath.includes("node_modules")
-        ? "index.js"
-        : "",
-    ),
-  )
 
   if (enumFields.length > 0) {
-    importList.push({
-      kind: StructureKind.ImportDeclaration,
-      isTypeOnly: enumFields.length === 0,
-      moduleSpecifier: dotSlash(relativePath),
-      ...(config.nodeEsModules
-        ? {
-            namespaceImport: "Prisma",
-          }
-        : {
-            namedImports: enumFields.map((f) => f.type),
-          }),
-    })
+    const uniqueEnumTypes = [...new Set(enumFields.map((e) => e.type))]
+    importList.push(
+      ...uniqueEnumTypes.map((type) => ({
+        kind: StructureKind.ImportDeclaration as const,
+        moduleSpecifier: `./${type.toLowerCase()}${
+          config.nodeEsModules ? ".js" : ""
+        }`,
+        namedImports: [enumSchema(type)],
+      })),
+    )
   }
 
   if (needsRelatedSchema(model, config)) {
@@ -105,14 +100,6 @@ export const writeImportsForModel = (
   }
 
   sourceFile.addImportDeclarations(importList)
-
-  if (config.nodeEsModules && enumFields.length > 0) {
-    sourceFile.addStatements((writer) => {
-      writer.write(
-        `const { ${enumFields.map((e) => e.type).join(", ")} } = Prisma;`,
-      )
-    })
-  }
 }
 
 export const writeTypeSpecificSchemas = (
@@ -182,10 +169,12 @@ export const populateModelFile = (
 
 export const generateBarrelFile = (
   models: DMMF.Model[],
+  enums: DMMF.DatamodelEnum[],
   indexFile: SourceFile,
   config: Config,
 ) => {
-  const { schema, createSchema, updateSchema } = schemaNameFormatter(config)
+  const { schema, createSchema, updateSchema, enumSchema } =
+    schemaNameFormatter(config)
 
   models.forEach((model) =>
     indexFile.addExportDeclaration({
@@ -199,4 +188,41 @@ export const generateBarrelFile = (
       ],
     }),
   )
+
+  enums.forEach((enumDecl) => {
+    indexFile.addExportDeclaration({
+      moduleSpecifier: `./${enumDecl.name.toLowerCase()}${
+        config.nodeEsModules ? ".js" : ""
+      }`,
+      namedExports: [enumSchema(enumDecl.name)],
+    })
+  })
+}
+
+export const populateEnumFile = (
+  enumDecl: DMMF.DatamodelEnum,
+  sourceFile: SourceFile,
+  config: Config,
+  _prismaOptions: PrismaOptions,
+) => {
+  const { enumSchema } = schemaNameFormatter(config)
+
+  sourceFile.addImportDeclaration({
+    kind: StructureKind.ImportDeclaration,
+    namespaceImport: "z",
+    moduleSpecifier: "zod",
+  })
+
+  sourceFile.addVariableStatement({
+    declarationKind: VariableDeclarationKind.Const,
+    isExported: true,
+    declarations: [
+      {
+        name: enumSchema(enumDecl.name),
+        initializer: `z.enum(["${enumDecl.values
+          .map((e) => e.name)
+          .join('", "')}"])`,
+      },
+    ],
+  })
 }

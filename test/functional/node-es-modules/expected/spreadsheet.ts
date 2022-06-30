@@ -1,6 +1,5 @@
 import * as z from "zod"
-import * as Prisma from "../prisma/.client/index.js"
-const { Status } = Prisma
+import { statusSchema } from "./status.js"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
@@ -15,7 +14,7 @@ export const spreadsheetBaseSchema = z.object({
   filename: z.string(),
   author: z.string(),
   contents: jsonSchema,
-  status: z.nativeEnum(Status),
+  status: statusSchema,
   created: z.date(),
   updated: z.date(),
 })

@@ -1,6 +1,7 @@
 import type { DMMF } from "@prisma/generator-helper"
 import { Config } from "./config"
 import { computeCustomSchema, computeModifiers } from "./docs"
+import { schemaNameFormatter } from "./util"
 
 export const getZodConstructor = (
   config: Config,
@@ -42,7 +43,8 @@ export const getZodConstructor = (
         break
     }
   } else if (field.kind === "enum") {
-    zodType = `z.nativeEnum(${field.type})`
+    const { enumSchema } = schemaNameFormatter(config)
+    zodType = enumSchema(field.type)
   } else if (field.kind === "object") {
     zodType = getRelatedSchemaName(field.type.toString())
   }

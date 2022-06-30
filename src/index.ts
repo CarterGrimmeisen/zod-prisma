@@ -3,7 +3,11 @@ import { Project } from "ts-morph"
 import { SemicolonPreference } from "typescript"
 import { version } from "../package.json"
 import { configSchema, PrismaOptions } from "./config"
-import { generateBarrelFile, populateModelFile } from "./generator"
+import {
+  generateBarrelFile,
+  populateEnumFile,
+  populateModelFile,
+} from "./generator"
 
 generatorHandler({
   onManifest() {
@@ -17,6 +21,7 @@ generatorHandler({
     const project = new Project()
 
     const models = options.dmmf.datamodel.models
+    const enums = options.dmmf.datamodel.enums
 
     const { schemaPath } = options
     const outputPath = options.generator.output?.value
@@ -49,7 +54,7 @@ generatorHandler({
       { overwrite: true },
     )
 
-    generateBarrelFile(models, indexFile, config)
+    generateBarrelFile(models, enums, indexFile, config)
 
     indexFile.formatText({
       indentSize: 2,
@@ -65,6 +70,22 @@ generatorHandler({
       )
 
       populateModelFile(model, sourceFile, config, prismaOptions)
+
+      sourceFile.formatText({
+        indentSize: 2,
+        convertTabsToSpaces: true,
+        semicolons: SemicolonPreference.Remove,
+      })
+    })
+
+    enums.forEach((enumDecl) => {
+      const sourceFile = project.createSourceFile(
+        `${outputPath}/${enumDecl.name.toLowerCase()}.ts`,
+        {},
+        { overwrite: true },
+      )
+
+      populateEnumFile(enumDecl, sourceFile, config, prismaOptions)
 
       sourceFile.formatText({
         indentSize: 2,

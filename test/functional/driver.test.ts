@@ -7,7 +7,11 @@ import { Project } from "ts-morph"
 import ts, { SemicolonPreference } from "typescript"
 import { describe, expect, test } from "vitest"
 import { configSchema, PrismaOptions } from "../../src/config"
-import { generateBarrelFile, populateModelFile } from "../../src/generator"
+import {
+  generateBarrelFile,
+  populateEnumFile,
+  populateModelFile,
+} from "../../src/generator"
 
 describe.concurrent("Functional Tests", () => {
   test.each([
@@ -77,7 +81,12 @@ describe.concurrent("Functional Tests", () => {
       { overwrite: true },
     )
 
-    generateBarrelFile(dmmf.datamodel.models, indexFile, config)
+    generateBarrelFile(
+      dmmf.datamodel.models,
+      dmmf.datamodel.enums,
+      indexFile,
+      config,
+    )
 
     indexFile.formatText({
       indentSize: 2,
@@ -111,6 +120,31 @@ describe.concurrent("Functional Tests", () => {
       const expectedFile = path.resolve(
         expectedDir,
         `${model.name.toLowerCase()}.ts`,
+      )
+      const expectedContents = read(path.resolve(expectedDir, expectedFile))
+
+      if (!process.env.UPDATE_EXPECTED)
+        expect(sourceFile.getFullText()).toStrictEqual(expectedContents)
+    }
+
+    for (const enumDecl of dmmf.datamodel.enums) {
+      const sourceFile = project.createSourceFile(
+        `${outputPath}/${enumDecl.name.toLowerCase()}.ts`,
+        {},
+        { overwrite: true },
+      )
+
+      populateEnumFile(enumDecl, sourceFile, config, prismaOptions)
+
+      sourceFile.formatText({
+        indentSize: 2,
+        convertTabsToSpaces: true,
+        semicolons: SemicolonPreference.Remove,
+      })
+
+      const expectedFile = path.resolve(
+        expectedDir,
+        `${enumDecl.name.toLowerCase()}.ts`,
       )
       const expectedContents = read(path.resolve(expectedDir, expectedFile))
 
