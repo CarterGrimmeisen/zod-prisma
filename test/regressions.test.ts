@@ -1,7 +1,7 @@
 import path from "path"
 import { configSchema, PrismaOptions } from "../src/config"
 import { writeImportsForModel } from "../src/generator"
-import { getDMMF } from "@prisma/sdk"
+import { getDMMF } from "@prisma/internals"
 import { Project } from "ts-morph"
 import { SemicolonPreference } from "typescript"
 import { describe, test, expect } from "vitest"

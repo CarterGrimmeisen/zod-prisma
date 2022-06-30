@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { getConfig, getDMMF } from "@prisma/sdk"
+import { getConfig, getDMMF } from "@prisma/internals"
 import glob from "fast-glob"
 import { read } from "fs-jetpack"
 import path from "path"
