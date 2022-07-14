@@ -63,7 +63,7 @@ export const writeImportsForModel = (
 		if (filteredFields.length > 0) {
 			importList.push({
 				kind: StructureKind.ImportDeclaration,
-				moduleSpecifier: './index',
+				moduleSpecifier: `./index${jsExt(config)}`,
 				namedImports: Array.from(
 					new Set(
 						filteredFields.flatMap((f) => [
@@ -242,9 +242,9 @@ export const populateModelFile = (
 export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, config: Config) => {
 	models.forEach((model) =>
 		indexFile.addExportDeclaration({
-			moduleSpecifier: `./${model.name.toLowerCase()}${
-				config.includeJSExtension ? '.js' : ''
-			}`,
+			moduleSpecifier: `./${model.name.toLowerCase()}${jsExt(config)}`
 		})
 	)
 }
+
+const jsExt = (config: Config) => config.includeJSExtension ? '.js' : ''
