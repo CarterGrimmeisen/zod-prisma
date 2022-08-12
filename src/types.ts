@@ -47,6 +47,7 @@ export const getZodConstructor = (
 	}
 
 	if (field.isList) extraModifiers.push('array()')
+	if (field.hasDefaultValue) extraModifiers.push('optional()')
 	if (field.documentation) {
 		zodType = computeCustomSchema(field.documentation) ?? zodType
 		extraModifiers.push(...computeModifiers(field.documentation))
