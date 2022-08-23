@@ -1,6 +1,6 @@
 import glob from 'fast-glob'
 import execa from 'execa'
-import { getDMMF, getConfig } from '@prisma/sdk'
+import { getDMMF, getConfig } from '@prisma/internals'
 import { readFile } from 'fs-extra'
 import path from 'path'
 import { Project } from 'ts-morph'
