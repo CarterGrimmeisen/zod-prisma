@@ -52,25 +52,24 @@
 		"testEnvironment": "node"
 	},
 	"dependencies": {
-		"@prisma/generator-helper": "^4.2.1",
+		"@prisma/generator-helper": "^4.6.1",
 		"parenthesis": "^3.1.8",
-		"ts-morph": "^15.1.0"
+		"ts-morph": "^17.0.1"
 	},
 	"devDependencies": {
-		"@prisma/client": "^4.2.1",
-		"@prisma/internals": "^4.2.1",
+		"@prisma/client": "^4.6.1",
+		"@prisma/internals": "^4.6.1",
 		"@tsconfig/recommended": "^1.0.1",
 		"@types/fs-extra": "^9.0.13",
-		"dts-cli": "^1.5.2",
+		"dts-cli": "^1.6.0",
 		"execa": "^5.1.0",
-		"fast-glob": "^3.2.11",
+		"fast-glob": "^3.2.12",
 		"fs-extra": "^10.1.0",
-		"husky": "^7.0.4",
-		"jest-mock-extended": "^2.0.7",
-		"prisma": "^4.2.1",
-		"tslib": "^2.4.0",
-		"typescript": "^4.5.5",
-		"zod": "^3.18.0"
+		"husky": "^8.0.2",
+		"jest-mock-extended": "^3.0.1",
+		"prisma": "^4.6.1",
+		"tslib": "^2.4.1",
+		"zod": "^3.19.1"
 	},
 	"peerDependencies": {
 		"decimal.js": "^10.0.0",
