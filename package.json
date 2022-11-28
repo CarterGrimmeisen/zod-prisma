@@ -54,7 +54,7 @@
 	"dependencies": {
 		"@prisma/generator-helper": "~3.8.1",
 		"parenthesis": "^3.1.8",
-		"ts-morph": "^13.0.2"
+		"ts-morph": "^17.0.1"
 	},
 	"devDependencies": {
 		"@prisma/client": "~3.8.1",
