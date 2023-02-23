@@ -6,7 +6,7 @@ export * from "./document"
 export * from "./presentation"
 export * from "./spreadsheet"
 
-export const db: Record<string, any> = {
+export const db = {
   Document: DocumentModel,
   Presentation: PresentationModel,
   Spreadsheet: SpreadsheetModel,

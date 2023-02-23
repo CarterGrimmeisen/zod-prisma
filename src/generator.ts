@@ -245,8 +245,8 @@ export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, 
 		const module = `./${model.name.toLowerCase()}`
 		// Import the model to be able to reference it in the object we create below
 		indexFile.addImportDeclaration({
-			namedImports: [ modelName(model.name) ],
-			moduleSpecifier: module
+			namedImports: [modelName(model.name)],
+			moduleSpecifier: module,
 		})
 
 		indexFile.addExportDeclaration({
@@ -262,18 +262,17 @@ export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, 
 			{
 				name: 'db',
 				initializer(writer) {
-					writer
-						.inlineBlock(() => {
-							models.forEach(model => {
-								const { modelName } = useModelNames(config)
-								writer
-									.write(`${model.name}: ${modelName(model.name)}`)
-									.write(',')
-									.newLine()
-							})
+					writer.inlineBlock(() => {
+						models.forEach((model) => {
+							const { modelName } = useModelNames(config)
+							writer
+								.write(`${model.name}: ${modelName(model.name)}`)
+								.write(',')
+								.newLine()
 						})
-				}
-			}
-		]
+					})
+				},
+			},
+		],
 	})
 }

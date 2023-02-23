@@ -2,6 +2,6 @@ import { CommentModel } from "./comment"
 
 export * from "./comment"
 
-export const db: Record<string, any> = {
+export const db = {
   Comment: CommentModel,
 }

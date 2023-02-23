@@ -2,6 +2,6 @@ import { DocumentModel } from "./document"
 
 export * from "./document"
 
-export const db: Record<string, any> = {
+export const db = {
   Document: DocumentModel,
 }
