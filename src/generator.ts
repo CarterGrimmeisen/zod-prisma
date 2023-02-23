@@ -261,7 +261,6 @@ export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, 
 		declarations: [
 			{
 				name: 'db',
-				type: `Record<string, any>`,
 				initializer(writer) {
 					writer
 						.inlineBlock(() => {
