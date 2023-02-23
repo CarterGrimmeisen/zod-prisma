@@ -239,10 +239,42 @@ export const populateModelFile = (
 		generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions)
 }
 
-export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
-	models.forEach((model) =>
-		indexFile.addExportDeclaration({
-			moduleSpecifier: `./${model.name.toLowerCase()}`,
+export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, config: Config) => {
+	models.forEach((model) => {
+		const { modelName } = useModelNames(config)
+		const module = `./${model.name.toLowerCase()}`
+		// Import the model to be able to reference it in the object we create below
+		indexFile.addImportDeclaration({
+			namedImports: [ modelName(model.name) ],
+			moduleSpecifier: module
 		})
-	)
+
+		indexFile.addExportDeclaration({
+			moduleSpecifier: module,
+		})
+	})
+
+	// Also write an object representing the entire DB schema to the index file
+	indexFile.addVariableStatement({
+		declarationKind: VariableDeclarationKind.Const,
+		isExported: true,
+		declarations: [
+			{
+				name: 'db',
+				type: `Record<string, any>`,
+				initializer(writer) {
+					writer
+						.inlineBlock(() => {
+							models.forEach(model => {
+								const { modelName } = useModelNames(config)
+								writer
+									.write(`${model.name}: ${modelName(model.name)}`)
+									.write(',')
+									.newLine()
+							})
+						})
+				}
+			}
+		]
+	})
 }

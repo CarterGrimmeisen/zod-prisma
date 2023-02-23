@@ -45,7 +45,7 @@ const ftForDir = (dir: string) => async () => {
 
 	const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true })
 
-	generateBarrelFile(dmmf.datamodel.models, indexFile)
+	generateBarrelFile(dmmf.datamodel.models, indexFile, config)
 
 	indexFile.formatText({
 		indentSize: 2,
@@ -58,6 +58,7 @@ const ftForDir = (dir: string) => async () => {
 	const actualIndexContents = await readFile(`${actualDir}/index.ts`, 'utf-8')
 
 	const expectedIndexFile = path.resolve(expectedDir, `index.ts`)
+	console.log("Expected index file: " + expectedIndexFile)
 	const expectedIndexContents = await readFile(
 		path.resolve(expectedDir, expectedIndexFile),
 		'utf-8'
