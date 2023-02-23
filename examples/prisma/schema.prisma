@@ -13,7 +13,7 @@ generator client {
 generator zod {
   provider      = "../bin/cli.js"
   output        = "./zod"
-  relationModel = false
+  relationModel = "default"
 }
 
 model User {
