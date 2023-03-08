@@ -140,7 +140,7 @@ const getZodConstructor = (field, getRelatedModelName = name => name.toString())
     extraModifiers.push(...computeModifiers(field.documentation));
   }
 
-  if (!field.isRequired && field.type !== 'Json') extraModifiers.push('nullish()'); // if (field.hasDefaultValue) extraModifiers.push('optional()')
+  if (!field.isRequired && field.type !== 'Json') extraModifiers.push('nullable()'); // if (field.hasDefaultValue) extraModifiers.push('optional()')
 
   return `${zodType}${extraModifiers.join('.')}`;
 };
