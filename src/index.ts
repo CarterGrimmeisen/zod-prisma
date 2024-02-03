@@ -2,10 +2,10 @@
 import { version } from '../package.json'
 
 import { generatorHandler } from '@prisma/generator-helper'
+import { Project } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from './config'
-import { populateModelFile, generateBarrelFile } from './generator'
-import { Project } from 'ts-morph'
+import { generateBarrelFile, populateModelFile } from './generator'
 
 generatorHandler({
 	onManifest() {
@@ -19,7 +19,8 @@ generatorHandler({
 		const project = new Project()
 
 		const models = options.dmmf.datamodel.models
-		console.log(models)
+		console.log(JSON.stringify(options.dmmf, null, 2))
+		console.log(JSON.stringify(models, null, 2))
 
 		const { schemaPath } = options
 		const outputPath = options.generator.output!.value
