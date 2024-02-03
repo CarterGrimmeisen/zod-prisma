@@ -19,6 +19,7 @@ generatorHandler({
 		const project = new Project()
 
 		const models = options.dmmf.datamodel.models
+		console.log(models)
 
 		const { schemaPath } = options
 		const outputPath = options.generator.output!.value
