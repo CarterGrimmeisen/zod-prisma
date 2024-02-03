@@ -19,8 +19,6 @@ generatorHandler({
 		const project = new Project()
 
 		const models = [options.dmmf.datamodel.models, options.dmmf.datamodel.types].flat()
-		console.log(JSON.stringify(options.dmmf.datamodel, null, 2))
-		// console.log(JSON.stringify(models, null, 2))
 
 		const { schemaPath } = options
 		const outputPath = options.generator.output!.value
