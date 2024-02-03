@@ -1,12 +1,12 @@
-import * as z from "zod"
-import { CompleteUser, RelatedUserModel } from "./index"
+import * as z from 'zod'
+import { CompleteUser, RelatedUserModel } from './index'
 
 export const KeychainModel = z.object({
-  userID: z.string(),
+	userID: z.string(),
 })
 
 export interface CompleteKeychain extends z.infer<typeof KeychainModel> {
-  owner: CompleteUser
+	owner: CompleteUser
 }
 
 /**
@@ -14,6 +14,8 @@ export interface CompleteKeychain extends z.infer<typeof KeychainModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedKeychainModel: z.ZodSchema<CompleteKeychain> = z.lazy(() => KeychainModel.extend({
-  owner: RelatedUserModel,
-}))
+export const RelatedKeychainModel: z.ZodSchema<CompleteKeychain> = z.lazy(() =>
+	KeychainModel.extend({
+		owner: RelatedUserModel,
+	})
+)
