@@ -1,11 +1,10 @@
-
 vscode:
-  extensions:
-    - coenraads.bracket-pair-colorizer-2
-    - mikestead.dotenv
-    - dbaeumer.vscode-eslint
-    - github.vscode-pull-request-github
-    - equinusocio.vsc-material-theme
-    - equinusocio.vsc-material-theme-icons
-    - esbenp.prettier-vscode
-    - prisma.prisma
+    extensions:
+        - coenraads.bracket-pair-colorizer-2
+        - mikestead.dotenv
+        - dbaeumer.vscode-eslint
+        - github.vscode-pull-request-github
+        - equinusocio.vsc-material-theme
+        - equinusocio.vsc-material-theme-icons
+        - esbenp.prettier-vscode
+        - prisma.prisma

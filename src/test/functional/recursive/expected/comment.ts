@@ -1,15 +1,15 @@
-import * as z from "zod"
+import * as z from 'zod'
 
 export const CommentModel = z.object({
-  id: z.string(),
-  author: z.string(),
-  contents: z.string(),
-  parentId: z.string(),
+	id: z.string(),
+	author: z.string(),
+	contents: z.string(),
+	parentId: z.string(),
 })
 
 export interface CompleteComment extends z.infer<typeof CommentModel> {
-  parent: CompleteComment
-  children: CompleteComment[]
+	parent: CompleteComment
+	children: CompleteComment[]
 }
 
 /**
@@ -17,7 +17,9 @@ export interface CompleteComment extends z.infer<typeof CommentModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedCommentModel: z.ZodSchema<CompleteComment> = z.lazy(() => CommentModel.extend({
-  parent: RelatedCommentModel,
-  children: RelatedCommentModel.array(),
-}))
+export const RelatedCommentModel: z.ZodSchema<CompleteComment> = z.lazy(() =>
+	CommentModel.extend({
+		parent: RelatedCommentModel,
+		children: RelatedCommentModel.array(),
+	})
+)

@@ -1,6 +1,6 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.detectIndentation": false,
-  "editor.tabSize": 2,
-  "editor.insertSpaces": false
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"editor.detectIndentation": false,
+	"editor.tabSize": 2,
+	"editor.insertSpaces": false
 }
