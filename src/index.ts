@@ -37,7 +37,7 @@ generatorHandler({
 		const config = results.data
 		const prismaOptions: PrismaOptions = {
 			clientPath,
-			outputPath,
+			outputPath: outputPath as string,
 			schemaPath,
 		}
 

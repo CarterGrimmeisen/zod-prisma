@@ -1,12 +1,12 @@
-import glob from 'fast-glob'
+import { getConfig, getDMMF } from '@prisma/sdk'
 import execa from 'execa'
-import { getDMMF, getConfig } from '@prisma/sdk'
+import glob from 'fast-glob'
 import { readFile } from 'fs-extra'
 import path from 'path'
 import { Project } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
-import { configSchema, PrismaOptions } from '../../config'
-import { populateModelFile, generateBarrelFile } from '../../generator'
+import { PrismaOptions, configSchema } from '../../config'
+import { generateBarrelFile, populateModelFile } from '../../generator'
 
 jest.setTimeout(10000)
 
@@ -114,6 +114,7 @@ describe('Functional Tests', () => {
 	test.concurrent('Config Import', ftForDir('config-import'))
 
 	test.concurrent('Type Check Everything', async () => {
+		// @ts-ignore
 		const typeCheckResults = await execa(
 			path.resolve(__dirname, '../../../node_modules/.bin/tsc'),
 			['--strict', '--noEmit', ...(await glob(`${__dirname}/*/expected/*.ts`))]
