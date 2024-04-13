@@ -153,7 +153,7 @@ npm install -g yarn
     ```
 
 3.  Run `npx prisma generate` or `yarn prisma generate` to generate your zod schemas
-4.  Import the generated schemas form your selected output location
+4.  Import the generated schemas from your selected output location
 
 <!-- USAGE EXAMPLES -->
 
