@@ -1,5 +1,11 @@
 name: Lint and Test
-on: [push, workflow_dispatch]
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
+    branches: ['main']
+
 jobs:
   build:
     name: Build, lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
