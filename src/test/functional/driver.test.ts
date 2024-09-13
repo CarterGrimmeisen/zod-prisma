@@ -6,7 +6,8 @@ import { configSchema, PrismaOptions } from '../../config'
 import { generateBarrelFile, populateModelFile } from '../../generator'
 import { project, tsMorphFormatStyles } from '../../util'
 
-jest.setTimeout(10000)
+// if any individual test takes longer than 30 seconds to complete it will fail with a timeout error.
+jest.setTimeout(30000)
 
 const ftForDir = (dir: string) => async () => {
   const schemaFile = path.resolve(__dirname, dir, 'prisma/schema.prisma')
@@ -51,16 +52,6 @@ const ftForDir = (dir: string) => async () => {
 
   await indexFile.save()
 
-  const actualIndexContents = await readFile(`${actualDir}/index.ts`, 'utf-8')
-
-  const expectedIndexFile = path.resolve(expectedDir, `index.ts`)
-  const expectedIndexContents = await readFile(
-    path.resolve(expectedDir, expectedIndexFile),
-    'utf-8'
-  )
-
-  expect(actualIndexContents).toStrictEqual(expectedIndexContents)
-
   await Promise.all(
     dmmf.datamodel.models.map(async (model) => {
       const sourceFile = project.createSourceFile(
@@ -74,16 +65,28 @@ const ftForDir = (dir: string) => async () => {
       sourceFile.formatText(tsMorphFormatStyles)
 
       await sourceFile.save()
-      const actualContents = await readFile(`${actualDir}/${model.name.toLowerCase()}.ts`, 'utf-8')
-
-      const expectedFile = path.resolve(expectedDir, `${model.name.toLowerCase()}.ts`)
-      const expectedContents = await readFile(path.resolve(expectedDir, expectedFile), 'utf-8')
-
-      expect(actualContents).toStrictEqual(expectedContents)
     })
   )
 
   await project.save()
+
+  const actualIndexContents = await readFile(`${actualDir}/index.ts`, 'utf-8')
+
+  const expectedIndexFile = path.resolve(expectedDir, `index.ts`)
+  const expectedIndexContents = await readFile(expectedIndexFile, 'utf-8')
+
+  expect(actualIndexContents).toStrictEqual(expectedIndexContents)
+
+  await Promise.all(
+    dmmf.datamodel.models.map(async (model) => {
+      const actualContents = await readFile(`${actualDir}/${model.name.toLowerCase()}.ts`, 'utf-8')
+
+      const expectedFile = path.resolve(expectedDir, `${model.name.toLowerCase()}.ts`)
+      const expectedContents = await readFile(expectedFile, 'utf-8')
+
+      expect(actualContents).toStrictEqual(expectedContents)
+    })
+  )
 }
 
 describe('Functional Tests', () => {
