@@ -1,8 +1,7 @@
 import { generatorHandler } from '@prisma/generator-helper'
-import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from './config'
-import { populateModelFile, generateBarrelFile } from './generator'
-import { Project } from 'ts-morph'
+import { generateBarrelFile, populateModelFile } from './generator'
+import { project, tsMorphFormatStyles } from './util'
 
 generatorHandler({
 	onManifest() {
@@ -14,8 +13,6 @@ generatorHandler({
 		}
 	},
 	onGenerate(options) {
-		const project = new Project()
-
 		const models = options.dmmf.datamodel.models
 
 		const { schemaPath } = options
@@ -48,11 +45,7 @@ generatorHandler({
 
 		generateBarrelFile(mutableModels, indexFile)
 
-		indexFile.formatText({
-			indentSize: 2,
-			convertTabsToSpaces: true,
-			semicolons: SemicolonPreference.Remove,
-		})
+		indexFile.formatText(tsMorphFormatStyles)
 
 		models.forEach((model) => {
 			const sourceFile = project.createSourceFile(
@@ -63,11 +56,7 @@ generatorHandler({
 
 			populateModelFile(model, sourceFile, config, prismaOptions)
 
-			sourceFile.formatText({
-				indentSize: 2,
-				convertTabsToSpaces: true,
-				semicolons: SemicolonPreference.Remove,
-			})
+			sourceFile.formatText(tsMorphFormatStyles)
 		})
 
 		return project.save()

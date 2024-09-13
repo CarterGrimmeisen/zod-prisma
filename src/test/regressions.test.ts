@@ -1,9 +1,9 @@
+import { DMMF } from '@prisma/generator-helper'
+import { getDMMF } from '@prisma/internals'
 import path from 'path'
 import { configSchema, PrismaOptions } from '../config'
 import { writeImportsForModel } from '../generator'
-import { getDMMF } from '@prisma/internals'
-import { Project } from 'ts-morph'
-import { DMMF } from '@prisma/generator-helper'
+import { project } from '../util'
 
 describe('Regression Tests', () => {
 	test('#92', async () => {
@@ -30,13 +30,12 @@ describe('Regression Tests', () => {
 			}`,
 		})
 
-		const project = new Project()
 		const testFile = project.createSourceFile('test.ts')
 
 		writeImportsForModel(model as DMMF.Model, testFile, config, prismaOptions)
 
 		expect(testFile.print()).toBe(
-			'import * as z from "zod";\nimport { UserType } from "@prisma/client";\n'
+			`import * as z from 'zod';\nimport { UserType } from '@prisma/client';\n`
 		)
 	})
 })

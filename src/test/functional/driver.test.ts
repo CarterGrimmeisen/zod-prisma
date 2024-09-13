@@ -2,10 +2,9 @@ import { DMMF } from '@prisma/generator-helper'
 import { getConfig, getDMMF } from '@prisma/internals'
 import { readFile } from 'fs-extra'
 import path from 'path'
-import { Project } from 'ts-morph'
-import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from '../../config'
 import { generateBarrelFile, populateModelFile } from '../../generator'
+import { project, tsMorphFormatStyles } from '../../util'
 
 jest.setTimeout(10000)
 
@@ -13,8 +12,6 @@ const ftForDir = (dir: string) => async () => {
 	const schemaFile = path.resolve(__dirname, dir, 'prisma/schema.prisma')
 	const expectedDir = path.resolve(__dirname, dir, 'expected')
 	const actualDir = path.resolve(__dirname, dir, 'actual')
-
-	const project = new Project()
 
 	const datamodel = await readFile(schemaFile, 'utf-8')
 
@@ -50,11 +47,7 @@ const ftForDir = (dir: string) => async () => {
 
 	generateBarrelFile(dmmf.datamodel.models as DMMF.Model[], indexFile)
 
-	indexFile.formatText({
-		indentSize: 2,
-		convertTabsToSpaces: true,
-		semicolons: SemicolonPreference.Remove,
-	})
+	indexFile.formatText(tsMorphFormatStyles)
 
 	await indexFile.save()
 
@@ -78,11 +71,7 @@ const ftForDir = (dir: string) => async () => {
 
 			populateModelFile(model, sourceFile, config, prismaOptions)
 
-			sourceFile.formatText({
-				indentSize: 2,
-				convertTabsToSpaces: true,
-				semicolons: SemicolonPreference.Remove,
-			})
+			sourceFile.formatText(tsMorphFormatStyles)
 
 			await sourceFile.save()
 			const actualContents = await readFile(

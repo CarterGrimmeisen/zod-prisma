@@ -38,14 +38,6 @@
 		"format": "prettier --check .",
 		"format:fix": "prettier --write ."
 	},
-	"prettier": {
-		"printWidth": 100,
-		"semi": false,
-		"singleQuote": true,
-		"tabWidth": 4,
-		"trailingComma": "es5",
-		"useTabs": true
-	},
 	"jest": {
 		"testEnvironment": "node"
 	},

@@ -1,6 +1,7 @@
 import { DMMF } from '@prisma/generator-helper'
-import type { CodeBlockWriter } from 'ts-morph'
+import { Project, QuoteKind, type CodeBlockWriter } from 'ts-morph'
 import { Config } from './config'
+import { SemicolonPreference } from 'typescript'
 
 export const writeArray = (writer: CodeBlockWriter, array: string[], newLine = true) =>
 	array.forEach((line) => writer.write(line).conditionalNewLine(newLine))
@@ -45,4 +46,16 @@ export const dotSlash = (input: string) => {
 	if (converted.startsWith(`../`)) return converted
 
 	return './' + converted
+}
+
+export const project = new Project({
+	manipulationSettings: {
+		quoteKind: QuoteKind.Single,
+	},
+})
+
+export const tsMorphFormatStyles = {
+	indentSize: 2,
+	convertTabsToSpaces: true,
+	semicolons: SemicolonPreference.Remove,
 }
