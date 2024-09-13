@@ -51,6 +51,9 @@
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
+		<li>
+			<a href="#reasoning-for-the-fork">Reasoning for the Fork</a>
+		</li>
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
@@ -87,7 +90,24 @@
 
 <!-- ABOUT THE PROJECT -->
 
+## Reasoning for the Fork
+
+There are other libraries out there made to generate Zod schemas from Prisma models, but the reason I like this more then some alternatives is because of its simplicity and ease of use. I plan to keep this library that way, am will be sceptical of adding any features that might significantly increase the complexity of the library.
+
+
+
+
+
+The original zod-prisma library is no longer maintained. When I tried to use it, I ran into a bug that made the library unusable. More on that [here](https://github.com/CarterGrimmeisen/zod-prisma/issues/168).
+
+I tried contacting the original author, but he was unresponsive, so there was no way for me to get the bug fixed.
+I decided to fork the project, fix the bug, publish it as a new library, and maintain it myself. I also plan to add some new features that I think would be useful.
+
+First of all, I added better Eslint, Prettier and TypeScript configurations/checks to the project. I also plan to bum up all of the dependencies to their latest versions, so that the library is up to date, and might even switch some of the dependencies to more modern alternatives.
+
 ## About The Project
+
+<!-- https://github.com/CarterGrimmeisen/zod-prisma/issues/168 -->
 
 I got tired of having to manually create Zod schemas for my Prisma models and of
 updating them everytime I made schema changes. This provides a way of
