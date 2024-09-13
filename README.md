@@ -336,3 +336,4 @@ Project Link:
 [issues-url]: https://github.com/CarterGrimmeisen/zod-prisma/issues
 [license-shield]: https://img.shields.io/github/license/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
 [license-url]: https://github.com/CarterGrimmeisen/zod-prisma/blob/main/LICENSE
+
