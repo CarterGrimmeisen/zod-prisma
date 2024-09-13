@@ -26,12 +26,12 @@ export type JsonValue = string | number | boolean | JsonObject | JsonArray | nul
  *
  */
 export type Document = {
-	id: string
-	filename: string
-	author: string
-	contents: string
-	created: Date
-	updated: Date
+  id: string
+  filename: string
+  author: string
+  contents: string
+  created: Date
+  updated: Date
 }
 
 /**
@@ -39,12 +39,12 @@ export type Document = {
  *
  */
 export type Presentation = {
-	id: string
-	filename: string
-	author: string
-	contents: string[]
-	created: Date
-	updated: Date
+  id: string
+  filename: string
+  author: string
+  contents: string[]
+  created: Date
+  updated: Date
 }
 
 /**
@@ -52,10 +52,10 @@ export type Presentation = {
  *
  */
 export type Spreadsheet = {
-	id: string
-	filename: string
-	author: string
-	contents: JsonValue
-	created: Date
-	updated: Date
+  id: string
+  filename: string
+  author: string
+  contents: JsonValue
+  created: Date
+  updated: Date
 }

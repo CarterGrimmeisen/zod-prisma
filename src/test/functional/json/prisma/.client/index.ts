@@ -26,8 +26,8 @@ export type JsonValue = string | number | boolean | JsonObject | JsonArray | nul
  *
  */
 export type User = {
-	id: number
-	meta: JsonValue
+  id: number
+  meta: JsonValue
 }
 
 /**
@@ -35,6 +35,6 @@ export type User = {
  *
  */
 export type Post = {
-	id: number
-	authorId: number
+  id: number
+  authorId: number
 }

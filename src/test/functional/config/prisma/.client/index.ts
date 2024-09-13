@@ -3,9 +3,9 @@
  *
  */
 export type User = {
-	id: string
-	name: string
-	email: string
+  id: string
+  name: string
+  email: string
 }
 
 /**
@@ -13,8 +13,8 @@ export type User = {
  *
  */
 export type Post = {
-	id: string
-	title: string
-	contents: string
-	userId: string
+  id: string
+  title: string
+  contents: string
+  userId: string
 }

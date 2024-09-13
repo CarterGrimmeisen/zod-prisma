@@ -1,83 +1,83 @@
 {
-	"name": "zod-prisma",
-	"version": "0.5.4",
-	"description": "A Prisma generator that creates Zod schemas for all of your models",
-	"license": "MIT",
-	"author": "Carter Grimmeisen",
-	"homepage": "https://github.com/CarterGrimmeisen/zod-prisma#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/CarterGrimmeisen/zod-prisma.git"
-	},
-	"bugs": {
-		"url": "https://github.com/CarterGrimmeisen/zod-prisma/issues"
-	},
-	"main": "dist/index.js",
-	"module": "dist/zod-prisma.esm.js",
-	"typings": "dist/index.d.ts",
-	"bin": {
-		"zod-prisma": "bin/cli.js"
-	},
-	"keywords": [
-		"zod",
-		"prisma",
-		"generator"
-	],
-	"files": [
-		"bin",
-		"dist"
-	],
-	"scripts": {
-		"build": "dts build --target node --format cjs --rollupTypes",
-		"prepare": "husky install",
-		"prepublish": "dts build --target node --format cjs --rollupTypes",
-		"start": "dts watch",
-		"test": "dts test --maxWorkers=4 --verbose",
-		"type-check": "tsc --noEmit",
-		"lint": "eslint . --max-warnings 0",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write ."
-	},
-	"jest": {
-		"testEnvironment": "node"
-	},
-	"dependencies": {
-		"@prisma/generator-helper": "5.19.1",
-		"@prisma/internals": "5.19.1",
-		"parenthesis": "3.1.8",
-		"prettier": "3.1.1",
-		"ts-morph": "13.0.2"
-	},
-	"devDependencies": {
-		"@prisma/client": "5.19.1",
-		"@tsconfig/recommended": "1.0.1",
-		"@types/fs-extra": "9.0.13",
-		"@typescript-eslint/eslint-plugin": "7.1.1",
-		"@typescript-eslint/parser": "7.3.1",
-		"dts-cli": "1.1.5",
-		"eslint": "8.53.0",
-		"execa": "5.1.0",
-		"fast-glob": "3.2.5",
-		"fs-extra": "10.0.0",
-		"globals": "15.9.0",
-		"husky": "7.0.4",
-		"jest-mock-extended": "2.0.4",
-		"prisma": "5.19.1",
-		"tslib": "2.3.1",
-		"typescript": "5.5.4",
-		"zod": "3.23.8"
-	},
-	"peerDependencies": {
-		"decimal.js": "10.4.3",
-		"prisma": "5.19.1",
-		"zod": "3.23.8"
-	},
-	"peerDependenciesMeta": {
-		"decimal.js": {
-			"optional": true
-		}
-	},
-	"engines": {
-		"node": ">=20"
-	}
+  "name": "zod-prisma",
+  "version": "0.5.4",
+  "description": "A Prisma generator that creates Zod schemas for all of your models",
+  "license": "MIT",
+  "author": "Carter Grimmeisen",
+  "homepage": "https://github.com/CarterGrimmeisen/zod-prisma#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CarterGrimmeisen/zod-prisma.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CarterGrimmeisen/zod-prisma/issues"
+  },
+  "main": "dist/index.js",
+  "module": "dist/zod-prisma.esm.js",
+  "typings": "dist/index.d.ts",
+  "bin": {
+    "zod-prisma": "bin/cli.js"
+  },
+  "keywords": [
+    "zod",
+    "prisma",
+    "generator"
+  ],
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "dts build --target node --format cjs --rollupTypes",
+    "prepare": "husky install",
+    "prepublish": "dts build --target node --format cjs --rollupTypes",
+    "start": "dts watch",
+    "test": "dts test --maxWorkers=4 --verbose",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "@prisma/generator-helper": "5.19.1",
+    "@prisma/internals": "5.19.1",
+    "parenthesis": "3.1.8",
+    "prettier": "3.1.1",
+    "ts-morph": "13.0.2"
+  },
+  "devDependencies": {
+    "@prisma/client": "5.19.1",
+    "@tsconfig/recommended": "1.0.1",
+    "@types/fs-extra": "9.0.13",
+    "@typescript-eslint/eslint-plugin": "7.1.1",
+    "@typescript-eslint/parser": "7.3.1",
+    "dts-cli": "1.1.5",
+    "eslint": "8.53.0",
+    "execa": "5.1.0",
+    "fast-glob": "3.2.5",
+    "fs-extra": "10.0.0",
+    "globals": "15.9.0",
+    "husky": "7.0.4",
+    "jest-mock-extended": "2.0.4",
+    "prisma": "5.19.1",
+    "tslib": "2.3.1",
+    "typescript": "5.5.4",
+    "zod": "3.23.8"
+  },
+  "peerDependencies": {
+    "decimal.js": "10.4.3",
+    "prisma": "5.19.1",
+    "zod": "3.23.8"
+  },
+  "peerDependenciesMeta": {
+    "decimal.js": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }

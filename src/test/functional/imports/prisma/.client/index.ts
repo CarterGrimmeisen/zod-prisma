@@ -26,13 +26,13 @@ export type JsonValue = string | number | boolean | JsonObject | JsonArray | nul
  *
  */
 export type Document = {
-	id: string
-	filename: string
-	author: string
-	contents: string
-	status: Status
-	created: Date
-	updated: Date
+  id: string
+  filename: string
+  author: string
+  contents: string
+  status: Status
+  created: Date
+  updated: Date
 }
 
 /**
@@ -40,12 +40,12 @@ export type Document = {
  *
  */
 export type Presentation = {
-	id: string
-	filename: string
-	author: string
-	contents: string[]
-	created: Date
-	updated: Date
+  id: string
+  filename: string
+  author: string
+  contents: string[]
+  created: Date
+  updated: Date
 }
 
 /**
@@ -53,12 +53,12 @@ export type Presentation = {
  *
  */
 export type Spreadsheet = {
-	id: string
-	filename: string
-	author: string
-	contents: JsonValue
-	created: Date
-	updated: Date
+  id: string
+  filename: string
+  author: string
+  contents: JsonValue
+  created: Date
+  updated: Date
 }
 
 /**
@@ -69,9 +69,9 @@ export type Spreadsheet = {
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
 export const Status = {
-	draft: 'draft',
-	live: 'live',
-	archived: 'archived',
+  draft: 'draft',
+  live: 'live',
+  archived: 'archived',
 }
 
 export type Status = (typeof Status)[keyof typeof Status]

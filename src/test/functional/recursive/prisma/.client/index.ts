@@ -3,8 +3,8 @@
  *
  */
 export type Comment = {
-	id: string
-	author: string
-	contents: string
-	parentId: string
+  id: string
+  author: string
+  contents: string
+  parentId: string
 }
