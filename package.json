@@ -64,7 +64,7 @@
     "jest-mock-extended": "2.0.4",
     "prisma": "5.19.1",
     "tslib": "2.3.1",
-    "typescript": "5.5.4",
+    "typescript": "5.4.5",
     "zod": "3.23.8"
   },
   "peerDependencies": {

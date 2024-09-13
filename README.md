@@ -94,10 +94,6 @@
 
 There are other libraries out there made to generate Zod schemas from Prisma models, but the reason I like this more then some alternatives is because of its simplicity and ease of use. I plan to keep this library that way, am will be sceptical of adding any features that might significantly increase the complexity of the library.
 
-
-
-
-
 The original zod-prisma library is no longer maintained. When I tried to use it, I ran into a bug that made the library unusable. More on that [here](https://github.com/CarterGrimmeisen/zod-prisma/issues/168).
 
 I tried contacting the original author, but he was unresponsive, so there was no way for me to get the bug fixed.
