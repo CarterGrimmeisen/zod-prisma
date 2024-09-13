@@ -32,7 +32,7 @@ export const writeImportsForModel = (
 			namespaceImport: 'imports',
 			moduleSpecifier: dotSlash(
 				path.relative(outputPath, path.resolve(path.dirname(schemaPath), config.imports))
-			),
+			) as string,
 		})
 	}
 
@@ -52,7 +52,7 @@ export const writeImportsForModel = (
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			isTypeOnly: enumFields.length === 0,
-			moduleSpecifier: dotSlash(relativePath),
+			moduleSpecifier: dotSlash(relativePath) as string,
 			namedImports: enumFields.map((f) => f.type),
 		})
 	}

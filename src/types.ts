@@ -7,7 +7,7 @@ export const getZodConstructor = (
 		name.toString()
 ) => {
 	let zodType = 'z.unknown()'
-	let extraModifiers: string[] = ['']
+	const extraModifiers: string[] = ['']
 	if (field.kind === 'scalar') {
 		switch (field.type) {
 			case 'String':

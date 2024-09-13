@@ -46,7 +46,7 @@ npx prisma migrate dev --name init
 
 ### 3. Run the script
 
-Execute the script with this command: 
+Execute the script with this command:
 
 ```
 npm run dev
@@ -78,8 +78,8 @@ model Post {
 }
 
 model User {
-  id      Int      @default(autoincrement()) @id 
-  name    String? 
+  id      Int      @default(autoincrement()) @id
+  name    String?
   email   String   @unique
   posts   Post[]
 + profile Profile?
@@ -107,50 +107,49 @@ You can now use your `PrismaClient` instance to perform operations against the n
 
 ```ts
 const profile = await prisma.profile.create({
-  data: {
-    bio: "Hello World",
-    user: {
-      connect: { email: "alice@prisma.io" },
-    },
-  },
-});
+	data: {
+		bio: 'Hello World',
+		user: {
+			connect: { email: 'alice@prisma.io' },
+		},
+	},
+})
 ```
 
 #### Create a new user with a new profile
 
 ```ts
 const user = await prisma.user.create({
-  data: {
-    email: "john@prisma.io",
-    name: "John",
-    profile: {
-      create: {
-        bio: "Hello World",
-      },
-    },
-  },
-});
+	data: {
+		email: 'john@prisma.io',
+		name: 'John',
+		profile: {
+			create: {
+				bio: 'Hello World',
+			},
+		},
+	},
+})
 ```
 
 #### Update the profile of an existing user
 
 ```ts
 const userWithUpdatedProfile = await prisma.user.update({
-  where: { email: "alice@prisma.io" },
-  data: {
-    profile: {
-      update: {
-        bio: "Hello Friends",
-      },
-    },
-  },
-});
+	where: { email: 'alice@prisma.io' },
+	data: {
+		profile: {
+			update: {
+				bio: 'Hello Friends',
+			},
+		},
+	},
+})
 ```
-
 
 ## Switch to another database (e.g. PostgreSQL, MySQL, SQL Server)
 
-If you want to try this example with another database than SQLite, you can adjust the the database connection in [`prisma/schema.prisma`](./prisma/schema.prisma) by reconfiguring the `datasource` block. 
+If you want to try this example with another database than SQLite, you can adjust the the database connection in [`prisma/schema.prisma`](./prisma/schema.prisma) by reconfiguring the `datasource` block.
 
 Learn more about the different connection configurations in the [docs](https://www.prisma.io/docs/reference/database-reference/connection-urls).
 
@@ -220,7 +219,7 @@ generator client {
 
 ## Next steps
 
-- Check out the [Prisma docs](https://www.prisma.io/docs)
-- Share your feedback in the [`prisma2`](https://prisma.slack.com/messages/CKQTGR6T0/) channel on the [Prisma Slack](https://slack.prisma.io/)
-- Create issues and ask questions on [GitHub](https://github.com/prisma/prisma/)
-- Watch our biweekly "What's new in Prisma" livestreams on [Youtube](https://www.youtube.com/channel/UCptAHlN1gdwD89tFM3ENb6w)
+-   Check out the [Prisma docs](https://www.prisma.io/docs)
+-   Share your feedback in the [`prisma2`](https://prisma.slack.com/messages/CKQTGR6T0/) channel on the [Prisma Slack](https://slack.prisma.io/)
+-   Create issues and ask questions on [GitHub](https://github.com/prisma/prisma/)
+-   Watch our biweekly "What's new in Prisma" livestreams on [Youtube](https://www.youtube.com/channel/UCptAHlN1gdwD89tFM3ENb6w)

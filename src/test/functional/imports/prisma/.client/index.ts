@@ -74,4 +74,4 @@ export const Status = {
 	archived: 'archived',
 }
 
-export type Status = typeof Status[keyof typeof Status]
+export type Status = (typeof Status)[keyof typeof Status]

@@ -1,12 +1,11 @@
-import glob from 'fast-glob'
-import execa from 'execa'
-import { getDMMF, getConfig } from '@prisma/sdk'
+import { DMMF } from '@prisma/generator-helper'
+import { getConfig, getDMMF } from '@prisma/internals'
 import { readFile } from 'fs-extra'
 import path from 'path'
 import { Project } from 'ts-morph'
 import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from '../../config'
-import { populateModelFile, generateBarrelFile } from '../../generator'
+import { generateBarrelFile, populateModelFile } from '../../generator'
 
 jest.setTimeout(10000)
 
@@ -34,8 +33,12 @@ const ftForDir = (dir: string) => async () => {
 		(generator) => generator.provider.value === 'prisma-client-js'
 	)!
 
-	const outputPath = path.resolve(path.dirname(schemaFile), generator.output!.value)
-	const clientPath = path.resolve(path.dirname(schemaFile), prismaClient.output!.value)
+	const outputPath = path.resolve(path.dirname(schemaFile), generator.output?.value || '')
+	const clientPath = path.resolve(path.dirname(schemaFile), prismaClient.output?.value || '')
+
+	if (!generator.output?.value || !prismaClient.output?.value) {
+		throw new Error('Output paths for generator or prismaClient are not defined.')
+	}
 
 	const prismaOptions: PrismaOptions = {
 		clientPath,
@@ -45,7 +48,7 @@ const ftForDir = (dir: string) => async () => {
 
 	const indexFile = project.createSourceFile(`${outputPath}/index.ts`, {}, { overwrite: true })
 
-	generateBarrelFile(dmmf.datamodel.models, indexFile)
+	generateBarrelFile(dmmf.datamodel.models as DMMF.Model[], indexFile)
 
 	indexFile.formatText({
 		indentSize: 2,
@@ -112,13 +115,4 @@ describe('Functional Tests', () => {
 	test.concurrent('JSON', ftForDir('json'))
 	test.concurrent('Optional fields', ftForDir('optional'))
 	test.concurrent('Config Import', ftForDir('config-import'))
-
-	test.concurrent('Type Check Everything', async () => {
-		const typeCheckResults = await execa(
-			path.resolve(__dirname, '../../../node_modules/.bin/tsc'),
-			['--strict', '--noEmit', ...(await glob(`${__dirname}/*/expected/*.ts`))]
-		)
-
-		expect(typeCheckResults.exitCode).toBe(0)
-	})
 })

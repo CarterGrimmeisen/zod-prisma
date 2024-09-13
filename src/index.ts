@@ -1,6 +1,3 @@
-// @ts-ignore Importing package.json for automated synchronization of version numbers
-import { version } from '../package.json'
-
 import { generatorHandler } from '@prisma/generator-helper'
 import { SemicolonPreference } from 'typescript'
 import { configSchema, PrismaOptions } from './config'
@@ -10,7 +7,8 @@ import { Project } from 'ts-morph'
 generatorHandler({
 	onManifest() {
 		return {
-			version,
+			// TODO: add auto versioning
+			version: '1.0.0',
 			prettyName: 'Zod Schemas',
 			defaultOutput: 'zod',
 		}
@@ -21,10 +19,10 @@ generatorHandler({
 		const models = options.dmmf.datamodel.models
 
 		const { schemaPath } = options
-		const outputPath = options.generator.output!.value
-		const clientPath = options.otherGenerators.find(
-			(each) => each.provider.value === 'prisma-client-js'
-		)!.output!.value!
+		const outputPath = options.generator.output?.value ?? ''
+		const clientPath =
+			options.otherGenerators.find((each) => each.provider.value === 'prisma-client-js')
+				?.output?.value ?? ''
 
 		const results = configSchema.safeParse(options.generator.config)
 		if (!results.success)
@@ -45,7 +43,10 @@ generatorHandler({
 			{ overwrite: true }
 		)
 
-		generateBarrelFile(models, indexFile)
+		// Create a mutable copy of the models array
+		const mutableModels = models.map((model) => ({ ...model }))
+
+		generateBarrelFile(mutableModels, indexFile)
 
 		indexFile.formatText({
 			indentSize: 2,

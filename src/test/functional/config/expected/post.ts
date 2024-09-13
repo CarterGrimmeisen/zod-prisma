@@ -1,15 +1,15 @@
-import * as z from "zod"
-import { CompleteUser, userSchema } from "./index"
+import * as z from 'zod'
+import { CompleteUser, userSchema } from './index'
 
 export const _postSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  contents: z.string(),
-  userId: z.string(),
+	id: z.string(),
+	title: z.string(),
+	contents: z.string(),
+	userId: z.string(),
 })
 
 export interface CompletePost extends z.infer<typeof _postSchema> {
-  author: CompleteUser
+	author: CompleteUser
 }
 
 /**
@@ -17,6 +17,8 @@ export interface CompletePost extends z.infer<typeof _postSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const postSchema: z.ZodSchema<CompletePost> = z.lazy(() => _postSchema.extend({
-  author: userSchema,
-}))
+export const postSchema: z.ZodSchema<CompletePost> = z.lazy(() =>
+	_postSchema.extend({
+		author: userSchema,
+	})
+)

@@ -7,7 +7,7 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                node: ['14.x', '16.x']
+                node: ['20.11.0']
                 os: [ubuntu-latest, macos-latest, windows-latest]
 
         steps:
@@ -29,8 +29,14 @@ jobs:
             - name: Build
               run: yarn build
 
+            - name: Typecheck
+              run: yarn type-check
+
             - name: Lint
               run: yarn lint
+
+            - name: Prettier
+              run: yarn format
 
             - name: Test
               run: yarn test --ci --maxWorkers=2

@@ -25,6 +25,7 @@ export const useModelNames = ({ modelCase, modelSuffix, relationModel }: Config)
 export const needsRelatedModel = (model: DMMF.Model, config: Config) =>
 	model.fields.some((field) => field.kind === 'object') && config.relationModel !== false
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const chunk = <T extends any[]>(input: T, size: number): T[] => {
 	return input.reduce((arr, item, idx) => {
 		return idx % size === 0
