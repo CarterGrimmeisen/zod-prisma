@@ -28,7 +28,6 @@ const ftForDir = (dir: string) => async () => {
     (generator) => generator.provider.value === '@elhanmah/prisma-to-zod'
   )!
   const config = configSchema.parse(generator.config)
-  console.log({ config })
 
   const prismaClient = generators.find(
     (generator) => generator.provider.value === 'prisma-client-js'
