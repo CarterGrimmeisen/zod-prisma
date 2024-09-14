@@ -14,18 +14,25 @@ generator zod {
   provider      = "../bin/cli.js"
   output        = "./zod"
   relationModel = "true"
+	useDecimal		= "true"
 }
 
 model User {
   id    Int    @id @default(autoincrement())
-	name	String
+  name  String
   meta  Json
   posts Post[]
 }
 
 model Post {
-  id       Int  @id @default(autoincrement())
-	title    String
+  id       Int    @id @default(autoincrement())
+  title    String
   authorId Int
-  author   User @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id])
+}
+
+model Product {
+  id    Int     @id @default(autoincrement())
+  name  String
+  price Decimal @db.Decimal
 }

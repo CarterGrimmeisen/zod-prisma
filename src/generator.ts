@@ -101,17 +101,17 @@ export const writeTypeSpecificSchemas = (
       writeArray(writer, [
         '// Helper schema for Decimal fields',
         'const decimalSchema = z',
-        '.instanceof(Decimal)',
+        '.instanceof(Prisma.Decimal)',
         '.or(z.string())',
         '.or(z.number())',
         '.refine((value) => {',
         '  try {',
-        '    return new Decimal(value);',
+        '    return new Prisma.Decimal(value);',
         '  } catch (error) {',
         '    return false;',
         '  }',
         '})',
-        '.transform((value) => new Decimal(value));',
+        '.transform((value) => new Prisma.Decimal(value));',
       ])
     })
   }
