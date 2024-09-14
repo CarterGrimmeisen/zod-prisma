@@ -7,7 +7,7 @@
 ***
 ***
 *** To avoid retyping too much info. Do a search and replace for the following:
-*** CarterGrimmeisen, zod-prisma, twitter_handle, Carter.Grimmeisen@uah.edu, Zod Prisma, A custom prisma generator that creates Zod schemas from your Prisma model.
+*** CarterGrimmeisen, @elhanmah/prisma-to-zod, twitter_handle, Carter.Grimmeisen@uah.edu, Zod Prisma, A custom prisma generator that creates Zod schemas from your Prisma model.
 -->
 
 <!-- PROJECT SHIELDS -->
@@ -29,21 +29,21 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/CarterGrimmeisen/zod-prisma">
-    <img src="https://raw.githubusercontent.com/CarterGrimmeisen/zod-prisma/main/images/zod-prisma.svg" alt="Logo" width="120" height="120">
+  <a href="https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod">
+    <img src="https://raw.githubusercontent.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/main/images/@elhanmah/prisma-to-zod.svg" alt="Logo" width="120" height="120">
   </a>
   <h3 align="center">Zod Prisma</h3>
   <p align="center">
     A custom prisma generator that creates Zod schemas from your Prisma model.
     <br />
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional">View Demo</a>
+    <a href="https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/blob/main/src/test/functional">View Demo</a>
     ·
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Report Bug</a>
+    <a href="https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/issues">Report Bug</a>
     ·
-    <a href="https://github.com/CarterGrimmeisen/zod-prisma/issues">Request Feature</a>
+    <a href="https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/issues">Request Feature</a>
   </p>
 </p>
 
@@ -94,7 +94,7 @@
 
 There are other libraries out there made to generate Zod schemas from Prisma models, but the reason I like this more then some alternatives is because of its simplicity and ease of use. I plan to keep this library that way, am will be sceptical of adding any features that might significantly increase the complexity of the library.
 
-The original zod-prisma library is no longer maintained. When I tried to use it, I ran into a bug that made the library unusable. More on that [here](https://github.com/CarterGrimmeisen/zod-prisma/issues/168).
+The original @elhanmah/prisma-to-zod library is no longer maintained. When I tried to use it, I ran into a bug that made the library unusable. More on that [here](https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/issues/168).
 
 I tried contacting the original author, but he was unresponsive, so there was no way for me to get the bug fixed.
 I decided to fork the project, fix the bug, publish it as a new library, and maintain it myself. I also plan to add some new features that I think would be useful.
@@ -103,7 +103,7 @@ First of all, I added better Eslint, Prettier and TypeScript configurations/chec
 
 ## About The Project
 
-<!-- https://github.com/CarterGrimmeisen/zod-prisma/issues/168 -->
+<!-- https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/issues/168 -->
 
 I got tired of having to manually create Zod schemas for my Prisma models and of
 updating them everytime I made schema changes. This provides a way of
@@ -137,17 +137,17 @@ npm install -g yarn
     requires it and so do we, you will experience TS errors without strict mode
     enabled**
 
-1.  Add zod-prisma as a dev dependency
+1.  Add @elhanmah/prisma-to-zod as a dev dependency
 
     ```sh
-    yarn add -D zod-prisma
+    yarn add -D @elhanmah/prisma-to-zod
     ```
 
-2.  Add the zod-prisma generator to your schema.prisma
+2.  Add the @elhanmah/prisma-to-zod generator to your schema.prisma
 
     ```prisma
     generator zod {
-      provider                 = "zod-prisma"
+      provider                 = "@elhanmah/prisma-to-zod"
       output                   = "./zod" // (default) the directory where generated zod schemas will be saved
 
       relationModel            = true // (default) Create and export both plain and related models.
@@ -249,12 +249,12 @@ export const PostModel = z.object({
 ### Importing Helpers
 
 Sometimes its useful to define a custom Zod preprocessor or transformer for your
-data. zod-prisma enables you to reuse these by importing them via a config
+data. @elhanmah/prisma-to-zod enables you to reuse these by importing them via a config
 options. For example:
 
 ```prisma
 generator zod {
-  provider      = "zod-prisma"
+  provider      = "@elhanmah/prisma-to-zod"
   output        = "./zod"
   imports 		  = "../src/zod-schemas"
 }
@@ -286,7 +286,7 @@ assigned to the field.
 
 JSON fields in Prisma disallow null values. This is to disambiguate between
 setting a field's value to NULL in the database and having a value of null
-stored in the JSON. In accordance with this zod-prisma will default to
+stored in the JSON. In accordance with this @elhanmah/prisma-to-zod will default to
 disallowing null values, even if your JSON field is optional.
 
 If you would like to revert this behavior and allow null assignment to JSON
@@ -297,15 +297,15 @@ fields, you can set `prismaJsonNullability` to `false` in the generator options.
 <!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
 
 _For examples, please refer to the
-[Examples Directory](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/examples)
+[Examples Directory](https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/blob/main/examples)
 or the
-[Functional Tests](https://github.com/CarterGrimmeisen/zod-prisma/blob/main/src/test/functional)_
+[Functional Tests](https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/blob/main/src/test/functional)_
 
 <!-- ROADMAP -->
 
 ## Roadmap
 
-See the [open issues](https://github.com/CarterGrimmeisen/zod-prisma/issues) for
+See the [open issues](https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/issues) for
 a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
@@ -335,20 +335,20 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Carter Grimmeisen - Carter.Grimmeisen@uah.edu
 
 Project Link:
-[https://github.com/CarterGrimmeisen/zod-prisma](https://github.com/CarterGrimmeisen/zod-prisma)
+[https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod](https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[npm-shield]: https://img.shields.io/npm/v/zod-prisma?style=for-the-badge
-[npm-url]: https://www.npmjs.com/package/zod-prisma
-[contributors-shield]: https://img.shields.io/github/contributors/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[contributors-url]: https://github.com/CarterGrimmeisen/zod-prisma/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[forks-url]: https://github.com/CarterGrimmeisen/zod-prisma/network/members
-[stars-shield]: https://img.shields.io/github/stars/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[stars-url]: https://github.com/CarterGrimmeisen/zod-prisma/stargazers
-[issues-shield]: https://img.shields.io/github/issues/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[issues-url]: https://github.com/CarterGrimmeisen/zod-prisma/issues
-[license-shield]: https://img.shields.io/github/license/CarterGrimmeisen/zod-prisma.svg?style=for-the-badge
-[license-url]: https://github.com/CarterGrimmeisen/zod-prisma/blob/main/LICENSE
+[npm-shield]: https://img.shields.io/npm/v/@elhanmah/prisma-to-zod?style=for-the-badge
+[npm-url]: https://www.npmjs.com/package/@elhanmah/prisma-to-zod
+[contributors-shield]: https://img.shields.io/github/contributors/CarterGrimmeisen/@elhanmah/prisma-to-zod.svg?style=for-the-badge
+[contributors-url]: https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/CarterGrimmeisen/@elhanmah/prisma-to-zod.svg?style=for-the-badge
+[forks-url]: https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/network/members
+[stars-shield]: https://img.shields.io/github/stars/CarterGrimmeisen/@elhanmah/prisma-to-zod.svg?style=for-the-badge
+[stars-url]: https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/stargazers
+[issues-shield]: https://img.shields.io/github/issues/CarterGrimmeisen/@elhanmah/prisma-to-zod.svg?style=for-the-badge
+[issues-url]: https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/issues
+[license-shield]: https://img.shields.io/github/license/CarterGrimmeisen/@elhanmah/prisma-to-zod.svg?style=for-the-badge
+[license-url]: https://github.com/CarterGrimmeisen/@elhanmah/prisma-to-zod/blob/main/LICENSE
