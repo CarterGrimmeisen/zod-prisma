@@ -2,7 +2,7 @@ import { DMMF } from '@prisma/generator-helper'
 import { getZodConstructor } from '../types'
 
 describe('types Package', () => {
-  test('getZodConstructor', () => {
+  test('getZodConstructor - string type', () => {
     const field: DMMF.Field = {
       hasDefaultValue: false,
       isGenerated: false,
@@ -21,6 +21,46 @@ describe('types Package', () => {
     const constructor = getZodConstructor(field)
 
     expect(constructor).toBe('z.string().array().max(64).min(1).nullish()')
+  })
+
+  test('getZodConstructor - Decimal type - no useDecimal', () => {
+    const field: DMMF.Field = {
+      hasDefaultValue: false,
+      isGenerated: false,
+      isId: false,
+      isList: false,
+      isRequired: true,
+      isUnique: false,
+      isReadOnly: false,
+      isUpdatedAt: false,
+      kind: 'scalar',
+      name: 'aField',
+      type: 'Decimal',
+    }
+
+    const constructor = getZodConstructor(field, { useDecimal: false })
+
+    expect(constructor).toBe('z.number()')
+  })
+
+  test('getZodConstructor - Decimal type - useDecimal', () => {
+    const field: DMMF.Field = {
+      hasDefaultValue: false,
+      isGenerated: false,
+      isId: false,
+      isList: false,
+      isRequired: true,
+      isUnique: false,
+      isReadOnly: false,
+      isUpdatedAt: false,
+      kind: 'scalar',
+      name: 'aField',
+      type: 'Decimal',
+    }
+
+    const constructor = getZodConstructor(field, { useDecimal: true })
+
+    expect(constructor).toBe('decimalSchema')
   })
 
   test('regression - unknown type', () => {

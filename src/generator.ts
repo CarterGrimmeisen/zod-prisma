@@ -36,11 +36,11 @@ export const writeImportsForModel = (
     })
   }
 
-  if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal')) {
+  if (config.useDecimal && model.fields.some((f) => f.type === 'Decimal')) {
     importList.push({
       kind: StructureKind.ImportDeclaration,
-      namedImports: ['Decimal'],
-      moduleSpecifier: 'decimal.js',
+      namedImports: ['Prisma'],
+      moduleSpecifier: '@prisma/client',
     })
   }
 
@@ -95,12 +95,12 @@ export const writeTypeSpecificSchemas = (
     })
   }
 
-  if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal')) {
+  if (config.useDecimal && model.fields.some((f) => f.type === 'Decimal')) {
     sourceFile.addStatements((writer) => {
       writer.newLine()
       writeArray(writer, [
         '// Helper schema for Decimal fields',
-        'z',
+        'const decimalSchema = z',
         '.instanceof(Decimal)',
         '.or(z.string())',
         '.or(z.number())',
@@ -141,7 +141,7 @@ export const generateSchemaForModel = (
                 .forEach((field) => {
                   writeArray(writer, getJSDocs(field.documentation))
                   writer
-                    .write(`${field.name}: ${getZodConstructor(field)}`)
+                    .write(`${field.name}: ${getZodConstructor(field, config)}`)
                     .write(',')
                     .newLine()
                 })
@@ -202,7 +202,7 @@ export const generateRelatedSchemaForModel = (
                 writeArray(writer, getJSDocs(field.documentation))
 
                 writer
-                  .write(`${field.name}: ${getZodConstructor(field, relatedModelName)}`)
+                  .write(`${field.name}: ${getZodConstructor(field, config, relatedModelName)}`)
                   .write(',')
                   .newLine()
               })

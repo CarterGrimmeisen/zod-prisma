@@ -159,8 +159,8 @@ npm install -g yarn
 
       modelSuffix              = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
 
-      // useDecimalJs          = false // (default) represent the prisma Decimal type using as a JS number
-      useDecimalJs             = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
+      // useDecimal            = false // (default) represent the prisma Decimal type using as a JS number
+      useDecimal               = true // represent the prisma Decimal type using Prisma.Decimal
 
       imports                  = null // (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
 
