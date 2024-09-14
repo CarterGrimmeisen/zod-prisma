@@ -37,8 +37,8 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "postinstall": "node scripts/generate-prisma-schemas.js",
-    "panic": "sh scripts/panic.sh"
+    "postinstall": "node ./scripts/generate-prisma-schemas.js",
+    "panic": "sh ./scripts/panic.sh"
   },
   "jest": {
     "testEnvironment": "node"
