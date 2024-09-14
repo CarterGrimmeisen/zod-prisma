@@ -1,6 +1,6 @@
 {
   "name": "@elhanmah/prisma-to-zod",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A Prisma generator that creates Zod schemas for all of your models",
   "license": "MIT",
   "author": "Elhan Mahmutovic",
