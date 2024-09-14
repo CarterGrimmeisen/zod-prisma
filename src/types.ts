@@ -4,7 +4,7 @@ import { Config } from './config'
 
 export const getZodConstructor = (
   field: DMMF.Field,
-  config?: Partial<Config>,
+  _config?: Partial<Config>,
   getRelatedModelName = (name: string | DMMF.SchemaEnum | DMMF.OutputType | DMMF.SchemaArg) =>
     name.toString()
 ) => {
@@ -29,11 +29,7 @@ export const getZodConstructor = (
         zodType = 'z.number()'
         break
       case 'Decimal':
-        if (config?.useDecimal) {
-          zodType = 'decimalSchema'
-        } else {
-          zodType = 'z.number()'
-        }
+        zodType = 'decimalSchema'
         break
       case 'Json':
         zodType = 'jsonSchema'

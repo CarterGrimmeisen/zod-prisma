@@ -36,7 +36,7 @@ export const writeImportsForModel = (
     })
   }
 
-  if (config.useDecimal && model.fields.some((f) => f.type === 'Decimal')) {
+  if (model.fields.some((f) => f.type === 'Decimal')) {
     importList.push({
       kind: StructureKind.ImportDeclaration,
       namedImports: ['Prisma'],
@@ -95,7 +95,7 @@ export const writeTypeSpecificSchemas = (
     })
   }
 
-  if (config.useDecimal && model.fields.some((f) => f.type === 'Decimal')) {
+  if (model.fields.some((f) => f.type === 'Decimal')) {
     sourceFile.addStatements((writer) => {
       writer.newLine()
       writeArray(writer, [

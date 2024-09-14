@@ -8,7 +8,7 @@
     "@elhanmah/prisma-to-zod": "latest"
   },
   "scripts": {
-    "predev": "prisma generate && prisma db push",
+    "predev": "cd .. && yarn build && cd examples && prisma generate && prisma db push",
     "dev": "ts-node ./script.ts"
   },
   "dependencies": {

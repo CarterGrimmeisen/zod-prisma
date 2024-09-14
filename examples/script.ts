@@ -44,6 +44,15 @@ async function main() {
 
   const createdProduct = await prisma.product.create({ data: product })
   console.log(`Successfully created ${JSON.stringify(createdProduct)}`)
+
+  const userResult = await prisma.user.findUnique({ where: { id: 1 } })
+  console.log(`Successfully fetched ${JSON.stringify(UserModel.parse(userResult))}`)
+
+  const postResult = await prisma.post.findUnique({ where: { id: 1 } })
+  console.log(`Successfully fetched ${JSON.stringify(PostModel.parse(postResult))}`)
+
+  const productResult = await prisma.product.findUnique({ where: { id: 1 } })
+  console.log(`Successfully fetched ${JSON.stringify(ProductModel.parse(productResult))}`)
 }
 
 main()

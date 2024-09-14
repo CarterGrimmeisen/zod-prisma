@@ -7,12 +7,12 @@ generatorHandler({
   onManifest() {
     return {
       // TODO: add auto versioning
-      version: '0.0.5',
+      version: '0.0.6',
       prettyName: 'Zod Schemas',
       defaultOutput: 'zod',
     }
   },
-  onGenerate(options) {
+  async onGenerate(options) {
     const models = options.dmmf.datamodel.models
 
     const { schemaPath } = options

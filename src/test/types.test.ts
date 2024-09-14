@@ -23,26 +23,6 @@ describe('types Package', () => {
     expect(constructor).toBe('z.string().array().max(64).min(1).nullish()')
   })
 
-  test('getZodConstructor - Decimal type - no useDecimal', () => {
-    const field: DMMF.Field = {
-      hasDefaultValue: false,
-      isGenerated: false,
-      isId: false,
-      isList: false,
-      isRequired: true,
-      isUnique: false,
-      isReadOnly: false,
-      isUpdatedAt: false,
-      kind: 'scalar',
-      name: 'aField',
-      type: 'Decimal',
-    }
-
-    const constructor = getZodConstructor(field, { useDecimal: false })
-
-    expect(constructor).toBe('z.number()')
-  })
-
   test('getZodConstructor - Decimal type - useDecimal', () => {
     const field: DMMF.Field = {
       hasDefaultValue: false,
@@ -58,7 +38,7 @@ describe('types Package', () => {
       type: 'Decimal',
     }
 
-    const constructor = getZodConstructor(field, { useDecimal: true })
+    const constructor = getZodConstructor(field)
 
     expect(constructor).toBe('decimalSchema')
   })
