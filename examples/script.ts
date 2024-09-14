@@ -21,6 +21,8 @@ const product = ProductModel.parse({
   id: 1,
   name: 'Sample Product',
   price: 19.99,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 })
 
 const prisma = new PrismaClient()

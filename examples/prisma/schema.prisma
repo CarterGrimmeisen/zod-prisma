@@ -34,7 +34,9 @@ model Post {
 }
 
 model Product {
-  id    Int     @id @default(autoincrement())
-  name  String
-  price Decimal @db.Decimal
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Decimal  @db.Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
