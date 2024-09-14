@@ -8,6 +8,7 @@ export const configSchema = z.object({
   modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
   imports: z.string().optional(),
   prismaJsonNullability: configBoolean.default('true'),
+  prisma: z.string().default('@prisma/client'), // Path to prisma client, defaults to '@prisma/client'
 })
 
 export type Config = z.infer<typeof configSchema>

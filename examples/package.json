@@ -8,8 +8,8 @@
     "@elhanmah/prisma-to-zod": "latest"
   },
   "scripts": {
-    "predev": "cd .. && yarn build && cd examples && prisma generate && prisma db push",
-    "dev": "ts-node ./script.ts"
+    "predev": "sh ./scripts/predev.sh",
+    "dev": "ts-node ./scripts/devTest.ts"
   },
   "dependencies": {
     "@prisma/client": "5.19.1",

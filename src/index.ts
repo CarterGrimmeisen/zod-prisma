@@ -7,7 +7,7 @@ generatorHandler({
   onManifest() {
     return {
       // TODO: add auto versioning
-      version: '0.0.6',
+      version: '0.0.7',
       prettyName: 'Zod Schemas',
       defaultOutput: 'zod',
     }
@@ -53,6 +53,7 @@ generatorHandler({
       populateModelFile(model, sourceFile, config, prismaOptions)
 
       sourceFile.formatText(tsMorphFormatStyles)
+      sourceFile.fixUnusedIdentifiers()
     })
 
     return project.save()

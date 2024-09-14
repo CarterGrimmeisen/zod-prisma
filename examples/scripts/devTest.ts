@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { PostModel, UserModel } from './prisma/zod'
-import { ProductModel } from './prisma/zod/product'
+import { PostModel, UserModel } from '../prisma/zod'
+import { ProductModel } from '../prisma/zod/product'
 
 const user = UserModel.parse({
   id: 1,
@@ -8,6 +8,9 @@ const user = UserModel.parse({
   meta: {
     info: 'Hello World',
   },
+  money: 100.0,
+  createdAt: new Date(),
+  updatedAt: new Date(),
   posts: [],
 })
 
@@ -15,6 +18,8 @@ const post = PostModel.parse({
   id: 1,
   title: 'Hello World',
   authorId: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 })
 
 const product = ProductModel.parse({
@@ -22,14 +27,10 @@ const product = ProductModel.parse({
   name: 'Sample Product',
   price: 19.99,
   createdAt: new Date(),
-  updatedAt: new Date(),
+  updatedAt: null,
 })
 
 const prisma = new PrismaClient()
-
-// Before running the script, make sure your DB is running
-// docker compose up -d
-// npx prisma db push
 
 async function main() {
   await prisma.post.deleteMany()

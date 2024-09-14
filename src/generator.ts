@@ -40,7 +40,7 @@ export const writeImportsForModel = (
     importList.push({
       kind: StructureKind.ImportDeclaration,
       namedImports: ['Prisma'],
-      moduleSpecifier: '@prisma/client',
+      moduleSpecifier: config.prisma,
     })
   }
 
@@ -95,6 +95,36 @@ export const writeTypeSpecificSchemas = (
     })
   }
 
+  if (model.fields.some((f) => f.type === 'DateTime')) {
+    sourceFile.addStatements((writer) => {
+      writer.newLine()
+      writeArray(writer, [
+        '// Helper schema for DateTime fields',
+        'const dateSchema = z',
+        '.instanceof(Date)',
+        '.or(z.string())',
+        '.refine((value) => {',
+        '  try {',
+        '    return !isNaN(new Date(value).getTime());',
+        '  } catch (error) {',
+        '    return false;',
+        '  }',
+        '})',
+        // TODO: Is there a better way to do this?
+        // If refine fails, transform will not be called
+        '.transform((value) => new Date(value)) as z.ZodEffects<',
+        '  z.ZodEffects<',
+        '    z.ZodType<Date, z.ZodTypeDef, Date>,',
+        '    Date,',
+        '    Date',
+        '  >,',
+        '  Date,',
+        '  Date',
+        '>;',
+      ])
+    })
+  }
+
   if (model.fields.some((f) => f.type === 'Decimal')) {
     sourceFile.addStatements((writer) => {
       writer.newLine()
@@ -111,7 +141,15 @@ export const writeTypeSpecificSchemas = (
         '    return false;',
         '  }',
         '})',
-        '.transform((value) => new Prisma.Decimal(value));',
+        // TODO: Is there a better way to do this?
+        // Zod does not infer that because of transform, the type is always Prisma.Decimal
+        '.transform((value) => new Prisma.Decimal(value)) as z.ZodEffects<',
+        '  z.ZodEffects<',
+        '    z.ZodType<Prisma.Decimal, z.ZodTypeDef, Prisma.Decimal>,',
+        '    Prisma.Decimal,',
+        '    Prisma.Decimal',
+        '  >',
+        '>;',
       ])
     })
   }

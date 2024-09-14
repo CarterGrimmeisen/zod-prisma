@@ -11,31 +11,35 @@ generator client {
 }
 
 generator zod {
-  // provider      = "../bin/cli.js"
-  // provider      = "prisma-to-zod"
   provider      = env("ZOD_PROVIDER") // ../bin/cli.js or prisma-to-zod
   output        = "./zod"
   relationModel = "true"
+  imports       = "./zod-utils"
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  meta  Json
-  posts Post[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  meta      Json
+  money     Decimal   @db.Decimal
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  posts     Post[]
 }
 
 model Post {
-  id       Int    @id @default(autoincrement())
-  title    String
-  authorId Int
-  author   User   @relation(fields: [authorId], references: [id])
+  id        Int      @id @default(autoincrement())
+  title     String
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  price     Decimal  @db.Decimal
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  price     Decimal   @db.Decimal /// @zod.custom(imports.decimalSchema)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

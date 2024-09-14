@@ -60,9 +60,18 @@ const ftForDir = (dir: string) => async () => {
         { overwrite: true }
       )
 
-      populateModelFile(model, sourceFile, config, prismaOptions)
+      populateModelFile(
+        model,
+        sourceFile,
+        {
+          ...config,
+          prisma: '../prisma/.client',
+        },
+        prismaOptions
+      )
 
       sourceFile.formatText(tsMorphFormatStyles)
+      sourceFile.fixUnusedIdentifiers()
 
       await sourceFile.save()
     })

@@ -23,7 +23,7 @@ export const getZodConstructor = (
         zodType = 'z.bigint()'
         break
       case 'DateTime':
-        zodType = 'z.date()'
+        zodType = 'dateSchema'
         break
       case 'Float':
         zodType = 'z.number()'

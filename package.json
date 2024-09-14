@@ -1,6 +1,6 @@
 {
   "name": "@elhanmah/prisma-to-zod",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A Prisma generator that creates Zod schemas for all of your models",
   "license": "MIT",
   "author": "Elhan Mahmutovic",
@@ -38,7 +38,8 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "postinstall": "node ./scripts/generate-prisma-schemas.js",
-    "panic": "sh ./scripts/panic.sh"
+    "panic": "sh ./scripts/panic.sh",
+    "reset-tests": "sh ./scripts/copy_files.sh"
   },
   "jest": {
     "testEnvironment": "node"
