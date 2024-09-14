@@ -7,7 +7,7 @@
 ***
 ***
 *** To avoid retyping too much info. Do a search and replace for the following:
-*** Elhan Mahmutovic, @elhanmah/prisma-to-zod, twitter_handle, elhan.mahmutovic03@gmail.com, prisma-to-zod, A custom prisma generator that creates Zod schemas from your Prisma model.
+*** Elhan Mahmutovic, @elhanmah/prisma-to-zod, prisma-to-zod, twitter_handle, elhan.mahmutovic03@gmail.com, prisma-to-zod, A custom prisma generator that creates Zod schemas from your Prisma model.
 -->
 
 <!-- PROJECT SHIELDS -->
@@ -140,11 +140,11 @@ npm install -g yarn
     yarn add -D @elhanmah/prisma-to-zod
     ```
 
-2.  Add the @elhanmah/prisma-to-zod generator to your schema.prisma
+2.  Add the prisma-to-zod generator to your schema.prisma
 
     ```prisma
     generator zod {
-      provider                 = "@elhanmah/prisma-to-zod"
+      provider                 = "prisma-to-zod"
       output                   = "./zod" // (default) the directory where generated zod schemas will be saved
 
       relationModel            = true // (default) Create and export both plain and related models.
@@ -251,7 +251,7 @@ options. For example:
 
 ```prisma
 generator zod {
-  provider      = "@elhanmah/prisma-to-zod"
+  provider      = "prisma-to-zod"
   output        = "./zod"
   imports 		  = "../src/zod-schemas"
 }

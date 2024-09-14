@@ -978,6 +978,17 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@elhanmah/prisma-to-zod@latest":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@elhanmah/prisma-to-zod/-/prisma-to-zod-0.0.5.tgz#182296e3dfde1cb02e02b9fd3f014033bfd94ac6"
+  integrity sha512-CKwafQJ9yyJQAeCjcBpx5w4xG9+kqa4nk3JSNmu6eAvXC01OV+U/9dJIM12/zf6EuCV5t7g0LFB7ZXT5Un/Xlw==
+  dependencies:
+    "@prisma/generator-helper" "5.19.1"
+    "@prisma/internals" "5.19.1"
+    parenthesis "3.1.8"
+    prettier "3.1.1"
+    ts-morph "13.0.2"
+
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz#a23514e8fb9af1269d5f7788aa556798d61c6b59"

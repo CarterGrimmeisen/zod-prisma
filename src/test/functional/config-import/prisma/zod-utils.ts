@@ -1,6 +1,15 @@
 import { z } from 'zod'
-import { Decimal } from 'decimal.js'
+import { Prisma } from './.client'
 
 export const decimalSchema = z
-  .union([z.string(), z.number()])
-  .transform((value) => new Decimal(value))
+  .instanceof(Prisma.Decimal)
+  .or(z.string())
+  .or(z.number())
+  .refine((value) => {
+    try {
+      return new Prisma.Decimal(value)
+    } catch (error) {
+      return false
+    }
+  })
+  .transform((value) => new Prisma.Decimal(value))

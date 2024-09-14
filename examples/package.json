@@ -4,7 +4,8 @@
   "devDependencies": {
     "prisma": "5.19.1",
     "ts-node": "9.1.1",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "@elhanmah/prisma-to-zod": "latest"
   },
   "scripts": {
     "predev": "prisma generate && prisma db push",

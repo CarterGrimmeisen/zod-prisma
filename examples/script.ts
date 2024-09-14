@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { PostModel, UserModel } from './prisma/zod'
+import { ProductModel } from './prisma/zod/product'
 
 const user = UserModel.parse({
   id: 1,
@@ -16,6 +17,12 @@ const post = PostModel.parse({
   authorId: 1,
 })
 
+const product = ProductModel.parse({
+  id: 1,
+  name: 'Sample Product',
+  price: 19.99,
+})
+
 const prisma = new PrismaClient()
 
 // Before running the script, make sure your DB is running
@@ -25,12 +32,16 @@ const prisma = new PrismaClient()
 async function main() {
   await prisma.post.deleteMany()
   await prisma.user.deleteMany()
+  await prisma.product.deleteMany()
 
   const createdUser = await prisma.user.create({ data: user })
   console.log(`Successfully created ${JSON.stringify(createdUser)}`)
 
   const createdPost = await prisma.post.create({ data: post })
   console.log(`Successfully created ${JSON.stringify(createdPost)}`)
+
+  const createdProduct = await prisma.product.create({ data: product })
+  console.log(`Successfully created ${JSON.stringify(createdProduct)}`)
 }
 
 main()

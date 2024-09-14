@@ -7,7 +7,7 @@
   "homepage": "https://github.com/ElhanM/prisma-to-zod#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ElhanM/prisma-to-zod"
+    "url": "https://github.com/ElhanM/prisma-to-zod.git"
   },
   "bugs": {
     "url": "https://github.com/ElhanM/prisma-to-zod/issues"
@@ -36,7 +36,8 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "postinstall": "node generate-prisma-schemas.js"
   },
   "jest": {
     "testEnvironment": "node"
@@ -65,17 +66,12 @@
     "prisma": "5.19.1",
     "tslib": "2.3.1",
     "typescript": "5.4.5",
-    "zod": "3.23.8"
+    "zod": "3.23.8",
+    "@elhanmah/prisma-to-zod": "latest"
   },
   "peerDependencies": {
-    "decimal.js": "10.4.3",
     "prisma": "5.19.1",
     "zod": "3.23.8"
-  },
-  "peerDependenciesMeta": {
-    "decimal.js": {
-      "optional": true
-    }
   },
   "engines": {
     "node": ">=20"

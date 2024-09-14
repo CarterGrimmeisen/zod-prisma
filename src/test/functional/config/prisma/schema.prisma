@@ -8,11 +8,11 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  output   = ".client"
+  output   = "./.client"
 }
 
 generator zod {
-  provider      = "@elhanmah/prisma-to-zod"
+  provider      = "prisma-to-zod"
   output        = "../actual/"
   relationModel = "default"
   modelCase     = "camelCase"

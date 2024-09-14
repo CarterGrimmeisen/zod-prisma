@@ -24,9 +24,7 @@ const ftForDir = (dir: string) => async () => {
     datamodel,
   })
 
-  const generator = generators.find(
-    (generator) => generator.provider.value === '@elhanmah/prisma-to-zod'
-  )!
+  const generator = generators.find((generator) => generator.provider.value === 'prisma-to-zod')!
   const config = configSchema.parse(generator.config)
 
   const prismaClient = generators.find(
