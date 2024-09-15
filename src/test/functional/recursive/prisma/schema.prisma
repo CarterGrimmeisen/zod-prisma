@@ -15,6 +15,7 @@ generator zod {
   provider      = "prisma-to-zod"
   output        = "../actual/"
   relationModel = true
+  prisma        = "../prisma/.client"
 }
 
 model Comment {

@@ -161,6 +161,8 @@ npm install -g yarn
       // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
       prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
+
+    	prisma                   = "@prisma/client" // Path to prisma client, defaults to '@prisma/client'
     }
     ```
 

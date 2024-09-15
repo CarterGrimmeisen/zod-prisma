@@ -4,11 +4,11 @@ const configBoolean = z.enum(['true', 'false']).transform((arg) => JSON.parse(ar
 
 export const configSchema = z.object({
   relationModel: configBoolean.default('true').or(z.literal('default')),
-  modelSuffix: z.string().default('Model'),
   modelCase: z.enum(['PascalCase', 'camelCase']).default('PascalCase'),
+  modelSuffix: z.string().default('Model'),
   imports: z.string().optional(),
   prismaJsonNullability: configBoolean.default('true'),
-  prisma: z.string().default('@prisma/client'), // Path to prisma client, defaults to '@prisma/client'
+  prisma: z.string().default('@prisma/client'),
 })
 
 export type Config = z.infer<typeof configSchema>

@@ -12,6 +12,7 @@ generator zod {
   provider = "prisma-to-zod"
   output   = "../actual/"
   imports  = "./zod-utils"
+  prisma   = "../prisma/.client"
 }
 
 model Document {

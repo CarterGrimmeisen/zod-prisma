@@ -17,6 +17,7 @@ generator zod {
   relationModel = "default"
   modelCase     = "camelCase"
   modelSuffix   = "Schema"
+  prisma        = "../prisma/.client"
 }
 
 model User {
