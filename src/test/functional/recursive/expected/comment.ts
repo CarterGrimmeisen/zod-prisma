@@ -8,8 +8,8 @@ export const CommentModel = z.object({
 })
 
 export interface CompleteComment extends z.infer<typeof CommentModel> {
-  parent: CompleteComment
-  children: CompleteComment[]
+  parent?: CompleteComment | null
+  children?: CompleteComment[] | null
 }
 
 /**
@@ -18,6 +18,6 @@ export interface CompleteComment extends z.infer<typeof CommentModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedCommentModel: z.ZodSchema<CompleteComment> = z.lazy(() => CommentModel.extend({
-  parent: RelatedCommentModel,
-  children: RelatedCommentModel.array(),
+  parent: RelatedCommentModel.nullish(),
+  children: RelatedCommentModel.array().nullish(),
 }))

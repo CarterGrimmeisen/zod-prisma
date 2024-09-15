@@ -38,7 +38,7 @@ export const SpreadsheetModel = z.object({
 })
 
 export interface CompleteSpreadsheet extends z.infer<typeof SpreadsheetModel> {
-  presentations: CompletePresentation[]
+  presentations?: CompletePresentation[] | null
 }
 
 /**
@@ -47,5 +47,5 @@ export interface CompleteSpreadsheet extends z.infer<typeof SpreadsheetModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedSpreadsheetModel: z.ZodSchema<CompleteSpreadsheet> = z.lazy(() => SpreadsheetModel.extend({
-  presentations: RelatedPresentationModel.array(),
+  presentations: RelatedPresentationModel.array().nullish(),
 }))

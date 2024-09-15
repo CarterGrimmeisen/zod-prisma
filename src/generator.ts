@@ -206,9 +206,9 @@ export const generateRelatedSchemaForModel = (
     isExported: true,
     extends: [`z.infer<typeof ${modelName(model.name)}>`],
     properties: relationFields.map((f) => ({
-      hasQuestionToken: !f.isRequired,
+      hasQuestionToken: config.optionalRelations ? true : !f.isRequired,
       name: f.name,
-      type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`,
+      type: `Complete${f.type}${f.isList ? '[]' : ''}${config.optionalRelations ? ' | null' : ''}`,
     })),
   })
 
@@ -237,10 +237,21 @@ export const generateRelatedSchemaForModel = (
             .write(`z.lazy(() => ${modelName(model.name)}.extend(`)
             .inlineBlock(() => {
               relationFields.forEach((field) => {
-                writeArray(writer, getJSDocs(field.documentation))
+                const modifiedField = {
+                  ...field,
+                  isRequired: config.optionalRelations ? false : field.isRequired,
+                }
+
+                writeArray(writer, getJSDocs(modifiedField.documentation))
 
                 writer
-                  .write(`${field.name}: ${getZodConstructor(field, config, relatedModelName)}`)
+                  .write(
+                    `${modifiedField.name}: ${getZodConstructor(
+                      modifiedField,
+                      config,
+                      relatedModelName
+                    )}`
+                  )
                   .write(',')
                   .newLine()
               })

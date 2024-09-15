@@ -7,7 +7,7 @@ export const PostModel = z.object({
 })
 
 export interface CompletePost extends z.infer<typeof PostModel> {
-  author: CompleteUser
+  author?: CompleteUser | null
 }
 
 /**
@@ -16,5 +16,5 @@ export interface CompletePost extends z.infer<typeof PostModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedPostModel: z.ZodSchema<CompletePost> = z.lazy(() => PostModel.extend({
-  author: RelatedUserModel,
+  author: RelatedUserModel.nullish(),
 }))

@@ -9,6 +9,7 @@ export const configSchema = z.object({
   imports: z.string().optional(),
   prismaJsonNullability: configBoolean.default('true'),
   prisma: z.string().default('@prisma/client'),
+  optionalRelations: configBoolean.default('true'),
 })
 
 export type Config = z.infer<typeof configSchema>

@@ -6,7 +6,7 @@ export const KeychainModel = z.object({
 })
 
 export interface CompleteKeychain extends z.infer<typeof KeychainModel> {
-  owner: CompleteUser
+  owner?: CompleteUser | null
 }
 
 /**
@@ -15,5 +15,5 @@ export interface CompleteKeychain extends z.infer<typeof KeychainModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedKeychainModel: z.ZodSchema<CompleteKeychain> = z.lazy(() => KeychainModel.extend({
-  owner: RelatedUserModel,
+  owner: RelatedUserModel.nullish(),
 }))

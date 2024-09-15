@@ -11,10 +11,10 @@ generator client {
 }
 
 generator zod {
-  provider      = env("ZOD_PROVIDER") // ../bin/cli.js or prisma-to-zod
-  output        = "./zod"
-  relationModel = "true"
-  imports       = "./zod-utils"
+  provider          = env("ZOD_PROVIDER") // ../bin/cli.js or prisma-to-zod
+  output            = "./zod"
+  relationModel     = "true"
+  imports           = "./zod-utils"
 }
 
 model User {

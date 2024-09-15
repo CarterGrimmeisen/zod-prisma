@@ -100,6 +100,8 @@ I tried contacting the original author, but he was unresponsive, so there was no
 
 First of all, I added better ESLint, Prettier, and TypeScript configurations/checks to the project. I also plan to bump up all of the dependencies to their latest versions so that the library is up to date, and might even switch some of the dependencies to more modern alternatives.
 
+I also plan on keeping this library compatible with the latest versions of Prisma(v5) and Zod(v3.23.x).
+
 ## About The Project
 
 I got tired of having to manually create Zod schemas for my Prisma models and of
@@ -163,6 +165,8 @@ npm install -g yarn
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
 
     	prisma                   = "@prisma/client" // Path to prisma client, defaults to '@prisma/client'
+
+    	optionalRelations				 = true // (default) all relations generated on the relation schema will be optional
     }
     ```
 
