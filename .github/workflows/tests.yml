@@ -16,9 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         node: ['20.11.0']
-        # MacOS 12 due to limitations of running Docker inside GitHub Actions on newer versions of MacOS
-        # os: [ubuntu-latest, macos-12, windows-latest]
-        os: [macos-12]
+        # TODO
+        # Can't figure out how to run Docker on MacOS
+        # os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
 
     steps:
       - name: Disable Auto CRLF
@@ -33,9 +34,16 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
 
-      - name: Setup docker for macOS
-        if: runner.os == 'macOS'
-        run: brew install --cask docker
+      - name: Install root deps
+        run: yarn install --frozen-lockfile
+
+      - name: 'Clean yarn cache on windows'
+        if: runner.os == 'Windows'
+        run: yarn cache clean
+
+      - name: Install example deps
+        working-directory: examples
+        run: yarn install --frozen-lockfile
 
       - name: 'Create env file'
         working-directory: examples
@@ -63,17 +71,6 @@ jobs:
           until docker exec postgres pg_isready; do
             sleep 1
           done
-
-      - name: Install root deps
-        run: yarn install --frozen-lockfile
-
-      - name: 'Clean yarn cache on windows'
-        if: runner.os == 'Windows'
-        run: yarn cache clean
-
-      - name: Install example deps
-        working-directory: examples
-        run: yarn install --frozen-lockfile
 
       - name: Build generator
         run: yarn build
