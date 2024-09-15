@@ -9,7 +9,9 @@
   },
   "scripts": {
     "predev": "sh ./scripts/predev.sh",
-    "dev": "ts-node ./scripts/devTest.ts"
+    "dev": "ts-node ./scripts/devTest.ts",
+    "build": "tsc",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "5.19.1",

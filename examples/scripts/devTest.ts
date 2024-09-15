@@ -11,7 +11,6 @@ const user = UserModel.parse({
   money: 100.0,
   createdAt: new Date(),
   updatedAt: new Date(),
-  posts: [],
 })
 
 const post = PostModel.parse({

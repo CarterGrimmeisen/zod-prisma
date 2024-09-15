@@ -1,0 +1,91 @@
+name: Tests for example
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and test example on Node ${{ matrix.node }} and ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20.11.0']
+        # MacOS 12 due to limitations of running Docker inside GitHub Actions on newer versions of MacOS
+        # os: [ubuntu-latest, macos-12, windows-latest]
+        os: [macos-12]
+
+    steps:
+      - name: Disable Auto CRLF
+        run: git config --global core.autocrlf false
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Use Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
+
+      - name: Setup docker for macOS
+        if: runner.os == 'macOS'
+        run: brew install --cask docker
+
+      - name: 'Create env file'
+        working-directory: examples
+        run: |
+          touch .env
+          echo PRISMA_DB_URL=${{ secrets.PRISMA_DB_URL }} >> .env
+          echo ZOD_PROVIDER=${{ secrets.ZOD_PROVIDER }} >> .env
+
+      - name: Build PostgreSQL Docker image
+        working-directory: examples
+        run: docker build -t postgres-db -f Dockerfile .
+
+      - name: Set up PostgreSQL
+        run: |
+          docker run -d \
+            --name postgres \
+            -e POSTGRES_USER=${{ secrets.PG_USER }} \
+            -e POSTGRES_PASSWORD=${{ secrets.PG_PASSWORD }} \
+            -e POSTGRES_DB=${{ secrets.PG_DB }} \
+            -p ${{ secrets.PG_PORT }}:5432 \
+            postgres-db
+
+      - name: Wait for DB to be ready
+        run: |
+          until docker exec postgres pg_isready; do
+            sleep 1
+          done
+
+      - name: Install root deps
+        run: yarn install --frozen-lockfile
+
+      - name: 'Clean yarn cache on windows'
+        if: runner.os == 'Windows'
+        run: yarn cache clean
+
+      - name: Install example deps
+        working-directory: examples
+        run: yarn install --frozen-lockfile
+
+      - name: Build generator
+        run: yarn build
+
+      - name: Build
+        working-directory: examples
+        run: yarn build
+
+      - name: Test
+        working-directory: examples
+        run: yarn dev
+
+      - name: Shutdown PostgreSQL
+        if: always()
+        run: docker stop postgres && docker rm postgres

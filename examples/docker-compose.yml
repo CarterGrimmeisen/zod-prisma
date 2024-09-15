@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   db:
-    image: postgres:16.4
+    build: .
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}

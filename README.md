@@ -164,9 +164,9 @@ npm install -g yarn
       prismaJsonNullability    = true // (default) uses prisma's scheme for JSON field nullability
       // prismaJsonNullability = false // allows null assignment to optional JSON fields
 
-    	prisma                   = "@prisma/client" // Path to prisma client, defaults to '@prisma/client'
+      prisma                   = "@prisma/client" // Path to prisma client, defaults to '@prisma/client'
 
-    	optionalRelations				 = true // (default) all relations generated on the relation schema will be optional
+      optionalRelations        = true // (default) all relations generated on the relation schema will be optional
     }
     ```
 
