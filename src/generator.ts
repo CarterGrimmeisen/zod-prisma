@@ -1,15 +1,16 @@
-import path from 'path'
-import { DMMF } from '@prisma/generator-helper'
+import { Config, PrismaOptions } from './config'
 import {
 	ImportDeclarationStructure,
 	SourceFile,
 	StructureKind,
 	VariableDeclarationKind,
 } from 'ts-morph'
-import { Config, PrismaOptions } from './config'
 import { dotSlash, needsRelatedModel, useModelNames, writeArray } from './util'
+
+import { DMMF } from '@prisma/generator-helper'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
+import path from 'path'
 
 export const writeImportsForModel = (
 	model: DMMF.Model,
@@ -239,8 +240,8 @@ export const populateModelFile = (
 		generateRelatedSchemaForModel(model, sourceFile, config, prismaOptions)
 }
 
-export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
-	models.forEach((model) =>
+export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile, skipModels: string[]) => {
+	models.filter(model => !skipModels.includes(model.name)).forEach((model) =>
 		indexFile.addExportDeclaration({
 			moduleSpecifier: `./${model.name.toLowerCase()}`,
 		})

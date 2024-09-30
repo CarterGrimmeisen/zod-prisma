@@ -9,6 +9,7 @@ export const configSchema = z.object({
 	useDecimalJs: configBoolean.default('false'),
 	imports: z.string().optional(),
 	prismaJsonNullability: configBoolean.default('true'),
+	skipModels: z.string().array().default([])
 })
 
 export type Config = z.infer<typeof configSchema>

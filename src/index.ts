@@ -1,11 +1,11 @@
+import { PrismaOptions, configSchema } from './config'
+import { generateBarrelFile, populateModelFile } from './generator'
+
+import { Project } from 'ts-morph'
+import { SemicolonPreference } from 'typescript'
+import { generatorHandler } from '@prisma/generator-helper'
 // @ts-ignore Importing package.json for automated synchronization of version numbers
 import { version } from '../package.json'
-
-import { generatorHandler } from '@prisma/generator-helper'
-import { SemicolonPreference } from 'typescript'
-import { configSchema, PrismaOptions } from './config'
-import { populateModelFile, generateBarrelFile } from './generator'
-import { Project } from 'ts-morph'
 
 generatorHandler({
 	onManifest() {
@@ -33,6 +33,7 @@ generatorHandler({
 			)
 
 		const config = results.data
+
 		const prismaOptions: PrismaOptions = {
 			clientPath,
 			outputPath,
@@ -45,7 +46,7 @@ generatorHandler({
 			{ overwrite: true }
 		)
 
-		generateBarrelFile(models, indexFile)
+		generateBarrelFile(models, indexFile, config.skipModels)
 
 		indexFile.formatText({
 			indentSize: 2,
@@ -53,7 +54,7 @@ generatorHandler({
 			semicolons: SemicolonPreference.Remove,
 		})
 
-		models.forEach((model) => {
+		models.filter(model => !config.skipModels.includes(model.name)).forEach((model) => {
 			const sourceFile = project.createSourceFile(
 				`${outputPath}/${model.name.toLowerCase()}.ts`,
 				{},
