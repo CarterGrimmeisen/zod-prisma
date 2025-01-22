@@ -148,7 +148,13 @@ export const generateSchemaForModel = (
 								.forEach((field) => {
 									writeArray(writer, getJSDocs(field.documentation))
 									writer
-										.write(`${field.name}: ${getZodConstructor(field)}`)
+										.write(
+											`${field.name}: ${getZodConstructor(
+												field,
+												undefined,
+												config
+											)}`
+										)
 										.write(',')
 										.newLine()
 								})
@@ -212,7 +218,8 @@ export const generateRelatedSchemaForModel = (
 									.write(
 										`${field.name}: ${getZodConstructor(
 											field,
-											relatedModelName
+											relatedModelName,
+											config
 										)}`
 									)
 									.write(',')
@@ -242,7 +249,7 @@ export const populateModelFile = (
 export const generateBarrelFile = (models: DMMF.Model[], indexFile: SourceFile) => {
 	models.forEach((model) =>
 		indexFile.addExportDeclaration({
-			moduleSpecifier: `./${model.name.toLowerCase()}`,
+			moduleSpecifier: `./${model.name.toLowerCase()}.js`,
 		})
 	)
 }

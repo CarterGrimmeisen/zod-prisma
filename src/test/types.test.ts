@@ -18,7 +18,10 @@ describe('types Package', () => {
 			documentation: ['@zod.max(64)', '@zod.min(1)'].join('\n'),
 		}
 
-		const constructor = getZodConstructor(field)
+		const constructor = getZodConstructor(field, undefined, {
+			modelCase: 'camelCase',
+			modelSuffix: '',
+		})
 
 		expect(constructor).toBe('z.string().array().max(64).min(1).nullish()')
 	})
@@ -38,7 +41,10 @@ describe('types Package', () => {
 			type: 'SomeUnknownType',
 		}
 
-		const constructor = getZodConstructor(field)
+		const constructor = getZodConstructor(field, undefined, {
+			modelCase: 'camelCase',
+			modelSuffix: '',
+		})
 
 		expect(constructor).toBe('z.unknown()')
 	})
