@@ -36,7 +36,7 @@ export const writeImportsForModel = (
 		})
 	}
 
-	if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal')) {
+	if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal' && !f.documentation?.includes('@zod.custom'))) {
 		importList.push({
 			kind: StructureKind.ImportDeclaration,
 			namedImports: ['Decimal'],
@@ -102,7 +102,7 @@ export const writeTypeSpecificSchemas = (
 		})
 	}
 
-	if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal')) {
+	if (config.useDecimalJs && model.fields.some((f) => f.type === 'Decimal' && !f.documentation?.includes('@zod.custom'))) {
 		sourceFile.addStatements((writer) => {
 			writer.newLine()
 			writeArray(writer, [
