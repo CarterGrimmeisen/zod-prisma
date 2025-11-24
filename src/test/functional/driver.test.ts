@@ -31,7 +31,7 @@ const ftForDir = (dir: string) => async () => {
 	const config = configSchema.parse(generator.config)
 
 	const prismaClient = generators.find(
-		(generator) => generator.provider.value === 'prisma-client-js'
+		(generator) => generator.provider.value === 'prisma-client'
 	)!
 
 	const outputPath = path.resolve(path.dirname(schemaFile), generator.output!.value)
@@ -116,7 +116,7 @@ describe('Functional Tests', () => {
 	test.concurrent('Type Check Everything', async () => {
 		const typeCheckResults = await execa(
 			path.resolve(__dirname, '../../../node_modules/.bin/tsc'),
-			['--strict', '--noEmit', ...(await glob(`${__dirname}/*/expected/*.ts`))]
+			['--strict', '--noEmit', '--esModuleInterop', ...(await glob(`${__dirname}/*/expected/*.ts`))]
 		)
 
 		expect(typeCheckResults.exitCode).toBe(0)
